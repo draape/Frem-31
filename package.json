@@ -1,0 +1,31 @@
+{
+  "name": "frem-31-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "panda codegen && next dev",
+    "build": "panda codegen && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prepare": "panda codegen",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui"
+  },
+  "dependencies": {
+    "@ark-ui/react": "^4.5.0",
+    "next": "14.2.21",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@pandacss/dev": "^0.52.0",
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^22.10.5",
+    "@types/react": "^18.3.17",
+    "@types/react-dom": "^18.3.5",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.2.21",
+    "prettier": "^3.8.1",
+    "typescript": "^5.7.2"
+  }
+}
