@@ -35,13 +35,13 @@ const footerTitleStyles = css({
   color: 'grey.900',
 });
 
-const footerLinkStyles = css({
-  color: 'grey.700',
-  fontSize: '14px',
-  _hover: {
-    color: 'grey.900',
-  },
-});
+// const footerLinkStyles = css({
+//   color: 'grey.700',
+//   fontSize: '14px',
+//   _hover: {
+//     color: 'grey.900',
+//   },
+// });
 
 const socialContainerStyles = css({
   display: 'flex',
