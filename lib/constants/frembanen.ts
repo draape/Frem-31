@@ -10,7 +10,7 @@ export const frembanenContent: FrembanenContent = {
     street: 'Nordraaks vei 67',
     postalCity: '1369 Stabekk',
     mapEmbedUrl:
-      'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1999.5!2d10.6089!3d59.9127!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTnCsDU0JzQ1LjciTiAxMMKwMzYnMzIuMCJF!5e0!3m2!1sen!2sno!4v1234567890',
+      'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2000.2982680992989!2d10.615837599999999!3d59.91059709999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46416ce8a4b2c0c3%3A0x2b3c482baaaeb9cf!2sFrembanen%20kunstgress!5e0!3m2!1sen!2sno!4v1773009324276!5m2!1sen!2sno',
     coordinates: { lat: 59.9127, lng: 10.6089 },
   },
   parking: {
@@ -27,12 +27,12 @@ export const frembanenContent: FrembanenContent = {
   },
   rules: {
     title: 'Baneregler',
-    intro: 'Hjelp oss å ta vare på den fine banen vår! Følgende er ikke tillatt på kunstgresset:',
+    intro: 'Hjelp oss å ta vare på den fine banen vår! Følgende er ikke tillatt på kunstgresset',
     prohibited: [
-      'Leking og klatring i mål og nett',
-      'Hunder – av hygieniske grunner',
-      'Snus og mat',
-      'Sykler og annet på hjul. Sykler bes parkert på asfalten i enden mot klubbhuset.',
+      'leking og klatring i mål og nett',
+      'hunder – av hygieniske grunner',
+      'snus og mat',
+      'sykler og annet på hjul. Sykler bes parkert på asfalten i enden mot klubbhuset.',
     ],
     outro:
       'Vennligst ta med deg søppel av banen og kast det i søppeldunkene ved inngangene og ved klubbhuset.',

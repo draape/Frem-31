@@ -1,5 +1,5 @@
 export { WelcomeSection } from './WelcomeSection';
-export { AddressSection } from './AddressSection';
-export { ParkingSection } from './ParkingSection';
+export { BodyTextSection } from './BodyTextSection';
+export { AddressParkingSection } from './AddressParkingSection';
 export { RulesSection } from './RulesSection';
 export { PitchMap } from './PitchMap';

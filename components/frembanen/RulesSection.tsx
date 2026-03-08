@@ -2,7 +2,16 @@ import { css } from '@/styled-system/css';
 import { frembanenContent } from '@/lib/constants/frembanen';
 
 const sectionStyles = css({
-  marginBottom: '24px',
+  backgroundColor: 'white',
+  padding: '48px 24px',
+  sm: {
+    padding: '32px 16px',
+  },
+});
+
+const containerStyles = css({
+  maxWidth: '800px',
+  margin: '0 auto',
 });
 
 const titleStyles = css({
@@ -21,6 +30,7 @@ const introStyles = css({
 const listStyles = css({
   paddingLeft: '20px',
   marginBottom: '16px',
+  listStyleType: 'disc',
 });
 
 const listItemStyles = css({
@@ -41,16 +51,18 @@ export function RulesSection() {
 
   return (
     <section className={sectionStyles}>
-      <h2 className={titleStyles}>{rules.title}</h2>
-      <p className={introStyles}>{rules.intro}</p>
-      <ul className={listStyles}>
-        {rules.prohibited.map((rule, index) => (
-          <li key={index} className={listItemStyles}>
-            {rule}
-          </li>
-        ))}
-      </ul>
-      <p className={outroStyles}>{rules.outro}</p>
+      <div className={containerStyles}>
+        <h2 className={titleStyles}>{rules.title}</h2>
+        <p className={introStyles}>{rules.intro}</p>
+        <ul className={listStyles}>
+          {rules.prohibited.map((rule, index) => (
+            <li key={index} className={listItemStyles}>
+              {rule}
+            </li>
+          ))}
+        </ul>
+        <p className={outroStyles}>{rules.outro}</p>
+      </div>
     </section>
   );
 }

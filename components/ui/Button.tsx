@@ -13,7 +13,7 @@ const baseButtonStyles = css({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: '8px 16px',
+  padding: '12px 18px',
   borderRadius: '9999px',
   fontWeight: '600',
   fontSize: '14px',
@@ -32,10 +32,10 @@ const primaryStyles = css({
 });
 
 const accentStyles = css({
-  backgroundColor: 'yellow.500',
-  color: 'grey.900',
+  backgroundColor: 'blue.500',
+  color: 'grey.50',
   _hover: {
-    backgroundColor: 'yellow.400',
+    backgroundColor: 'blue.600',
   },
 });
 

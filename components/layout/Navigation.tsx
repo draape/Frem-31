@@ -23,8 +23,8 @@ const linkStyles = css({
   color: 'grey.700',
   textDecoration: 'none',
   fontWeight: '500',
-  fontSize: '14px',
-  padding: '8px 16px',
+  fontSize: '1rem',
+  padding: '8px 18px',
   borderRadius: '9999px',
   transition: 'all 0.2s ease',
   whiteSpace: 'nowrap',
@@ -32,14 +32,10 @@ const linkStyles = css({
     backgroundColor: 'blue.50',
     color: 'blue.600',
   },
-  sm: {
-    fontSize: '12px',
-    padding: '6px 12px',
-  },
 });
 
 const activeLinkStyles = css({
-  backgroundColor: 'blue.100',
+  backgroundColor: 'blue.200',
   color: 'blue.600',
 });
 

@@ -3,7 +3,16 @@ import { css } from '@/styled-system/css';
 import { frembanenContent } from '@/lib/constants/frembanen';
 
 const sectionStyles = css({
-  marginBottom: '24px',
+  backgroundColor: 'white',
+  padding: '48px 24px',
+  sm: {
+    padding: '32px 16px',
+  },
+});
+
+const containerStyles = css({
+  maxWidth: '800px',
+  margin: '0 auto',
 });
 
 const titleStyles = css({
@@ -26,15 +35,17 @@ export function PitchMap() {
 
   return (
     <section className={sectionStyles}>
-      <h2 className={titleStyles}>{pitchMap.title}</h2>
-      <div className={imageContainerStyles}>
-        <Image
-          src="/images/pitch-map.svg"
-          alt="Banekart over Frembanen med oversikt over 5er og 7er baner samt foreldresoner"
-          fill
-          style={{ objectFit: 'contain' }}
-          priority
-        />
+      <div className={containerStyles}>
+        <h2 className={titleStyles}>{pitchMap.title}</h2>
+        <div className={imageContainerStyles}>
+          <Image
+            src="/images/pitch-map.svg"
+            alt="Banekart over Frembanen med oversikt over 5er og 7er baner samt foreldresoner"
+            fill
+            style={{ objectFit: 'contain' }}
+            priority
+          />
+        </div>
       </div>
     </section>
   );
