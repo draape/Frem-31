@@ -1,6 +1,6 @@
 import { css } from '@/styled-system/css';
-import { navigationConfig, socialLinks } from '@/lib/constants/navigation';
-import { Link } from '@/components/ui/Link';
+import { socialLinks } from '@/lib/constants/navigation';
+// import { Link } from '@/components/ui/Link';
 
 const footerStyles = css({
   backgroundColor: 'blue.100',
