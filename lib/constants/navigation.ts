@@ -2,7 +2,7 @@ import type { NavigationConfig } from '@/lib/types';
 
 export const navigationConfig: NavigationConfig = {
   header: [
-    { label: 'Frembanen', href: '/', variant: 'link' },
+    { label: 'Frembanen', href: '/frembanen', variant: 'link' },
     { label: 'Banekalender', href: '/banekalender', variant: 'link' },
     {
       label: 'Treningstilbud',

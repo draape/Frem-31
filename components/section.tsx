@@ -1,9 +1,44 @@
-import { css } from '@/styled-system/css/css';
+import { cva, cx } from '@/styled-system/css';
 
-const sectionStyles = css({
-  backgroundColor: 'blue.100',
+const sectionStyles = cva({
+  base: {
+    width: '100%',
+    marginX: 'auto',
+    px: '6', // Default horizontal padding
+  },
+  variants: {
+    maxWidth: {
+      content: { maxWidth: '800px' },
+      layout: { maxWidth: '1280px' },
+    },
+    padding: {
+      none: { py: '0' },
+      sm: { py: '8' }, // 2rem
+      md: { py: '12' }, // 3rem
+      lg: { py: '16' }, // 4rem
+    },
+    background: {
+      transparent: { bg: 'transparent' },
+      white: { bg: 'white' },
+      blue: { bg: 'blue.100' },
+      yellow: { bg: 'yellow.100' },
+    },
+  },
+  defaultVariants: {
+    maxWidth: 'layout',
+    padding: 'none',
+    background: 'transparent',
+  },
 });
 
-export function Section({ children }: { children: React.ReactNode }) {
-  return <section className={sectionStyles}>{children}</section>;
+interface SectionProps {
+  maxWidth?: 'content' | 'layout';
+  padding?: 'none' | 'sm' | 'md' | 'lg';
+  background?: 'transparent' | 'white' | 'blue' | 'yellow';
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function Section({ maxWidth, padding, background, children, className }: SectionProps) {
+  return <div className={cx(sectionStyles({ maxWidth, padding, background }), className)}>{children}</div>;
 }

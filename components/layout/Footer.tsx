@@ -1,20 +1,17 @@
 import { css } from '@/styled-system/css';
 import { socialLinks } from '@/lib/constants/navigation';
+import { Section } from '../section';
 // import { Link } from '@/components/ui/Link';
 
 const footerStyles = css({
-  backgroundColor: 'blue.100',
   color: 'grey.900',
-  padding: '48px 24px',
-  marginTop: '4rem',
+  marginTop: '16',
 });
 
-const footerContainerStyles = css({
-  margin: '0 auto',
-  maxW: '80rem',
+const gridStyles = css({
   display: 'grid',
   gridTemplateColumns: '1fr',
-  gap: '32px',
+  gap: '8',
   md: {
     gridTemplateColumns: '1fr 1fr',
   },
@@ -26,18 +23,18 @@ const footerContainerStyles = css({
 const footerSectionStyles = css({
   display: 'flex',
   flexDirection: 'column',
-  gap: '12px',
+  gap: '3',
 });
 
 const footerTitleStyles = css({
-  fontSize: '16px',
-  fontWeight: '600',
+  fontSize: 'base',
+  fontWeight: 'semibold',
   color: 'grey.900',
 });
 
 // const footerLinkStyles = css({
 //   color: 'grey.700',
-//   fontSize: '14px',
+//   fontSize: 'sm',
 //   _hover: {
 //     color: 'grey.900',
 //   },
@@ -45,9 +42,9 @@ const footerTitleStyles = css({
 
 const socialContainerStyles = css({
   display: 'flex',
-  gap: '16px',
+  gap: '4',
   alignItems: 'center',
-  marginTop: '8px',
+  marginTop: '2',
 });
 
 const socialLinkStyles = css({
@@ -60,7 +57,8 @@ const socialLinkStyles = css({
 export function Footer() {
   return (
     <footer className={footerStyles}>
-      <div className={footerContainerStyles}>
+      <Section maxWidth="layout" padding="md" background="blue">
+        <div className={gridStyles}>
         <div className={footerSectionStyles}>
           <h3 className={footerTitleStyles}>Sportsklubb Frem-31</h3>
           <div className={socialContainerStyles}>
@@ -97,7 +95,8 @@ export function Footer() {
             ))}
           </div>
         ))} */}
-      </div>
+        </div>
+      </Section>
     </footer>
   );
 }

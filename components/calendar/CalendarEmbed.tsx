@@ -39,7 +39,7 @@ const fallbackStyles = css({
 });
 
 const fallbackTextStyles = css({
-  fontSize: '16px',
+  fontSize: 'base',
   color: 'grey.600',
   marginBottom: '16px',
 });

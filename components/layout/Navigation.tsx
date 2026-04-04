@@ -22,8 +22,8 @@ const navStyles = css({
 const linkStyles = css({
   color: 'grey.700',
   textDecoration: 'none',
-  fontWeight: '500',
-  fontSize: '1rem',
+  fontWeight: 'medium',
+  fontSize: 'base',
   padding: '8px 18px',
   borderRadius: '9999px',
   transition: 'all 0.2s ease',
@@ -48,7 +48,11 @@ export function Navigation() {
         const isActive = pathname === item.href;
 
         if (item.variant === 'button') {
-          return <Button key={item.href} item={item} variant="accent" />;
+          return (
+            <Button key={item.href} href={item.href} external={item.external} variant="secondary">
+              {item.label}
+            </Button>
+          );
         }
 
         return (

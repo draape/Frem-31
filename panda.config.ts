@@ -7,6 +7,27 @@ export default defineConfig({
   theme: {
     extend: {
       tokens: {
+        fonts: {
+          sans: { value: 'var(--font-inter), system-ui, -apple-system, sans-serif' },
+          serif: { value: 'var(--font-fraunces), Georgia, serif' },
+        },
+        fontWeights: {
+          extralight: { value: '200' },
+          normal: { value: '400' },
+          medium: { value: '500' },
+          semibold: { value: '600' },
+          bold: { value: '700' },
+        },
+        fontSizes: {
+          xs: { value: '12px' },
+          sm: { value: '14px' },
+          base: { value: '16px' },
+          lg: { value: '18px' },
+          xl: { value: '24px' },
+          '2xl': { value: '32px' },
+          '3xl': { value: '48px' },
+          '4xl': { value: '60px' },
+        },
         colors: {
           blue: {
             50: { value: '#F4FCFF' },
@@ -58,6 +79,51 @@ export default defineConfig({
           muted: { value: '{colors.grey.500}' },
         },
       },
+      textStyles: {
+        hero: {
+          description: 'Display/Hero - Large hero headings',
+          value: {
+            fontFamily: 'serif',
+            fontSize: '4xl',
+            fontWeight: 'bold',
+            lineHeight: '1',
+          },
+        },
+        titleLg: {
+          description: 'Display/Title lg - Page titles',
+          value: {
+            fontFamily: 'serif',
+            fontSize: '3xl',
+            fontWeight: 'bold',
+            lineHeight: '1',
+          },
+        },
+        lead: {
+          description: 'Text/Lead - Lead paragraphs and descriptions',
+          value: {
+            fontFamily: 'sans',
+            fontSize: 'xl',
+            fontWeight: 'extralight',
+            lineHeight: '1.5',
+          },
+        },
+        tag: {
+          description: 'Text/Tag - Small tags and labels',
+          value: {
+            fontFamily: 'sans',
+            fontSize: 'xs',
+            fontWeight: 'bold',
+            lineHeight: '1',
+          },
+        },
+      },
+    },
+  },
+  globalCss: {
+    body: {
+      fontFamily: 'sans',
+      fontSize: 'base',
+      fontWeight: 'normal',
     },
   },
   outdir: 'styled-system',

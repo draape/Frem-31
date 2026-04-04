@@ -1,14 +1,8 @@
 import { css } from '@/styled-system/css';
 import { frembanenContent } from '@/lib/constants/frembanen';
+import { Section } from '../section';
 
-const sectionStyles = css({
-  backgroundColor: 'yellow.100',
-  py: '3rem',
-});
-
-const containerStyles = css({
-  maxW: '80rem',
-  margin: '0 auto',
+const cardStyles = css({
   display: 'flex',
   backgroundColor: 'white',
   borderRadius: '12px',
@@ -18,7 +12,7 @@ const containerStyles = css({
 
 const textContentStyles = css({
   padding: '2rem',
-  fontSize: '16px',
+  fontSize: 'base',
   color: 'grey.700',
   lineHeight: '1.5',
   display: 'flex',
@@ -27,8 +21,8 @@ const textContentStyles = css({
 });
 
 const titleStyles = css({
-  fontSize: '18px',
-  fontWeight: '600',
+  fontSize: 'lg',
+  fontWeight: 'semibold',
   color: 'grey.900',
   marginBottom: '8px',
 });
@@ -57,8 +51,8 @@ export function AddressParkingSection() {
   const { address, parking } = frembanenContent;
 
   return (
-    <section className={sectionStyles}>
-      <div className={containerStyles}>
+    <Section maxWidth="layout" padding="lg" background="yellow">
+      <div className={cardStyles}>
         <div className={textContentStyles}>
           <h2 className={titleStyles}>Addresse</h2>
           <p>
@@ -86,6 +80,6 @@ export function AddressParkingSection() {
           />
         </div>
       </div>
-    </section>
+    </Section>
   );
 }

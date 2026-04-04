@@ -1,74 +1,121 @@
-import { css } from '@/styled-system/css';
-import type { NavigationItem } from '@/lib/types';
+import { ark } from '@ark-ui/react';
+import { sva, cx } from '@/styled-system/css';
+import type { ReactNode } from 'react';
+
+const buttonStyles = sva({
+  slots: ['root'],
+  base: {
+    root: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 'md',
+      fontWeight: 'semibold',
+      fontSize: 'sm',
+      transition: 'all 0.2s ease',
+      cursor: 'pointer',
+      border: 'none',
+      textDecoration: 'none',
+      outline: 'none',
+      _disabled: {
+        opacity: 0.5,
+        cursor: 'not-allowed',
+      },
+      _focus: {
+        outline: '2px solid',
+        outlineColor: 'blue.300',
+        outlineOffset: '2px',
+      },
+    },
+  },
+  variants: {
+    variant: {
+      primary: {
+        root: {
+          bg: 'yellow.400',
+          color: 'blue.800',
+          _hover: { bg: 'yellow.200' },
+          _active: { bg: 'yellow.200' },
+        },
+      },
+      secondary: {
+        root: {
+          bg: 'blue.500',
+          color: 'white',
+          _hover: { bg: 'blue.600' },
+          _active: { bg: 'blue.700' },
+        },
+      },
+      outlined: {
+        root: {
+          bg: 'transparent',
+          border: '2px solid',
+          borderColor: 'gray.50',
+          color: 'gray.50',
+          _hover: { bg: 'blue.200/40' },
+          _active: { bg: 'blue.200/40' },
+        },
+      },
+    },
+    size: {
+      sm: { root: { px: '6', height: '36px' } },
+      md: { root: { px: '8', height: '45px' } },
+      lg: { root: { px: '10', height: '52px' } },
+    },
+  },
+  defaultVariants: {
+    variant: 'primary',
+    size: 'md',
+  },
+});
 
 interface ButtonProps {
-  item?: NavigationItem;
+  variant?: 'primary' | 'secondary' | 'outlined';
+  size?: 'sm' | 'md' | 'lg';
+  children: ReactNode;
+  href?: string;
+  external?: boolean;
   onClick?: () => void;
-  children?: React.ReactNode;
-  variant?: 'primary' | 'accent';
+  disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
   className?: string;
 }
 
-const baseButtonStyles = css({
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '12px 18px',
-  borderRadius: '9999px',
-  fontWeight: '600',
-  fontSize: '14px',
-  textDecoration: 'none',
-  cursor: 'pointer',
-  border: 'none',
-  transition: 'all 0.2s ease',
-});
+export function Button({
+  variant = 'primary',
+  size = 'md',
+  children,
+  href,
+  external,
+  onClick,
+  disabled,
+  type = 'button',
+  className,
+}: ButtonProps) {
+  const styles = buttonStyles({ variant, size });
 
-const primaryStyles = css({
-  backgroundColor: 'blue.500',
-  color: 'white',
-  _hover: {
-    backgroundColor: 'blue.600',
-  },
-});
-
-const accentStyles = css({
-  backgroundColor: 'blue.500',
-  color: 'grey.50',
-  _hover: {
-    backgroundColor: 'blue.600',
-  },
-});
-
-export function Button({ item, onClick, children, variant = 'accent', className }: ButtonProps) {
-  const content = children ?? item?.label;
-  const variantStyles = variant === 'primary' ? primaryStyles : accentStyles;
-
-  if (item?.external && item.href) {
+  if (href) {
     return (
-      <a
-        href={item.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`${baseButtonStyles} ${variantStyles} ${className ?? ''}`}
+      <ark.a
+        href={href}
+        target={external ? '_blank' : undefined}
+        rel={external ? 'noopener noreferrer' : undefined}
+        className={cx(styles.root, className)}
+        aria-disabled={disabled}
       >
-        {content}
-      </a>
-    );
-  }
-
-  if (item?.href) {
-    return (
-      <a href={item.href} className={`${baseButtonStyles} ${variantStyles} ${className ?? ''}`}>
-        {content}
-      </a>
+        {children}
+      </ark.a>
     );
   }
 
   return (
-    <button onClick={onClick} className={`${baseButtonStyles} ${variantStyles} ${className ?? ''}`}>
-      {content}
-    </button>
+    <ark.button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={cx(styles.root, className)}
+    >
+      {children}
+    </ark.button>
   );
 }
-
-export { baseButtonStyles, primaryStyles, accentStyles };

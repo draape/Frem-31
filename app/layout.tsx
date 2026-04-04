@@ -2,18 +2,18 @@ import type { Metadata } from 'next';
 import { css } from '@/styled-system/css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { inter, fraunces } from './fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Frembanen - Sportsklubb Frem-31',
-  description: 'Informasjon om Frembanen, trenings- og kampanlegget til Frem-31 i Stabekk.',
+  title: 'Sportsklubb Frem-31',
+  description: 'Sportsklubb i Stabekk med fotballbane og treningsaktiviteter.',
 };
 
 const bodyStyles = css({
   display: 'flex',
   flexDirection: 'column',
   minHeight: '100vh',
-  fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
 });
 
 const mainStyles = css({
@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="no">
+    <html lang="no" className={`${inter.variable} ${fraunces.variable}`}>
       <body className={bodyStyles}>
         <Header />
         <main className={mainStyles}>{children}</main>
