@@ -1,10 +1,10 @@
 import { cva, cx } from '@/styled-system/css';
 
-const sectionStyles = cva({
+const styles = cva({
   base: {
     width: '100%',
     marginX: 'auto',
-    px: '6', // Default horizontal padding
+    px: '6',
   },
   variants: {
     maxWidth: {
@@ -13,9 +13,9 @@ const sectionStyles = cva({
     },
     padding: {
       none: { py: '0' },
-      sm: { py: '8' }, // 2rem
-      md: { py: '12' }, // 3rem
-      lg: { py: '16' }, // 4rem
+      sm: { py: '8' },
+      md: { py: '12' },
+      lg: { py: '16' },
     },
     background: {
       transparent: { bg: 'transparent' },
@@ -31,14 +31,18 @@ const sectionStyles = cva({
   },
 });
 
-interface SectionProps {
+type SectionProps = {
   maxWidth?: 'content' | 'layout';
   padding?: 'none' | 'sm' | 'md' | 'lg';
   background?: 'transparent' | 'white' | 'blue' | 'yellow';
   children: React.ReactNode;
   className?: string;
-}
+};
 
 export function Section({ maxWidth, padding, background, children, className }: SectionProps) {
-  return <div className={cx(sectionStyles({ maxWidth, padding, background }), className)}>{children}</div>;
+  return (
+    <div className={cx(styles({ maxWidth: maxWidth, padding, background }), className)}>
+      {children}
+    </div>
+  );
 }

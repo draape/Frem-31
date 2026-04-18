@@ -18,18 +18,76 @@ type HeroProps = {
   };
 };
 
-const heroStyles = sva({
-  slots: ['root', 'container', 'title', 'titleAccent', 'description', 'buttonGroup'],
+export function Hero({
+  badge,
+  title,
+  titleAccent,
+  description,
+  primaryButton,
+  secondaryButton,
+}: HeroProps) {
+  const s = style();
+
+  return (
+    <section className={s.root}>
+      <div className={s.stripes}>&nbsp;</div>
+      <Section maxWidth="layout" padding="lg">
+        <div className={s.container}>
+          {badge && <Badge>{badge}</Badge>}
+
+          <h1 className={s.title}>
+            {title}
+            {titleAccent && <span className={s.titleAccent}> {titleAccent}</span>}
+          </h1>
+
+          <p className={s.description}>{description}</p>
+
+          {(primaryButton || secondaryButton) && (
+            <div className={s.buttonGroup}>
+              {primaryButton && (
+                <Button
+                  variant="primary"
+                  href={primaryButton.href}
+                  external={primaryButton.external}
+                >
+                  {primaryButton.label}
+                </Button>
+              )}
+              {secondaryButton && (
+                <Button variant="outlined" href={secondaryButton.href}>
+                  {secondaryButton.label}
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+      </Section>
+    </section>
+  );
+}
+
+const style = sva({
+  slots: ['root', 'stripes', 'container', 'title', 'titleAccent', 'description', 'buttonGroup'],
   base: {
     root: {
-      backgroundColor: 'blue.800',
+      bg: 'blue.800',
       width: '100%',
+      pos: 'relative',
+    },
+    stripes: {
+      pos: 'absolute',
+      background:
+        'repeating-linear-gradient(135deg, var(--colors-yellow-400) 0px, var(--colors-yellow-400) 2px, transparent 2px, transparent 40px)',
+      opacity: 0.15,
+      w: '100%',
+      h: '100%',
+      pointerEvents: 'none',
     },
     container: {
       display: 'flex',
       alignItems: 'flex-start',
       flexDirection: 'column',
-      gap: '6', // 1.5rem
+      gap: '6',
     },
     title: {
       textStyle: 'titleLg',
@@ -56,46 +114,3 @@ const heroStyles = sva({
     },
   },
 });
-
-export function Hero({
-  badge,
-  title,
-  titleAccent,
-  description,
-  primaryButton,
-  secondaryButton,
-}: HeroProps) {
-  const styles = heroStyles();
-
-  return (
-    <section className={styles.root}>
-      <Section maxWidth="layout" padding="lg">
-        <div className={styles.container}>
-          {badge && <Badge>{badge}</Badge>}
-
-          <h1 className={styles.title}>
-            {title}
-            {titleAccent && <span className={styles.titleAccent}> {titleAccent}</span>}
-          </h1>
-
-          <p className={styles.description}>{description}</p>
-
-          {(primaryButton || secondaryButton) && (
-            <div className={styles.buttonGroup}>
-              {primaryButton && (
-                <Button variant="primary" href={primaryButton.href} external={primaryButton.external}>
-                  {primaryButton.label}
-                </Button>
-              )}
-              {secondaryButton && (
-                <Button variant="outlined" href={secondaryButton.href}>
-                  {secondaryButton.label}
-                </Button>
-              )}
-            </div>
-          )}
-        </div>
-      </Section>
-    </section>
-  );
-}
