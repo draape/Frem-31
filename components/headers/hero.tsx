@@ -78,7 +78,7 @@ const style = sva({
       pos: 'absolute',
       background:
         'repeating-linear-gradient(135deg, var(--colors-yellow-400) 0px, var(--colors-yellow-400) 2px, transparent 2px, transparent 40px)',
-      opacity: 0.15,
+      opacity: 0.1,
       w: '100%',
       h: '100%',
       pointerEvents: 'none',
