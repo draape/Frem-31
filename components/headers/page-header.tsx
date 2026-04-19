@@ -5,7 +5,7 @@ import { Section } from '@/components/section';
 type PageHeaderProps = {
   title: string;
   titleAccent?: string;
-  description: string;
+  description?: string;
   image?: {
     src: string;
     alt: string;
@@ -27,7 +27,7 @@ export function PageHeader({ title, titleAccent, description, image }: PageHeade
               {title}
               {titleAccent && <span className={s.titleAccent}> {titleAccent}</span>}
             </h1>
-            <p className={s.description}>{description}</p>
+            {description && <p className={s.description}>{description}</p>}
           </div>
           <div className={s.imageContainer}>
             <Image

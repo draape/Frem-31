@@ -39,12 +39,15 @@ const styles = sva({
       alignItems: 'center',
       gap: '2.5',
       textDecoration: 'none',
+      color: 'gray.50',
+      _hover: {
+        color: 'yellow.400',
+      },
     },
     logoText: {
       fontFamily: 'serif',
       fontWeight: 'bold',
       fontSize: 'xl',
-      color: 'white',
       lineHeight: '1',
       whiteSpace: 'nowrap',
     },

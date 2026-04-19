@@ -1,21 +1,24 @@
 import { Metadata } from 'next';
 import {
-  WelcomeSection,
   BodyTextSection,
   AddressParkingSection,
   RulesSection,
   // PitchMap,
 } from '@/components/frembanen';
+import { PageHeader } from '@/components/headers';
 
 export const metadata: Metadata = {
   title: 'Frembanen - Sportsklubb Frem-31',
-  description: 'Informasjon om Frembanen, trenings- og kampanlegget til Frem-31 i Stabekk.',
+  description: 'Informasjon om Frembanen, trenings- og kampanlegget til Frem-31.',
 };
 
 export default function FrembanenPage() {
   return (
     <>
-      <WelcomeSection />
+      <PageHeader
+        title="Frembanen"
+        description="Velkommen til Frembanen, trenings- og kampanlegget til Frem-31."
+      />
       <BodyTextSection />
       <AddressParkingSection />
       <RulesSection />
