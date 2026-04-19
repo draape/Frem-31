@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { css } from '@/styled-system/css';
 import { CalendarEmbed } from '@/components/calendar';
 import { calendarConfig } from '@/lib/constants/calendar';
+import { PageHeader } from '@/components/headers';
 
 export const metadata: Metadata = {
   title: 'Banekalender - Frembanen | Sportsklubb Frem-31',
@@ -45,10 +46,10 @@ const subtitleStyles = css({
 export default function BanekalenderPage() {
   return (
     <div className={containerStyles}>
-      <header className={headerStyles}>
-        <h1 className={titleStyles}>{calendarConfig.title}</h1>
-        <p className={subtitleStyles}>Se når banen er ledig for trening og kamper.</p>
-      </header>
+      <PageHeader
+        title={calendarConfig.title}
+        description="Se når banen er ledig for trening og kamper."
+      />
       <CalendarEmbed />
     </div>
   );
