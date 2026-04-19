@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@ark-ui/react": "^4.5.0",
+    "@phosphor-icons/react": "^2.1.10",
     "next": "14.2.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
