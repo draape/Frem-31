@@ -6,6 +6,8 @@ import { calendarConfig } from '@/lib/constants/calendar';
 
 const containerStyles = css({
   width: '100%',
+  maxWidth: '1200px',
+  margin: '0 auto',
   minHeight: '800px',
   position: 'relative',
   overflowX: 'auto',

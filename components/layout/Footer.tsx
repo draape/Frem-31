@@ -76,6 +76,7 @@ const styles = sva({
     root: {
       bg: 'blue.800',
       w: 'full',
+      mt: '16',
     },
     container: {
       maxW: '1280px',
