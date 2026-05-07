@@ -5,7 +5,6 @@ import { Section } from '@/components/section';
 
 type SplitProps = {
   title: string;
-  titleAccent?: string;
   description?: string;
   image: {
     src: string;
@@ -17,35 +16,19 @@ type SplitProps = {
     external?: boolean;
   };
   imageSide?: 'left' | 'right';
-  variant?: 'transparent' | 'white' | 'blue' | 'yellow';
 };
 
-export function Split({
-  title,
-  titleAccent,
-  description,
-  image,
-  cta,
-  imageSide = 'right',
-  variant = 'transparent',
-}: SplitProps) {
-  const s = styles({ imageSide, variant });
+export function Split({ title, description, image, cta, imageSide = 'right' }: SplitProps) {
+  const s = styles({ imageSide });
 
   return (
-    <Section maxWidth="layout" padding="lg" background={variant}>
+    <Section maxWidth="layout" padding="lg">
       <div className={s.grid}>
         <div className={s.textContainer}>
-          <h2 className={s.title}>
-            {title}
-            {titleAccent && <span className={s.titleAccent}> {titleAccent}</span>}
-          </h2>
+          <h2 className={s.title}>{title}</h2>
           {description && <p className={s.description}>{description}</p>}
           <div className={s.ctaWrap}>
-            <Button
-              variant={variant === 'blue' ? 'primary' : 'secondary'}
-              href={cta.href}
-              external={cta.external}
-            >
+            <Button variant="secondary" href={cta.href} external={cta.external}>
               {cta.label}
             </Button>
           </div>
@@ -65,7 +48,7 @@ export function Split({
 }
 
 const styles = sva({
-  slots: ['grid', 'textContainer', 'title', 'titleAccent', 'description', 'ctaWrap', 'imageContainer'],
+  slots: ['grid', 'textContainer', 'title', 'description', 'ctaWrap', 'imageContainer'],
   base: {
     grid: {
       display: 'flex',
@@ -84,13 +67,12 @@ const styles = sva({
       flex: '1',
     },
     title: {
+      color: 'grey.950',
       textStyle: 'titleLg',
       maxW: '35ch',
     },
-    titleAccent: {
-      color: 'yellow.500',
-    },
     description: {
+      color: 'grey.600',
       textStyle: 'lead',
       maxW: '50ch',
     },
@@ -116,28 +98,8 @@ const styles = sva({
         grid: { md: { flexDir: 'row' } },
       },
     },
-    variant: {
-      transparent: {
-        title: { color: 'grey.950' },
-        description: { color: 'grey.600' },
-      },
-      white: {
-        title: { color: 'grey.950' },
-        description: { color: 'grey.600' },
-      },
-      blue: {
-        title: { color: 'white' },
-        titleAccent: { color: 'yellow.400' },
-        description: { color: 'blue.100' },
-      },
-      yellow: {
-        title: { color: 'blue.950' },
-        description: { color: 'blue.800' },
-      },
-    },
   },
   defaultVariants: {
     imageSide: 'right',
-    variant: 'transparent',
   },
 });

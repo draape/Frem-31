@@ -22,9 +22,7 @@ type RichTextProps = {
 export function RichText({ content }: RichTextProps) {
   return (
     <Section maxWidth="content" padding="md">
-      <div className={prose}>
-        {content.map((node, i) => renderNode(node, i))}
-      </div>
+      <div className={prose}>{content.map((node, i) => renderNode(node, i))}</div>
     </Section>
   );
 }
@@ -51,7 +49,7 @@ function renderNode(node: RichTextNode, key: number) {
 
     case 'list':
       return node.style === 'bullet' ? (
-        <ul key={key} className={list}>
+        <ul key={key} className={unorderedList}>
           {node.items.map((item, j) => (
             <li key={j} className={listItem}>
               {item}
@@ -59,7 +57,7 @@ function renderNode(node: RichTextNode, key: number) {
           ))}
         </ul>
       ) : (
-        <ol key={key} className={list}>
+        <ol key={key} className={orderedList}>
           {node.items.map((item, j) => (
             <li key={j} className={listItem}>
               {item}
@@ -130,7 +128,7 @@ const h3 = css({
   mt: '2',
 });
 
-const list = css({
+const list = {
   fontFamily: 'sans',
   fontSize: 'base',
   lineHeight: '1.7',
@@ -139,6 +137,16 @@ const list = css({
   display: 'flex',
   flexDir: 'column',
   gap: '1',
+};
+
+const unorderedList = css({
+  ...list,
+  listStyleType: 'disc',
+});
+
+const orderedList = css({
+  ...list,
+  listStyleType: 'decimal',
 });
 
 const listItem = css({

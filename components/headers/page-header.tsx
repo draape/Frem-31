@@ -4,7 +4,6 @@ import { Section } from '@/components/section';
 
 type PageHeaderProps = {
   title: string;
-  titleAccent?: string;
   description?: string;
   image?: {
     src: string;
@@ -14,7 +13,7 @@ type PageHeaderProps = {
   };
 };
 
-export function PageHeader({ title, titleAccent, description, image }: PageHeaderProps) {
+export function PageHeader({ title, description, image }: PageHeaderProps) {
   const s = styles();
   const hasImage = !!image;
 
@@ -23,10 +22,7 @@ export function PageHeader({ title, titleAccent, description, image }: PageHeade
       {hasImage ? (
         <div className={s.grid}>
           <div className={s.textContainer}>
-            <h1 className={s.title}>
-              {title}
-              {titleAccent && <span className={s.titleAccent}> {titleAccent}</span>}
-            </h1>
+            <h1 className={s.title}>{title}</h1>
             {description && <p className={s.description}>{description}</p>}
           </div>
           <div className={s.imageContainer}>
@@ -42,10 +38,7 @@ export function PageHeader({ title, titleAccent, description, image }: PageHeade
         </div>
       ) : (
         <div className={s.textContainer}>
-          <h1 className={s.title}>
-            {title}
-            {titleAccent && <span className={s.titleAccent}> {titleAccent}</span>}
-          </h1>
+          <h1 className={s.title}>{title}</h1>
           <p className={s.description}>{description}</p>
         </div>
       )}
@@ -54,7 +47,7 @@ export function PageHeader({ title, titleAccent, description, image }: PageHeade
 }
 
 const styles = sva({
-  slots: ['grid', 'textContainer', 'title', 'titleAccent', 'description', 'imageContainer'],
+  slots: ['grid', 'textContainer', 'title', 'description', 'imageContainer'],
   base: {
     grid: {
       display: 'flex',
@@ -75,9 +68,6 @@ const styles = sva({
       textStyle: 'titleLg',
       color: 'grey.950',
       maxW: '35ch',
-    },
-    titleAccent: {
-      color: 'yellow.500',
     },
     description: {
       textStyle: 'lead',

@@ -17,43 +17,38 @@ export function CallToAction({ title, description, cta, variant = 'blue' }: Call
   const s = styles({ variant });
 
   return (
-    <div className={s.root}>
-      <Section maxWidth="layout" padding="lg">
-        <div className={s.container}>
-          <div className={s.textWrap}>
-            <h2 className={s.title}>{title}</h2>
-            {description && <p className={s.description}>{description}</p>}
-          </div>
-          <div className={s.ctaWrap}>
-            <Button
-              variant={variant === 'blue' ? 'primary' : 'secondary'}
-              href={cta.href}
-              external={cta.external}
-            >
-              {cta.label}
-            </Button>
-          </div>
+    <Section maxWidth="layout" padding="lg">
+      <div className={s.root}>
+        <div className={s.textWrap}>
+          <h2 className={s.title}>{title}</h2>
+          {description && <p className={s.description}>{description}</p>}
         </div>
-      </Section>
-    </div>
+        <div className={s.ctaWrap}>
+          <Button
+            variant={variant === 'blue' ? 'primary' : 'secondary'}
+            href={cta.href}
+            external={cta.external}
+          >
+            {cta.label}
+          </Button>
+        </div>
+      </div>
+    </Section>
   );
 }
 
 const styles = sva({
-  slots: ['root', 'container', 'textWrap', 'title', 'description', 'ctaWrap'],
+  slots: ['root', 'textWrap', 'title', 'description', 'ctaWrap'],
   base: {
     root: {
-      w: '100%',
-    },
-    container: {
       display: 'flex',
       flexDir: 'column',
       gap: '8',
+      p: '8',
+      borderRadius: 'lg',
       md: {
-        flexDir: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '12',
+        gap: '8',
+        p: '14',
       },
     },
     textWrap: {
