@@ -6,6 +6,7 @@ import { Split } from '@/components/content/split';
 import { RichText } from '@/components/content/rich-text';
 import type { RichTextNode } from '@/components/content/rich-text';
 import { PricingTiers } from '@/components/pricing/pricing-tiers';
+import { FeeTable } from '@/components/pricing/fee-table';
 
 export default function UiSandboxPage() {
   return (
@@ -237,6 +238,23 @@ export default function UiSandboxPage() {
         </h2>
         <PricingTiers tiers={membershipTiers} />
       </section>
+      {/* ─── FeeTable ─── */}
+      <section style={{ borderTop: '1px solid #e8e8e8' }}>
+        <h2
+          style={{
+            fontFamily: 'sans-serif',
+            fontSize: '12px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+            color: '#ABABAB',
+            padding: '24px 24px 0',
+          }}
+        >
+          FeeTable
+        </h2>
+        <FeeTable groups={feeGroups} />
+      </section>
     </main>
   );
 }
@@ -323,5 +341,34 @@ const membershipTiers = [
       'Invitasjon til klubbens arrangementer',
     ],
     cta: { label: 'Bli støttemedlem', href: '/innmelding' },
+  },
+];
+
+const feeGroups = [
+  {
+    title: 'Fotball',
+    rows: [
+      { label: 'Barn og ungdom (6–12 år)', price: 'kr 1 200 / år' },
+      { label: 'Junior (13–19 år)', price: 'kr 1 800 / år' },
+      { label: 'Voksen (20+)', price: 'kr 2 400 / år' },
+      { label: 'Treningstøy (valgfritt)', price: 'kr 600', note: 'Betales separat ved bestilling' },
+    ],
+  },
+  {
+    title: 'Bandy',
+    rows: [
+      { label: 'Barn og ungdom (6–12 år)', price: 'kr 1 000 / år' },
+      { label: 'Junior (13–19 år)', price: 'kr 1 500 / år' },
+      { label: 'Voksen (20+)', price: 'kr 2 000 / år' },
+      { label: 'Bandystøvler (utlån)', price: 'Inkludert', note: 'Begrenset tilgjengelighet' },
+    ],
+  },
+  {
+    title: 'Annet',
+    rows: [
+      { label: 'Lego League', price: 'kr 800 / sesong', note: 'Oktober–januar' },
+      { label: 'Sommerskole', price: 'kr 1 500 / uke', note: 'Per uke, søskenmoderasjon tilgjengelig' },
+      { label: 'Baneleie (ekstern)', price: 'kr 500 / time', note: 'Kun tilgjengelig utenfor treningstider' },
+    ],
   },
 ];
