@@ -2,6 +2,7 @@ import { Football, Lightning, Trophy } from '@phosphor-icons/react/dist/ssr';
 import { CallToAction } from '@/components/content/call-to-action';
 import { Card } from '@/components/content/card';
 import { CardList } from '@/components/content/card-list';
+import { Split } from '@/components/content/split';
 
 export default function UiSandboxPage() {
   return (
@@ -152,6 +153,52 @@ export default function UiSandboxPage() {
             link={{ label: 'Meld deg inn', href: '/innmelding' }}
           />
         </CardList>
+      </section>
+      {/* ─── Split ─── */}
+      <section style={{ borderTop: '1px solid #e8e8e8' }}>
+        <h2
+          style={{
+            fontFamily: 'sans-serif',
+            fontSize: '12px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+            color: '#ABABAB',
+            padding: '24px 24px 0',
+          }}
+        >
+          Split
+        </h2>
+
+        {/* image right (default) */}
+        <Split
+          title="Frembanen — vår hjemmebane"
+          titleAccent="siden 1921"
+          description="Et fullverdig anlegg med kunstgressbane, bandyis og gode fasiliteter for alle våre aktiviteter gjennom hele året."
+          image={{ src: '/images/_DSC6121.jpg', alt: 'Frembanen' }}
+          cta={{ label: 'Les om banen', href: '/frembanen' }}
+        />
+
+        {/* image left */}
+        <Split
+          title="Bli med i klubben"
+          description="Frem 31 er for alle. Vi tilbyr fotball, bandy, Lego League og sommerskole. Meld deg inn i dag og bli en del av fellesskapet."
+          image={{ src: '/images/_DSC6121.jpg', alt: 'Frem 31 aktiviteter' }}
+          cta={{ label: 'Meld deg inn', href: '/innmelding' }}
+          imageSide="left"
+          variant="white"
+        />
+
+        {/* blue variant */}
+        <Split
+          title="Treningstilbud for"
+          titleAccent="alle aldre"
+          description="Fra de minste til de eldste — vi har et tilbud som passer deg, uansett nivå eller erfaring."
+          image={{ src: '/images/_DSC6121.jpg', alt: 'Trening hos Frem 31' }}
+          cta={{ label: 'Se treningstilbud', href: '/treningstilbud' }}
+          imageSide="right"
+          variant="blue"
+        />
       </section>
     </main>
   );
