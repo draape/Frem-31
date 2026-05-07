@@ -3,6 +3,8 @@ import { CallToAction } from '@/components/content/call-to-action';
 import { Card } from '@/components/content/card';
 import { CardList } from '@/components/content/card-list';
 import { Split } from '@/components/content/split';
+import { RichText } from '@/components/content/rich-text';
+import type { RichTextNode } from '@/components/content/rich-text';
 
 export default function UiSandboxPage() {
   return (
@@ -200,6 +202,70 @@ export default function UiSandboxPage() {
           variant="blue"
         />
       </section>
+      {/* ─── RichText + Image ─── */}
+      <section style={{ borderTop: '1px solid #e8e8e8' }}>
+        <h2
+          style={{
+            fontFamily: 'sans-serif',
+            fontSize: '12px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+            color: '#ABABAB',
+            padding: '24px 24px 0',
+          }}
+        >
+          RichText + Image
+        </h2>
+        <RichText content={sampleRichText} />
+      </section>
     </main>
   );
 }
+
+const sampleRichText: RichTextNode[] = [
+  { type: 'heading', level: 2, text: 'Om Frem 31' },
+  {
+    type: 'paragraph',
+    children: [
+      { text: 'Frem 31 er en idrettsklubb på Frøen i Oslo med lange tradisjoner innen ' },
+      { text: 'fotball og bandy', marks: ['strong'] },
+      { text: '. Vi tilbyr aktiviteter for alle aldre og nivåer.' },
+    ],
+  },
+  { type: 'heading', level: 3, text: 'Våre aktiviteter' },
+  {
+    type: 'list',
+    style: 'bullet',
+    items: [
+      'Fotball — sommer og høst for barn, ungdom og voksne',
+      'Bandy — vinteraktivitet på Frembanen',
+      'Lego League — robotprogrammering for barn og unge',
+      'Sommerskole — aktiviteter i skoleferien',
+    ],
+  },
+  {
+    type: 'image',
+    src: '/images/_DSC6121.jpg',
+    alt: 'Frembanen',
+    caption: 'Frembanen — vår hjemmebane siden 1921',
+  },
+  {
+    type: 'paragraph',
+    children: [
+      { text: 'Anlegget holder høy standard med kunstgressbane og bandyis gjennom hele vinteren. ' },
+      { text: 'Les mer om fasiliteter og åpningstider på siden for banen.', marks: ['em'] },
+    ],
+  },
+  {
+    type: 'list',
+    style: 'number',
+    items: [
+      'Meld deg inn via innmeldingsskjema',
+      'Velg ønsket aktivitet og aldersgruppe',
+      'Betal treningsavgift',
+      'Møt opp på første trening',
+    ],
+  },
+  { type: 'link', href: '/frembanen', text: 'Les mer om Frembanen →' },
+];
