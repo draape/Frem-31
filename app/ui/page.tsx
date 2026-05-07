@@ -1,4 +1,6 @@
 import { Football, Lightning, Trophy } from '@phosphor-icons/react/dist/ssr';
+import { Hero } from '@/components/headers/hero';
+import { PageHeader } from '@/components/headers/page-header';
 import { CallToAction } from '@/components/content/call-to-action';
 import { Card } from '@/components/content/card';
 import { CardList } from '@/components/content/card-list';
@@ -23,6 +25,95 @@ export default function UiSandboxPage() {
       >
         /ui — Component sandbox
       </h1>
+
+      {/* ─── Hero ─── */}
+      <section>
+        <h2
+          style={{
+            fontFamily: 'sans-serif',
+            fontSize: '12px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+            color: '#ABABAB',
+            padding: '24px 24px 16px',
+          }}
+        >
+          Hero
+        </h2>
+
+        <p style={{ fontFamily: 'sans-serif', fontSize: '11px', color: '#ABABAB', padding: '0 24px 8px' }}>
+          Full — badge, titleAccent, both buttons
+        </p>
+        <Hero
+          badge="Sesong 2025"
+          title="Frem 31 —"
+          titleAccent="idrett for alle"
+          description="Vi er en idrettsklubb på Frøen i Oslo. Hos oss kan du spille fotball, gå på is med bandy eller bygge roboter med Lego League."
+          primaryButton={{ label: 'Meld deg inn', href: '/innmelding' }}
+          secondaryButton={{ label: 'Les om klubben', href: '/om-oss' }}
+        />
+
+        <p style={{ fontFamily: 'sans-serif', fontSize: '11px', color: '#ABABAB', padding: '16px 24px 8px' }}>
+          Minimal — title, description, primary button only
+        </p>
+        <Hero
+          title="Frembanen"
+          description="Vår hjemmebane med kunstgress og bandyis — tilgjengelig for alle våre aktiviteter gjennom hele året."
+          primaryButton={{ label: 'Om banen', href: '/frembanen' }}
+        />
+
+        <p style={{ fontFamily: 'sans-serif', fontSize: '11px', color: '#ABABAB', padding: '16px 24px 8px' }}>
+          No buttons
+        </p>
+        <Hero
+          title="Banekalender"
+          description="Se alle kommende treninger, kamper og arrangementer på Frembanen."
+        />
+      </section>
+
+      {/* ─── PageHeader ─── */}
+      <section style={{ borderTop: '1px solid #e8e8e8' }}>
+        <h2
+          style={{
+            fontFamily: 'sans-serif',
+            fontSize: '12px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+            color: '#ABABAB',
+            padding: '24px 24px 16px',
+          }}
+        >
+          PageHeader
+        </h2>
+
+        <p style={{ fontFamily: 'sans-serif', fontSize: '11px', color: '#ABABAB', padding: '0 24px 8px' }}>
+          Text only
+        </p>
+        <PageHeader
+          title="Om Frem 31"
+          description="Vi er en idrettsklubb på Frøen i Oslo med lange tradisjoner innen fotball og bandy."
+        />
+
+        <p style={{ fontFamily: 'sans-serif', fontSize: '11px', color: '#ABABAB', padding: '0 24px 8px' }}>
+          With titleAccent
+        </p>
+        <PageHeader
+          title="Frembanen —"
+          titleAccent="vår hjemmebane"
+          description="Et fullverdig anlegg med kunstgressbane, bandyis og fasiliteter for alle våre aktiviteter."
+        />
+
+        <p style={{ fontFamily: 'sans-serif', fontSize: '11px', color: '#ABABAB', padding: '0 24px 8px' }}>
+          With image
+        </p>
+        <PageHeader
+          title="Aktiviteter for alle aldre"
+          description="Fra fotball og bandy til Lego League og sommerskole — vi har noe for alle."
+          image={{ src: '/images/_DSC6121.jpg', alt: 'Frem 31 aktiviteter' }}
+        />
+      </section>
 
       {/* ─── CallToAction ─── */}
       <section style={{ padding: '24px 0' }}>
