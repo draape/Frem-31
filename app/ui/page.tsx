@@ -5,6 +5,7 @@ import { CardList } from '@/components/content/card-list';
 import { Split } from '@/components/content/split';
 import { RichText } from '@/components/content/rich-text';
 import type { RichTextNode } from '@/components/content/rich-text';
+import { PricingTiers } from '@/components/pricing/pricing-tiers';
 
 export default function UiSandboxPage() {
   return (
@@ -219,6 +220,23 @@ export default function UiSandboxPage() {
         </h2>
         <RichText content={sampleRichText} />
       </section>
+      {/* ─── PricingTiers ─── */}
+      <section style={{ borderTop: '1px solid #e8e8e8' }}>
+        <h2
+          style={{
+            fontFamily: 'sans-serif',
+            fontSize: '12px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+            color: '#ABABAB',
+            padding: '24px 24px 0',
+          }}
+        >
+          PricingTiers
+        </h2>
+        <PricingTiers tiers={membershipTiers} />
+      </section>
     </main>
   );
 }
@@ -268,4 +286,42 @@ const sampleRichText: RichTextNode[] = [
     ],
   },
   { type: 'link', href: '/frembanen', text: 'Les mer om Frembanen →' },
+];
+
+const membershipTiers = [
+  {
+    name: 'Vanlig',
+    price: 'kr 800 / år',
+    description: 'For enkeltmedlemmer som ønsker å støtte klubben og delta i våre aktiviteter.',
+    features: [
+      'Tilgang til alle treninger og kamper',
+      'Klubbmedlemsblad og nyhetsbrev',
+      'Stemmerett på årsmøtet',
+    ],
+    cta: { label: 'Meld deg inn', href: '/innmelding' },
+  },
+  {
+    name: 'Familie',
+    price: 'kr 1 400 / år',
+    description: 'For familier med barn. Dekker to voksne og alle barn i husstanden.',
+    features: [
+      'Alt i Vanlig-medlemskap',
+      'Dekker hele husstanden',
+      'Rabatt på kurs og arrangementer',
+      'Prioritert plass på populære aktiviteter',
+    ],
+    cta: { label: 'Meld familien inn', href: '/innmelding' },
+    highlighted: true,
+  },
+  {
+    name: 'Støttemedlem',
+    price: 'kr 300 / år',
+    description: 'Støtt klubben uten å delta aktivt. Perfekt for tidligere spillere og sympatisører.',
+    features: [
+      'Klubbmedlemsblad og nyhetsbrev',
+      'Stemmerett på årsmøtet',
+      'Invitasjon til klubbens arrangementer',
+    ],
+    cta: { label: 'Bli støttemedlem', href: '/innmelding' },
+  },
 ];
