@@ -77,16 +77,15 @@ const groupHeading = css({
   color: 'grey.950',
 });
 
-const rowBase = css({
+const rowEven = css({
   borderBottom: '1px solid',
   borderColor: 'grey.100',
-});
-
-const rowEven = css(rowBase, {
   bg: 'transparent',
 });
 
-const rowOdd = css(rowBase, {
+const rowOdd = css({
+  borderBottom: '1px solid',
+  borderColor: 'grey.100',
   bg: 'grey.50',
 });
 
