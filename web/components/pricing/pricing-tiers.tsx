@@ -36,7 +36,7 @@ const grid = css({
 });
 
 function TierCard({ tier }: { tier: Tier }) {
-  const s = tierStyles({ highlighted: tier.highlighted ? 'true' : 'false' });
+  const s = tierStyles({ highlighted: !!tier.highlighted });
 
   return (
     <div className={s.root}>
