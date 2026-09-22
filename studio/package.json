@@ -9,20 +9,29 @@
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "dev": "sanity dev",
+    "seed:front-page": "sanity exec scripts/createFrontPage.ts --with-user-token",
     "start": "sanity start"
   },
   "keywords": [
     "sanity"
   ],
   "dependencies": {
-    "@sanity/vision": "^6.9.0",
+    "@dnd-kit/core": "^6.3.1",
+    "@sanity/client": "^7.26.2",
+    "@sanity/functions": "^1.5.0",
+    "@sanity/icons": "^5.2.1",
+    "@sanity/ui": "^3.5.1",
+    "@sanity/vision": "^6.9.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "sanity": "^6.9.0",
+    "react-icons": "^5.7.0",
+    "sanity": "^6.9.2",
     "styled-components": "^6.1.18"
   },
   "devDependencies": {
+    "@sanity/blueprints": "^0.23.1",
     "@sanity/eslint-config-studio": "^6.0.0",
+    "@types/node": "^26.1.2",
     "@types/react": "^19.2.14",
     "eslint": "^9.28",
     "prettier": "^3.5",

@@ -1,0 +1,195 @@
+.content-tree__thumbnail {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  object-fit: cover;
+  display: block;
+  /* Sit above the toggle hit area so clicking the image still navigates; the
+     descending line shows below the thumbnail and stays clickable there. */
+  position: relative;
+  z-index: 2;
+}
+
+.content-tree__thumbnail--fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--card-bg2-color);
+  color: var(--card-muted-fg-color);
+  font-size: 18px;
+  transition: background-color 0.15s ease;
+}
+
+/* On row hover the row takes the fallback's own bg colour, so swap the
+   placeholder to the base card colour to keep it distinct. */
+.content-tree__row:hover .content-tree__thumbnail--fallback {
+  background-color: var(--card-bg-color);
+}
+
+.status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--card-bg-color);
+}
+
+.status-dot--published {
+  background-color: var(--card-badge-positive-dot-color);
+}
+
+.status-dot--draft {
+  background-color: var(--card-badge-caution-dot-color);
+}
+
+.content-tree__drag-handle {
+  cursor: grab;
+}
+
+.content-tree__drag-handle:active {
+  cursor: grabbing;
+}
+
+.content-tree__row:hover {
+  background-color: var(--card-bg2-color);
+}
+
+/* Every tree connector — ancestor spines, the parent elbow, and a node's own
+   descending thread — is a `.content-tree__line`. The element is a transparent
+   hit area; the visible 1px line is drawn with a left (and, for the elbow,
+   bottom) border on the element's left edge, which lands on the column. The
+   width only widens the clickable area to the right. */
+.content-tree__line {
+  position: absolute;
+  z-index: 1;
+  cursor: pointer;
+  background: transparent;
+  border: 0 solid var(--card-border-color);
+}
+
+.content-tree__line:focus-visible {
+  outline: 2px solid var(--card-focus-ring-color);
+  outline-offset: -2px;
+  border-radius: 3px;
+}
+
+.content-tree__line--vertical {
+  border-left-width: 1px;
+}
+
+/* Elbow: vertical stroke down to the row centre, then a curve to the right.
+   Width and corner radius are set inline (they depend on the indent step). */
+.content-tree__hook {
+  top: 0;
+  height: 50%;
+  border-left-width: 1px;
+  border-bottom-width: 1px;
+}
+
+/* A node's own thread descends from the centre of its thumbnail down to its
+   first child (or, when collapsed, to the expander pill). The upper part is
+   hidden behind the thumbnail, so the line reads as emerging from it. */
+.content-tree__line--toggle {
+  top: 50%;
+  bottom: 0;
+  border-left-width: 1px;
+}
+
+/* Highlight the whole thread when any of its segments is hovered. */
+.content-tree__line.is-thread-hover {
+  border-color: var(--card-fg-color);
+}
+
+/* Stand-in for a collapsed node's children. */
+.content-tree__expander {
+  cursor: pointer;
+}
+
+/* Compact "N ⌄" pill the elbow connects to when collapsed. */
+.content-tree__expander-pill {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 6px 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--card-border-color);
+  background-color: var(--card-bg2-color);
+  color: var(--card-muted-fg-color);
+  font-size: 0.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.content-tree__expander-pill:hover,
+.content-tree__expander-pill.is-thread-hover {
+  border-color: var(--card-fg-color);
+  color: var(--card-fg-color);
+}
+
+.content-tree__expander-count {
+  font-weight: 500;
+}
+
+.content-tree-pane a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.content-tree-pane a:hover,
+.content-tree-pane a:focus,
+.content-tree-pane a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Always visible; the muted resting colour keeps it quiet. On hover it gains a
+   background chip, a crisp border, and the icon brightens. */
+.content-tree__add-button {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: transparent;
+  color: var(--card-muted-fg-color);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.content-tree__add-button:hover {
+  color: var(--card-fg-color);
+  background-color: var(--card-bg-color);
+  border-color: var(--card-border-color);
+}
+
+.content-tree__add-button:focus-visible {
+  outline: 2px solid var(--card-focus-ring-color);
+  outline-offset: -2px;
+}
+
+/* Touch / narrow viewports can't hover, so show the chip permanently. */
+@media (hover: none), (max-width: 600px) {
+  .content-tree__add-button {
+    color: var(--card-fg-color);
+    background-color: var(--card-bg-color);
+    border-color: var(--card-border-color);
+  }
+}
+
+/* Separates the pinned front-page row from the rest of the tree. Inset from the
+   edges, matching Sanity's own dividers. */
+.content-tree__divider {
+  height: 1px;
+  margin: 6px 8px;
+  background-color: var(--card-border-color);
+}
