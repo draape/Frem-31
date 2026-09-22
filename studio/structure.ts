@@ -38,7 +38,12 @@ export const structure: StructureResolver = (S) =>
     .items(
       withDividers(S, [
         // 1. Primary content.
-        [contentTreePane(S, 'page', 'Pages', BiGlobe, {draggable: true})],
+        [
+          contentTreePane(S, 'page', 'Pages', BiGlobe, {
+            draggable: true,
+            addChildTemplate: 'page-child',
+          }),
+        ],
         // 2. The rest of the document types (default list), minus singletons and
         //    any type handled by a custom item above.
         S.documentTypeListItems().filter((item) => {

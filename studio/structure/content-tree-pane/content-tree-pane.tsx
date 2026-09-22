@@ -50,9 +50,7 @@ export function ContentTreePane({options, childItemId}: ContentTreePaneProps) {
   // A small drag (< 8px) is treated as a click so the row's ChildLink still
   // navigates; only a real drag starts a move. This is what lets the whole row
   // be the drag affordance without a dedicated handle.
-  const sensors = useSensors(
-    useSensor(PointerSensor, {activationConstraint: {distance: 8}}),
-  )
+  const sensors = useSensors(useSensor(PointerSensor, {activationConstraint: {distance: 8}}))
 
   // id -> node lookup used by the drop checks; rebuilt only when the tree changes.
   const nodeIndex = useMemo(() => indexTree(documents), [documents])
@@ -62,9 +60,7 @@ export function ContentTreePane({options, childItemId}: ContentTreePaneProps) {
   const rootIds = useMemo(() => new Set(documents.map((d) => d._id)), [documents])
 
   const dropValid =
-    activeId !== null && overId !== null
-      ? canDrop(activeId, overId, nodeIndex, rootIds).ok
-      : false
+    activeId !== null && overId !== null ? canDrop(activeId, overId, nodeIndex, rootIds).ok : false
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     setActiveId(String(event.active.id))
@@ -112,7 +108,7 @@ export function ContentTreePane({options, childItemId}: ContentTreePaneProps) {
       if (!dragged) return
 
       try {
-        await executeMove(dragged, targetId, client)
+        await executeMove(dragged, targetId, client, type)
         toast.push({status: 'success', title: 'Moved'})
         // Silent refetch: update the tree in place. A non-silent refetch would
         // flip `loading` on and swap the whole tree for the spinner, unmounting
@@ -128,7 +124,7 @@ export function ContentTreePane({options, childItemId}: ContentTreePaneProps) {
         })
       }
     },
-    [nodeIndex, rootIds, client, toast, refetch],
+    [nodeIndex, rootIds, client, toast, refetch, type],
   )
 
   const toggleCollapse = useCallback((id: string) => {
@@ -149,10 +145,7 @@ export function ContentTreePane({options, childItemId}: ContentTreePaneProps) {
   const handleAddChild = useCallback(
     (parentBaseId: string) => {
       if (!addChildTemplate) return
-      navigateIntent('create', [
-        {type, template: addChildTemplate},
-        {parent: parentBaseId},
-      ])
+      navigateIntent('create', [{type, template: addChildTemplate}, {parent: parentBaseId}])
     },
     [navigateIntent, type, addChildTemplate],
   )
@@ -171,7 +164,7 @@ export function ContentTreePane({options, childItemId}: ContentTreePaneProps) {
   // A single root is the front page: pin it on top, separated by a divider,
   // and promote its children to the top level so everything else is one step
   // shallower.
-  const frontPage = documents.length === 1 ? filteredDocuments[0] ?? null : null
+  const frontPage = documents.length === 1 ? (filteredDocuments[0] ?? null) : null
   const topLevelNodes = frontPage ? frontPage.children : filteredDocuments
 
   const dnd: DndState = {
@@ -183,7 +176,7 @@ export function ContentTreePane({options, childItemId}: ContentTreePaneProps) {
   }
 
   // The node currently being dragged, rendered in the cursor-following overlay.
-  const activeNode = activeId ? nodeIndex.get(activeId) ?? null : null
+  const activeNode = activeId ? (nodeIndex.get(activeId) ?? null) : null
 
   if (error) {
     return (
@@ -431,9 +424,7 @@ function filterTree(
 
   function filterNode(node: TreeNode): TreeNode | null {
     const titleMatches = node.title?.toLowerCase().includes(lowerQuery)
-    const filteredChildren = node.children
-      .map(filterNode)
-      .filter((n): n is TreeNode => n !== null)
+    const filteredChildren = node.children.map(filterNode).filter((n): n is TreeNode => n !== null)
 
     if (titleMatches || filteredChildren.length > 0) {
       return {...node, children: filteredChildren}

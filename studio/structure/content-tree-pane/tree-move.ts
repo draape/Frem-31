@@ -1,4 +1,5 @@
 import type {SanityClient} from 'sanity'
+import {parentReference} from '../../utils/parentReference'
 import type {TreeNode} from './use-content-tree'
 
 // Flatten the in-memory tree into an id -> node lookup so the drop checks stay
@@ -72,14 +73,16 @@ export function canDrop(
 // compute-full-path Sanity Function (page-hierarchy feature) recomputes
 // path.fullPath for the moved page and every descendant. We patch whichever
 // versions exist so publishing an in-progress draft later can't revert the move.
-// `targetId` is the published (base) id — Sanity references always use the base
-// id, never the `drafts.` form.
+// `targetId` is the published (base) id. The drop target may itself be an
+// unpublished page, so the reference is built by `parentReference` rather than
+// inline — a strong reference to a draft-only target is rejected by the API.
 export async function executeMove(
   dragged: TreeNode,
   targetId: string,
   client: SanityClient,
+  type = 'page',
 ): Promise<void> {
-  const parent = {_type: 'reference' as const, _ref: targetId}
+  const parent = await parentReference(client, targetId, type)
   const tx = client.transaction()
   if (dragged.hasPublished) {
     tx.patch(dragged._id, (p) => p.set({'path.parent': parent}))
