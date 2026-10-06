@@ -42,3 +42,7 @@ gates:
 budgets:
   maxTurns: 60
   maxRetries: 2
+
+preview:
+  kind: netlify # netlify | slot | none
+  urlPattern: "https://deploy-preview-{pr}--frem-31.netlify.app"
