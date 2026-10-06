@@ -8,9 +8,7 @@ const requiredEnv = [
 
 for (const name of requiredEnv) {
   if (!process.env[name]) {
-    throw new Error(
-      `Missing environment variable: ${name} (see web/.env.example)`,
-    );
+    throw new Error(`Missing environment variable: ${name} (see web/.env.example)`);
   }
 }
 
