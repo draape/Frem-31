@@ -1,0 +1,44 @@
+version: 1
+name: frem-31
+
+backlog:
+  connection: github-frem-31
+  owner: draape
+  repo: Frem-31
+  readyFilter: "is:open label:ready no:assignee"
+  keyPrefix: gh # task keys look like gh-12
+
+repo:
+  connection: github-frem-31
+  owner: draape
+  repo: Frem-31
+  defaultBranch: main
+  branchPattern: "feature/{key}-{slug}"
+
+apps:
+  web:
+    path: web
+    install: pnpm install --frozen-lockfile
+    dev: pnpm dev # must honour PORT
+    portEnv: PORT
+    checks:
+      - pnpm lint
+      - pnpm build
+  studio:
+    path: studio
+    install: pnpm install --frozen-lockfile
+    dev: pnpm exec sanity dev --port $PORT
+    portEnv: PORT
+    checks:
+      - pnpm build
+
+gates:
+  triage: true
+  plan: false
+  hitl: true
+  pr: true
+  verify: false
+
+budgets:
+  maxTurns: 60
+  maxRetries: 2
