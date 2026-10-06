@@ -6,7 +6,7 @@
     "dev": "panda codegen && next dev",
     "build": "panda codegen && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint",
     "prepare": "panda codegen",
     "test": "playwright test",
     "test:ui": "playwright test --ui"
@@ -14,18 +14,18 @@
   "dependencies": {
     "@ark-ui/react": "^4.5.0",
     "@phosphor-icons/react": "^2.1.10",
-    "next": "14.2.21",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "next": "16.3.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   },
   "devDependencies": {
     "@pandacss/dev": "^0.52.0",
     "@playwright/test": "^1.50.0",
     "@types/node": "^22.10.5",
-    "@types/react": "^18.3.17",
-    "@types/react-dom": "^18.3.5",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "14.2.21",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.3.8",
     "prettier": "^3.8.1",
     "typescript": "^5.7.2"
   }
