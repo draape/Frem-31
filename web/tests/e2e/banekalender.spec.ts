@@ -38,9 +38,6 @@ test.describe('Banekalender Page', () => {
     // Navigate fresh to see loading state
     await page.goto('/banekalender');
 
-    // Loading text might be visible briefly (we use a quick check)
-    const loadingText = page.locator('text=Laster kalender');
-
     // Either loading is visible initially or iframe has loaded
     const iframe = page.locator('iframe[title="Banekalender - Frembanen"]');
 
