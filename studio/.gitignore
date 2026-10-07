@@ -2,5 +2,6 @@ node_modules/
 dist/
 .sanity/*
 !.sanity/blueprint.config.json
+functions/*/.build/
 .DS_Store
 tsconfig.tsbuildinfo

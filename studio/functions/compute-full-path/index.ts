@@ -34,8 +34,8 @@ export const handler = documentEventHandler(async ({context}) => {
   )
 
   // dryRun during `functions test` / `dev` (context.local) so local runs never
-  // mutate the dataset. Only writing when something drifted also keeps the
-  // function from re-triggering itself in a loop.
+  // mutate the dataset. These writes only touch path.fullPath, which the
+  // blueprint filter ignores, so they don't re-trigger the function.
   await tx.commit({dryRun: context.local, visibility: 'async'})
   console.log(
     `Updated fullPath on ${updates.length} of ${pages.length} page(s)${context.local ? ' (dry run)' : ''}: ` +
