@@ -11,5 +11,24 @@
         ]
       }
     ]
+  },
+  "permissions": {
+    "allow": [
+      "mcp__Sanity__search_docs",
+      "mcp__Sanity__read_docs",
+      "mcp__Sanity__list_sanity_rules",
+      "mcp__Sanity__get_sanity_rules",
+      "mcp__Sanity__whoami",
+      "mcp__Sanity__list_projects",
+      "mcp__Sanity__list_datasets",
+      "mcp__Sanity__get_project_studios",
+      "mcp__Sanity__list_workspace_schemas",
+      "mcp__Sanity__get_schema",
+      "mcp__Sanity__list_releases",
+      "mcp__Sanity__list_embeddings_indices",
+      "mcp__Sanity__query_documents",
+      "mcp__Sanity__get_document",
+      "mcp__Sanity__semantic_search"
+    ]
   }
 }
