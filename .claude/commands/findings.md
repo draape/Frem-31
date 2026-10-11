@@ -18,7 +18,7 @@ You are answering **review findings** for task `gh-<issue>` on its PR. This only
    - top-level finding: `gh pr comment <number> --body "R<n> <answer> — <note>"`.
    An id that isn't on the PR: report it, post nothing for it.
 4. Prepend `## <date> · <current state> · claude-code` to `log.md`, starting "Answered findings:" and listing the answers posted.
-5. Print a table: id, severity, suggestion, your answer, note. End with: *`/work` applies these on its next run.*
+5. Print a table: id, severity, suggestion, your answer, note. End with: *`/work` applies these on its next run. Findings you didn't answer are left as they are.*
 
 ## Rules
 - Post only answers. No code changes, no commits, no state changes, no resolving threads.
