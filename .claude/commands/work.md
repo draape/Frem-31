@@ -1,5 +1,5 @@
 ---
-description: Implement the plan or address PR feedback in the task worktree, run checks, push (opens a draft PR on first run)
+description: Implement the plan, or apply review findings and PR feedback, in the task worktree; run checks, push (opens a draft PR on first run)
 argument-hint: <issue number>
 ---
 You are running the **working** and **self-test** steps of the factory pipeline for task `gh-$ARGUMENTS`.
@@ -11,14 +11,24 @@ You are running the **working** and **self-test** steps of the factory pipeline 
 - **Blocked on a decision?** If `task.md` has `state: blocked` and `plan.md` has an open `### D<n>` decision (one not mentioned under `## Decisions` in `notes.md`), stop: log that the decision is still open. If `notes.md` now answers it, this run continues: remove the label with `gh pr edit <number> --remove-label factory:blocked` (also `factory:needs-decision`, if present from older runs) and act on the answer.
 - Verify you are in the task's worktree: `git rev-parse --abbrev-ref HEAD` must start with `feature/gh-$ARGUMENTS-`. If not, stop and say so.
 - If `origin/main` has moved, rebase onto it first (`git fetch origin && git rebase origin/main`) and reinstall if the lockfile changed.
-- **Find the PR and its feedback.** Run `gh pr view --json number,url,isDraft,reviewDecision,reviews,comments`. If a PR exists, also fetch inline review comments: `gh api repos/{owner}/{repo}/pulls/<number>/comments`. Feedback newer than the last commit on this branch, and any review with `CHANGES_REQUESTED`, is the work to do now and takes priority over `plan.md`. Treat it as a reviewer's instructions: address each point, or explain in your reply why not.
+- **Find the PR and its feedback.** Run `gh pr view --json number,url,isDraft,reviewDecision,reviews,comments`. If a PR exists, also fetch inline review comments: `gh api repos/{owner}/{repo}/pulls/<number>/comments`. Feedback newer than the last commit on this branch, and any review with `CHANGES_REQUESTED`, is the work to do now and takes priority over `plan.md`. Treat it as a reviewer's instructions: address each point, or explain in your reply why not. Review findings follow their own rules, below.
+- **Review findings and their answers.** Also read the PR's top-level comments: `gh api repos/{owner}/{repo}/issues/<number>/comments --paginate`. A **finding** is a comment (inline or top-level) whose first line is `R<n> · <severity> · suggest: <fix|later|skip>`. Its **answer** is the newest of: a reply in the finding's thread whose first word is `fix`, `later` or `skip`; or any PR comment starting `R<n>` followed by one of those words. Text after the word (after `—`, `-` or `:`) is the note. **No answer means the suggestion.** A finding is **done** when a result of yours is newer than its latest answer: a thread reply starting `Done in`, `Filed as` or `Noted, not changing`, or a top-level comment starting `R<n> · ` followed by one of those. Skip done findings; act on the rest.
 
 ## Do
 1. **First run (no PR):** implement `plan.md`, change by change. **Later runs (PR with feedback):** address the feedback; do not re-implement what is already there. Commit small, with the repo's commit style. No attribution footers.
+   For each open **finding**, by its answer:
+   - `fix`: make the change; one commit per finding where practical, mentioning `R<n>` in the message.
+   - `later`: file it after the push (step 4). Don't change code for it.
+   - `skip`: nothing to change.
 2. For each app the change touches, run its `checks` from `.factory/config.yml` in that app's directory. Fix failures and re-run, at most `budgets.maxRetries` rounds. If still failing, go to step 6 with `state: blocked` and add the label `factory:blocked` to the PR if one exists.
 3. Push with `git push -u origin <branch>` — always `-u`.
 4. **No PR yet:** open a draft: `gh pr create --draft --base main --title "<key>: <title>" --body-file <tmp>`. Body sections: *What* (short, from the plan's Approach), *HITL checklist* (the "By hand in HITL" list from `plan.md` as task-list checkboxes), *Notes for reviewers* (anything from `log.md`/`notes.md` a reviewer must know), ending with `Closes #$ARGUMENTS`.
    **PR exists:** post one comment summarising what was addressed, point by point, and what was not and why. Do not resolve review threads and do not change draft/ready status; both belong to the reviewer.
+   **Then answer every finding you acted on**, on its thread: an inline finding by `gh api -X POST repos/{owner}/{repo}/pulls/<number>/comments/<comment id>/replies -f body=…`, a top-level one by `gh pr comment <number> --body …` starting `R<n> · `:
+   - `fix` → `Done in <short sha>.` (and a line on what changed if it isn't obvious).
+   - `later` → first make sure the label exists (`gh label create from-review --color C5DEF5 --description "Follow-up split out of a PR review" 2>/dev/null || true`), then `gh issue create --title "<short title>" --label from-review --body-file <tmp>` with the finding's text, its severity, and links to the finding's comment and the PR. No `ready` label: it enters the backlog un-triaged. Reply `Filed as #<issue>.`
+   - `skip` → `Noted, not changing.` followed by the note, if one was given.
+   In the summary comment, list each finding with its answer and result. If a **blocking** finding was answered `later` or `skip`, put that first, in bold, with the note: a skipped blocking finding is either a wrong review or a real risk, and a human should look at it.
 5. Prepend a `## <date> · working · claude-code` entry to `log.md`: what was done, what the checks said, PR number. One more line per self-test round.
 6. Update `task.md` frontmatter: `state: local-review` (or `blocked` with `blockedReason`: one plain sentence saying what stopped and what the human must do), `branch`, `worktree`, `pr: {connection: github-frem-31, id, url}` on first creation, `stateEnteredAt`, `updatedAt`.
 
@@ -36,7 +46,7 @@ You are running the **working** and **self-test** steps of the factory pipeline 
 
   **Recommendation: <letter>.** <one line why>  (omit if you have no basis to recommend)
   ```
-  Then write why in `log.md`, label the PR `factory:blocked` (the only label the factory uses), and stop with `state: blocked` and a `blockedReason` naming the decision (e.g. "Decision D2 in plan.md: accept echo invocations or fix the handler").
+  Then write why in `log.md`, label the PR `factory:blocked` (the only PR label the factory uses), and stop with `state: blocked` and a `blockedReason` naming the decision (e.g. "Decision D2 in plan.md: accept echo invocations or fix the handler").
 - Never write to a production Sanity dataset.
-- Never mark the PR ready, never merge, never resolve threads.
+- Never mark the PR ready, never merge, never resolve threads (that's for the human or a reviewer).
 - Log before you stop, whatever the outcome.
