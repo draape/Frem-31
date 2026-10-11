@@ -57,7 +57,8 @@ pnpm lint
 
 ```
 app/                    # Next.js App Router pages
-  page.tsx             # Frembanen home page
+  [[...slug]]/page.tsx # Pages from Sanity, including the front page
+  frembanen/page.tsx   # Frembanen page (hand-written)
   banekalender/page.tsx # Calendar page
   layout.tsx           # Root layout
 components/
@@ -71,6 +72,15 @@ lib/
 public/images/         # Static assets
 tests/e2e/             # Playwright tests
 ```
+
+## Pages from Sanity
+
+`app/[[...slug]]/page.tsx` renders every published `page` document at its `path.fullPath`: `/` is the front page, `/parent/child` a nested page. Unknown paths return 404. Pages without a `fullPath` are not reachable. For now a page renders only its title and description in a `PageHeader`.
+
+- **Revalidation:** time-based ISR with a 60 s window (`revalidate = 60`). Reads go through Sanity's API CDN, which can add a few seconds, so published changes appear within about a minute. Pages published after a deploy render on their first request without a rebuild. Drafts never show; the client uses the `published` perspective.
+- **Build:** `pnpm build` queries Sanity for all page paths (`generateStaticParams`), so it needs the `NEXT_PUBLIC_SANITY_*` variables and network access.
+- **Reserved segments:** `frembanen`, `banekalender`, `ui` and `dev` belong to hand-written routes, which take priority over the catch-all. Sanity pages under them are skipped (`RESERVED_TOP_SEGMENTS` in `lib/sanity/paths.ts`).
+- **`/`:** unless `NEXT_PUBLIC_ENABLE_HOME_PAGE=true`, `next.config.mjs` still redirects `/` to `/frembanen`.
 
 ## Design Tokens
 
