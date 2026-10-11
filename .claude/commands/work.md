@@ -22,13 +22,19 @@ You are running the **working** and **self-test** steps of the factory pipeline 
    - `skip`: nothing to change.
 2. For each app the change touches, run its `checks` from `.factory/config.yml` in that app's directory. Fix failures and re-run, at most `budgets.maxRetries` rounds. If still failing, go to step 6 with `state: blocked` and add the label `factory:blocked` to the PR if one exists.
 3. Push with `git push -u origin <branch>` — always `-u`.
-4. **No PR yet:** open a draft: `gh pr create --draft --base main --title "<key>: <title>" --body-file <tmp>`. Body sections: *What* (short, from the plan's Approach), *HITL checklist* (the "By hand in HITL" list from `plan.md` as task-list checkboxes), *Notes for reviewers* (anything from `log.md`/`notes.md` a reviewer must know), ending with `Closes #$ARGUMENTS`.
-   **PR exists:** post one comment summarising what was addressed, point by point, and what was not and why. Do not resolve review threads and do not change draft/ready status; both belong to the reviewer.
+4. **No PR yet:** open a draft: `gh pr create --draft --base main --title "<key>: <title>" --body-file <tmp>` with the description below.
+   **PR exists:** first bring the description up to date if anything in it is now wrong (`gh pr edit <number> --body-file <tmp>`); don't mention that you did. Then post one short comment: one line per point addressed, one line per point not addressed and why. Do not resolve review threads and do not change draft/ready status; both belong to the reviewer.
+   **The PR description** is short. The code shows what changed; don't recount it file by file.
+   - *What*: two to four sentences: the behaviour this PR adds or changes, and why. No list of files or commits.
+   - *HITL checklist*: the "By hand in HITL" list from `plan.md` as task-list checkboxes, kept true to the current code.
+   - *Notes for reviewers*: only what a reviewer can't see in the diff (a manual step, a decision taken, a known limitation), one line each. Omit the section if there's nothing.
+   - End with `Closes #$ARGUMENTS`.
+   Keep it current: whenever a run changes behaviour, a checklist item or a note, edit the description in the same run.
    **Then answer every finding you acted on**, on its thread: an inline finding by `gh api -X POST repos/{owner}/{repo}/pulls/<number>/comments/<comment id>/replies -f body=…`, a top-level one by `gh pr comment <number> --body …` starting `R<n> · `:
    - `fix` → `Done in <short sha>.` (and a line on what changed if it isn't obvious).
    - `later` → first make sure the label exists (`gh label create from-review --color C5DEF5 --description "Follow-up split out of a PR review" 2>/dev/null || true`), then `gh issue create --title "<short title>" --label from-review --body-file <tmp>` with the finding's text, its severity, and links to the finding's comment and the PR. No `ready` label: it enters the backlog un-triaged. Reply `Filed as #<issue>.`
    - `skip` → `Noted, not changing.` followed by the note, if one was given.
-   In the summary comment, list each finding with its answer and result. If a **blocking** finding was answered `later` or `skip`, put that first, in bold, with the note: a skipped blocking finding is either a wrong review or a real risk, and a human should look at it.
+   In the summary comment, one line per finding: id, answer, result. If a **blocking** finding was answered `later` or `skip`, put that first, in bold, with the note: a skipped blocking finding is either a wrong review or a real risk, and a human should look at it.
 5. Prepend a `## <date> · working · claude-code` entry to `log.md`: what was done, what the checks said, PR number. One more line per self-test round.
 6. Update `task.md` frontmatter: `state: local-review` (or `blocked` with `blockedReason`: one plain sentence saying what stopped and what the human must do), `branch`, `worktree`, `pr: {connection: github-frem-31, id, url}` on first creation, `stateEnteredAt`, `updatedAt`.
 
