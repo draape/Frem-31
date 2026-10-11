@@ -31,3 +31,4 @@ You are running the **local-review** step of the factory pipeline for task `gh-$
 ## Rules
 - Fix nothing here; findings go to the PR and `review.md`, fixes happen in `/work`.
 - Never mark the PR ready, never merge, never resolve threads.
+- **Mark everything you post on GitHub.** End every comment, reply and review body you post with a line `<!-- factory -->` (invisible on GitHub). It tells the factory's posts from human feedback: `factory-sync` moves a task back to working when a PR has unmarked comments newer than the last commit and the last marked post.

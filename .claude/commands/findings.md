@@ -22,3 +22,4 @@ You are answering **review findings** for task `gh-<issue>` on its PR. This only
 
 ## Rules
 - Post only answers. No code changes, no commits, no state changes, no resolving threads.
+- Don't add the `<!-- factory -->` marker: these answers are the human's feedback, and `factory-sync` relies on them being unmarked to send the task back to `/work`.
