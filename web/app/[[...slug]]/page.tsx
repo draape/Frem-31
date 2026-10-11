@@ -7,7 +7,7 @@ import {
   type PageByPathResult,
   type PagePathsResult,
   fullPathToSlug,
-  isReservedPath,
+  isShadowedPath,
   sanityFetch,
   slugToFullPath,
 } from '@/lib/sanity';
@@ -34,7 +34,7 @@ export async function generateStaticParams() {
   const paths = await sanityFetch<PagePathsResult>({ query: PAGE_PATHS_QUERY });
 
   return [...new Set(paths)]
-    .filter((fullPath) => !isReservedPath(fullPath))
+    .filter((fullPath) => !isShadowedPath(fullPath))
     .map((fullPath) => ({ slug: fullPathToSlug(fullPath) }));
 }
 

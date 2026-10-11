@@ -1,8 +1,9 @@
-// Top-level segments owned by hand-written routes in app/. Static segments win
-// over the [[...slug]] catch-all, so a Sanity page under one of these can never
-// render; generateStaticParams skips them. Entries go away as #7 migrates the
-// routes to Sanity.
-export const RESERVED_TOP_SEGMENTS = ['frembanen', 'banekalender', 'ui', 'dev'];
+// Paths owned by hand-written routes in app/. A static route wins over the
+// [[...slug]] catch-all only at its exact path, so a Sanity page at one of
+// these never renders and generateStaticParams skips it. Pages below them
+// (e.g. /frembanen/child) are not shadowed and render as usual. Entries go
+// away as #7 migrates the routes to Sanity.
+export const SHADOWED_PATHS = ['/frembanen', '/banekalender', '/ui'];
 
 function decodeSegment(segment: string): string {
   try {
@@ -26,7 +27,6 @@ export function fullPathToSlug(fullPath: string): string[] {
   return fullPath.split('/').filter(Boolean);
 }
 
-export function isReservedPath(fullPath: string): boolean {
-  const [first] = fullPathToSlug(fullPath);
-  return first !== undefined && RESERVED_TOP_SEGMENTS.includes(first);
+export function isShadowedPath(fullPath: string): boolean {
+  return SHADOWED_PATHS.includes(fullPath);
 }
