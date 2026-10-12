@@ -20,7 +20,13 @@ You are running the **triage** step of the factory pipeline for issue #$ARGUMENT
 2. Write `triage.md` with these sections, in this order:
    - **Verdict**: `ready` or `needs-info`
    - **Acceptance criteria**: restated as testable statements
-   - **Questions for the reporter**: only when needs-info; concrete, answerable questions
+   - **Questions for the reporter**: only when needs-info; concrete, answerable questions, as a numbered list in exactly this form (the board reads it to build an answer form):
+     ```
+     1. **Q1 · <short title>.** <the question>
+        - **Proposed default:** <what you'd do without an answer>
+        - **Alternatives:** <other options, if any>
+     ```
+     Number them `Q1`, `Q2`, … in order. On a re-triage, keep the ids of questions that are still open, and don't ask an answered question again.
    - **Risks and areas touched**: which app, schema or data changes, anything irreversible
    - **Size**: S, M or L, one line of reasoning
    - **Recommended gates**: whether plan approval is worth it for this task, and why. Recommend it when the work has effects outside the repo (deploys, billable resources, writes to a dataset), touches data irreversibly, or leaves a design choice open for the plan.
