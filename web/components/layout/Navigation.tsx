@@ -5,9 +5,13 @@ import { usePathname } from 'next/navigation';
 import NextLink from 'next/link';
 import Image from 'next/image';
 import { sva, cva, cx } from '@/styled-system/css';
-import { navigationConfig } from '@/lib/constants/navigation';
+import type { NavigationItem } from '@/lib/types';
 
-export function Navigation() {
+type NavigationProps = {
+  items: NavigationItem[];
+};
+
+export function Navigation({ items }: NavigationProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const s = navStyles();
@@ -20,9 +24,9 @@ export function Navigation() {
   return (
     <>
       <nav className={s.desktopMenu}>
-        {navigationConfig.header.map((item) => (
+        {items.map((item) => (
           <NextLink
-            key={item.href}
+            key={`${item.href}-${item.label}`}
             href={item.href}
             target={item.external ? '_blank' : undefined}
             rel={item.external ? 'noopener noreferrer' : undefined}
@@ -58,9 +62,9 @@ export function Navigation() {
             </button>
           </div>
           <nav className={s.overlayMenu}>
-            {navigationConfig.header.map((item) => (
+            {items.map((item) => (
               <NextLink
-                key={item.href}
+                key={`${item.href}-${item.label}`}
                 href={item.href}
                 target={item.external ? '_blank' : undefined}
                 rel={item.external ? 'noopener noreferrer' : undefined}

@@ -2,9 +2,14 @@ import Image from 'next/image';
 import NextLink from 'next/link';
 import { FacebookLogoIcon } from '@phosphor-icons/react/ssr';
 import { sva } from '@/styled-system/css';
-import { navigationConfig, socialLinks } from '@/lib/constants/navigation';
+import type { FooterGroup } from '@/lib/types';
 
-export function Footer() {
+type FooterProps = {
+  groups: FooterGroup[];
+  facebookUrl?: string;
+};
+
+export function Footer({ groups, facebookUrl }: FooterProps) {
   const s = styles();
   return (
     <footer className={s.root}>
@@ -21,12 +26,12 @@ export function Footer() {
               Frem-31 er en breddeklubb på nedre Stabekk tilknyttet Lysaker skole.
             </p>
           </div>
-          {navigationConfig.footer.map((group) => (
-            <div key={group.title} className={s.navGroup}>
+          {groups.map((group, groupIndex) => (
+            <div key={`${groupIndex}-${group.title}`} className={s.navGroup}>
               <h3 className={s.navGroupTitle}>{group.title}</h3>
-              {group.links.map((link) => (
+              {group.links.map((link, linkIndex) => (
                 <NextLink
-                  key={link.href + link.label}
+                  key={`${linkIndex}-${link.href}`}
                   href={link.href}
                   target={link.external ? '_blank' : undefined}
                   rel={link.external ? 'noopener noreferrer' : undefined}
@@ -40,15 +45,17 @@ export function Footer() {
         </div>
         <hr className={s.divider} />
         <div className={s.bottom}>
-          <a
-            href={socialLinks.facebook}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={s.socialLink}
-            aria-label="Facebook"
-          >
-            <FacebookLogoIcon size={24} />
-          </a>
+          {facebookUrl && (
+            <a
+              href={facebookUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={s.socialLink}
+              aria-label="Facebook"
+            >
+              <FacebookLogoIcon size={24} />
+            </a>
+          )}
         </div>
       </div>
     </footer>
