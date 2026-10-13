@@ -1,3 +1,4 @@
+import NextLink from 'next/link';
 import { ark } from '@ark-ui/react';
 import { sva, cx } from '@/styled-system/css';
 import type { ReactNode } from 'react';
@@ -93,6 +94,15 @@ export function Button({
   className,
 }: ButtonProps) {
   const styles = buttonStyles({ variant, size });
+
+  // Same-site paths navigate client-side.
+  if (href?.startsWith('/') && !external) {
+    return (
+      <NextLink href={href} className={cx(styles.root, className)} aria-disabled={disabled}>
+        {children}
+      </NextLink>
+    );
+  }
 
   if (href) {
     return (
