@@ -91,6 +91,9 @@ function SplitView({ block }: { block: SplitBlock }) {
 function CardSectionView({ block }: { block: CardSectionBlock }) {
   // A card with no title of its own whose page is unpublished has nothing to show.
   const cards = (block.cards ?? []).filter((card) => card.title);
+  if (cards.length === 0) {
+    return null;
+  }
 
   return (
     <CardList title={block.title ?? undefined}>
