@@ -1,9 +1,11 @@
-// Fail the build up front, rather than at request time, when Sanity is not
-// configured. Kept in sync with lib/sanity/env.ts.
+// Fail the build up front, rather than at request time, when Sanity or the
+// site URL is not configured. The Sanity names are kept in sync with
+// lib/sanity/env.ts.
 const requiredEnv = [
   'NEXT_PUBLIC_SANITY_PROJECT_ID',
   'NEXT_PUBLIC_SANITY_DATASET',
   'NEXT_PUBLIC_SANITY_API_VERSION',
+  'NEXT_PUBLIC_SITE_URL',
 ];
 
 for (const name of requiredEnv) {
