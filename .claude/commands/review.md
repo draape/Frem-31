@@ -27,7 +27,7 @@ You are running the **local-review** step of the factory pipeline for task `gh-$
    - Keep findings short: what's wrong and what to change, in a few sentences. No restating the diff.
 5. **The PR description is not a finding.** Never write a finding or comment suggesting a change to it. If it's wrong or stale (an outdated checklist item, a note the code no longer matches, a recount of the diff), fix it yourself in this run with `gh pr edit <number> --body-file <tmp>`, keeping it short (see `/work`), and say nothing about it. This is the one thing `/review` changes.
 6. Prepend a `## <date> · local-review · claude-code` entry to `log.md`: the verdict and the finding ids with severity and suggestion.
-7. Whatever the verdict, set `task.md` to `state: hitl-test`: the human tests and answers the findings there; only answered findings get fixed. Then read `preview.urlPattern` from `.factory/config.yml`, substitute the PR number, check deploy status with `gh pr checks <number>`, and finish by printing the preview URL and the HITL checklist with this line: *Pass: mark the PR ready for review. Fail: comment on the PR with what to change (or use Send back to work on the board); `/work` picks it up. Only findings you answer `fix` or `later` are acted on, by the next `/work`; unanswered ones stay as they are.*
+7. Whatever the verdict, set `task.md` to `state: self-test`: `/verify` runs next and checks the mechanical HITL items, then hands over to the human in `hitl-test`, where they test and answer the findings; only answered findings get fixed. Finish by printing the verdict and the finding ids.
 
 ## Rules
 - Fix nothing here except the PR description; findings go to the PR and `review.md`, fixes happen in `/work`.
