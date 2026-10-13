@@ -13,6 +13,10 @@ export type PagePathsResult = string[];
 // editor's crop, hotspot and alt text.
 const IMAGE = `crop, hotspot, alt, decorative, asset->{ _id, metadata { dimensions } }`;
 
+// Share images only need what `urlFor` reads: the asset reference plus the
+// editor's crop and hotspot.
+const SEO_IMAGE = `crop, hotspot, asset`;
+
 // The client reads published content only, so a reference to an unpublished
 // page dereferences to null and leaves `internalPath` (or a card's `href`)
 // unset.
@@ -20,8 +24,8 @@ export const PAGE_BY_PATH_QUERY = defineQuery(
   `*[_type == "page" && path.fullPath == $fullPath][0]{
     title,
     description,
-    "seoTitle": seo.title,
-    "seoDescription": seo.description,
+    image{ ${SEO_IMAGE} },
+    seo{ title, description, image{ ${SEO_IMAGE} }, canonical, noIndex },
     content[]{
       _type,
       _key,
@@ -128,7 +132,31 @@ export type ContentBlock =
 export type PageByPathResult = {
   title: string | null;
   description: string | null;
-  seoTitle: string | null;
-  seoDescription: string | null;
+  image: SeoImage | null;
+  seo: PageSeo | null;
   content: ContentBlock[] | null;
 } | null;
+
+// The site-wide SEO defaults. Null until a siteSettings document exists.
+export const SITE_SEO_QUERY = defineQuery(
+  `*[_type == "siteSettings"][0].seo{ title, description, image{ ${SEO_IMAGE} } }`
+);
+
+export type SeoImage = {
+  crop?: { top: number; bottom: number; left: number; right: number } | null;
+  hotspot?: { x: number; y: number; width: number; height: number } | null;
+  asset?: { _ref: string } | null;
+};
+
+export type SeoFields = {
+  title: string | null;
+  description: string | null;
+  image: SeoImage | null;
+};
+
+export type PageSeo = SeoFields & {
+  canonical: string | null;
+  noIndex: boolean | null;
+};
+
+export type SiteSeoResult = SeoFields | null;
