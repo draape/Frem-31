@@ -1,5 +1,8 @@
 import {defineType, defineField} from 'sanity'
 import {SplitIcon} from './icons'
+import {imageAltFields} from './imageAlt'
+
+type LinkValue = {label?: string}
 
 export const split = defineType({
   name: 'split',
@@ -30,6 +33,8 @@ export const split = defineType({
       title: 'Image',
       type: 'image',
       options: {hotspot: true},
+      fields: imageAltFields,
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'imagePosition',
@@ -49,6 +54,8 @@ export const split = defineType({
       name: 'cta',
       title: 'Call to action',
       type: 'link',
+      validation: (rule) =>
+        rule.custom((value) => (value && !(value as LinkValue).label ? 'Add a button label' : true)),
     }),
   ],
   preview: {

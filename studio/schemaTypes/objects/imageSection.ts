@@ -1,5 +1,6 @@
 import {defineType, defineField} from 'sanity'
 import {ImageSectionIcon} from './icons'
+import {imageAltFields} from './imageAlt'
 
 export const imageSection = defineType({
   name: 'imageSection',
@@ -12,6 +13,7 @@ export const imageSection = defineType({
       title: 'Image',
       type: 'image',
       options: {hotspot: true},
+      fields: imageAltFields,
       validation: (rule) => rule.required(),
     }),
     defineField({
