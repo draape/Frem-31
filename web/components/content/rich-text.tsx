@@ -1,101 +1,77 @@
 import NextLink from 'next/link';
+import {
+  PortableText,
+  type PortableTextBlock,
+  type PortableTextComponents,
+  type PortableTextMarkComponentProps,
+} from 'next-sanity';
 import { css } from '@/styled-system/css';
 import { Section } from '@/components/section';
-import { Image } from '@/components/content/image';
-
-type InlineChild = {
-  text: string;
-  marks?: ('strong' | 'em' | 'underline')[];
-};
-
-export type RichTextNode =
-  | { type: 'paragraph'; children: InlineChild[] }
-  | { type: 'heading'; level: 2 | 3; text: string }
-  | { type: 'list'; style: 'bullet' | 'number'; items: string[] }
-  | { type: 'link'; href: string; text: string }
-  | { type: 'image'; src: string; alt: string; caption?: string; width?: number; height?: number };
+import { resolveLink, type SanityLink } from '@/lib/sanity';
 
 type RichTextProps = {
-  content: RichTextNode[];
+  content: PortableTextBlock[];
 };
 
 export function RichText({ content }: RichTextProps) {
   return (
     <Section maxWidth="content" padding="md">
-      <div className={prose}>{content.map((node, i) => renderNode(node, i))}</div>
+      <div className={prose}>
+        <PortableText value={content} components={components} />
+      </div>
     </Section>
   );
 }
 
-function renderNode(node: RichTextNode, key: number) {
-  switch (node.type) {
-    case 'paragraph':
-      return (
-        <p key={key} className={paragraph}>
-          {node.children.map((child, j) => renderInline(child, j))}
-        </p>
-      );
+type LinkMark = SanityLink & { _type: 'link'; _key: string };
 
-    case 'heading':
-      return node.level === 2 ? (
-        <h2 key={key} className={h2}>
-          {node.text}
-        </h2>
-      ) : (
-        <h3 key={key} className={h3}>
-          {node.text}
-        </h3>
-      );
+function LinkAnnotation({ value, children }: PortableTextMarkComponentProps<LinkMark>) {
+  const resolved = resolveLink(value);
 
-    case 'list':
-      return node.style === 'bullet' ? (
-        <ul key={key} className={unorderedList}>
-          {node.items.map((item, j) => (
-            <li key={j} className={listItem}>
-              {item}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <ol key={key} className={orderedList}>
-          {node.items.map((item, j) => (
-            <li key={j} className={listItem}>
-              {item}
-            </li>
-          ))}
-        </ol>
-      );
-
-    case 'link':
-      return (
-        <p key={key} className={paragraph}>
-          <NextLink href={node.href} className={link}>
-            {node.text}
-          </NextLink>
-        </p>
-      );
-
-    case 'image':
-      return (
-        <Image
-          key={key}
-          src={node.src}
-          alt={node.alt}
-          caption={node.caption}
-          width={node.width}
-          height={node.height}
-        />
-      );
+  // A link whose target is gone (e.g. an unpublished page) reads as plain text.
+  if (!resolved) {
+    return <>{children}</>;
   }
+
+  const newTabProps = resolved.newTab
+    ? { target: '_blank', rel: 'noopener noreferrer' }
+    : {};
+
+  if (value?.type === 'internal') {
+    return (
+      <NextLink href={resolved.href} className={link} {...newTabProps}>
+        {children}
+      </NextLink>
+    );
+  }
+
+  return (
+    <a href={resolved.href} className={link} {...newTabProps}>
+      {children}
+    </a>
+  );
 }
 
-function renderInline(child: InlineChild, key: number) {
-  let el: React.ReactNode = child.text;
-  if (child.marks?.includes('strong')) el = <strong key={`s-${key}`}>{el}</strong>;
-  if (child.marks?.includes('em')) el = <em key={`e-${key}`}>{el}</em>;
-  if (child.marks?.includes('underline')) el = <u key={`u-${key}`}>{el}</u>;
-  return el;
-}
+const components: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => <p className={paragraph}>{children}</p>,
+    title: ({ children }) => <h2 className={h2}>{children}</h2>,
+    subtitle: ({ children }) => <h3 className={h3}>{children}</h3>,
+  },
+  list: {
+    bullet: ({ children }) => <ul className={unorderedList}>{children}</ul>,
+    number: ({ children }) => <ol className={orderedList}>{children}</ol>,
+  },
+  listItem: ({ children }) => <li className={listItem}>{children}</li>,
+  marks: {
+    strong: ({ children }) => <strong>{children}</strong>,
+    em: ({ children }) => <em>{children}</em>,
+    'strike-through': ({ children }) => <s>{children}</s>,
+    sup: ({ children }) => <sup>{children}</sup>,
+    sub: ({ children }) => <sub>{children}</sub>,
+    link: LinkAnnotation,
+  },
+};
 
 const prose = css({
   display: 'flex',

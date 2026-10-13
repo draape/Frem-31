@@ -6,10 +6,11 @@ type CardProps = {
   kicker?: string;
   icon?: ReactNode;
   title: string;
-  description: string;
+  description?: string;
   link?: {
     label: string;
     href: string;
+    ariaLabel?: string;
   };
 };
 
@@ -22,9 +23,9 @@ export function Card({ kicker, icon, title, description, link }: CardProps) {
       <div className={s.body}>
         {kicker && <p className={s.kicker}>{kicker}</p>}
         <h3 className={s.title}>{title}</h3>
-        <p className={s.description}>{description}</p>
+        {description && <p className={s.description}>{description}</p>}
         {link && (
-          <NextLink href={link.href} className={s.link}>
+          <NextLink href={link.href} className={s.link} aria-label={link.ariaLabel}>
             {link.label} →
           </NextLink>
         )}
