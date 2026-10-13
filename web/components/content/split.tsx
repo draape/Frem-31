@@ -4,13 +4,14 @@ import { Button } from '@/components/ui';
 import { Section } from '@/components/section';
 
 type SplitProps = {
+  kicker?: string;
   title: string;
   description?: string;
   image: {
     src: string;
     alt: string;
   };
-  cta: {
+  cta?: {
     label: string;
     href: string;
     external?: boolean;
@@ -18,20 +19,30 @@ type SplitProps = {
   imageSide?: 'left' | 'right';
 };
 
-export function Split({ title, description, image, cta, imageSide = 'right' }: SplitProps) {
+export function Split({
+  kicker,
+  title,
+  description,
+  image,
+  cta,
+  imageSide = 'right',
+}: SplitProps) {
   const s = styles({ imageSide });
 
   return (
     <Section maxWidth="layout" padding="lg">
       <div className={s.grid}>
         <div className={s.textContainer}>
+          {kicker && <p className={s.kicker}>{kicker}</p>}
           <h2 className={s.title}>{title}</h2>
           {description && <p className={s.description}>{description}</p>}
-          <div className={s.ctaWrap}>
-            <Button variant="secondary" href={cta.href} external={cta.external}>
-              {cta.label}
-            </Button>
-          </div>
+          {cta && (
+            <div className={s.ctaWrap}>
+              <Button variant="secondary" href={cta.href} external={cta.external}>
+                {cta.label}
+              </Button>
+            </div>
+          )}
         </div>
         <div className={s.imageContainer}>
           <Image
@@ -48,7 +59,7 @@ export function Split({ title, description, image, cta, imageSide = 'right' }: S
 }
 
 const styles = sva({
-  slots: ['grid', 'textContainer', 'title', 'description', 'ctaWrap', 'imageContainer'],
+  slots: ['grid', 'textContainer', 'kicker', 'title', 'description', 'ctaWrap', 'imageContainer'],
   base: {
     grid: {
       display: 'flex',
@@ -65,6 +76,12 @@ const styles = sva({
       flexDir: 'column',
       gap: '5',
       flex: '1',
+    },
+    kicker: {
+      textStyle: 'tag',
+      color: 'grey.500',
+      textTransform: 'uppercase',
+      letterSpacing: '0.08em',
     },
     title: {
       color: 'grey.950',

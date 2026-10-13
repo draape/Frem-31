@@ -7,9 +7,17 @@ type ImageProps = {
   caption?: string;
   width?: number;
   height?: number;
+  sizes?: string;
 };
 
-export function Image({ src, alt, caption, width, height }: ImageProps) {
+export function Image({
+  src,
+  alt,
+  caption,
+  width,
+  height,
+  sizes = '(max-width: 800px) 100vw, 800px',
+}: ImageProps) {
   const hasDimensions = width !== undefined && height !== undefined;
 
   return (
@@ -20,11 +28,12 @@ export function Image({ src, alt, caption, width, height }: ImageProps) {
           alt={alt}
           width={width}
           height={height}
+          sizes={sizes}
           className={img}
         />
       ) : (
         <div className={fillWrap}>
-          <NextImage src={src} alt={alt} fill style={{ objectFit: 'cover' }} />
+          <NextImage src={src} alt={alt} fill sizes={sizes} style={{ objectFit: 'cover' }} />
         </div>
       )}
       {caption && <figcaption className={figcaption}>{caption}</figcaption>}

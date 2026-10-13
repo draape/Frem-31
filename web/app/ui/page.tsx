@@ -6,7 +6,9 @@ import { Card } from '@/components/content/card';
 import { CardList } from '@/components/content/card-list';
 import { Split } from '@/components/content/split';
 import { RichText } from '@/components/content/rich-text';
-import type { RichTextNode } from '@/components/content/rich-text';
+import { Image } from '@/components/content/image';
+import { Section } from '@/components/section';
+import type { PortableTextBlock } from 'next-sanity';
 import { PricingTiers } from '@/components/pricing/pricing-tiers';
 import { FeeTable } from '@/components/pricing/fee-table';
 
@@ -197,9 +199,9 @@ export default function UiSandboxPage() {
             padding: '16px 24px 8px',
           }}
         >
-          2 cards
+          2 cards, with title
         </p>
-        <CardList>
+        <CardList title="Våre aktiviteter">
           <Card
             kicker="Fotball"
             icon={<SoccerBallIcon size={20} />}
@@ -257,11 +259,11 @@ export default function UiSandboxPage() {
             padding: '16px 24px 8px',
           }}
         >
-          6 cards (no kicker/icon)
+          6 cards (no kicker/icon, one without description)
         </p>
         <CardList>
           <Card title="Fotball" description="Sesongbasert trening for alle aldersgrupper." />
-          <Card title="Bandy" description="Vinteridretten på Frembanen." />
+          <Card title="Bandy" />
           <Card title="Lego League" description="Teknologi og samarbeid for unge." />
           <Card
             title="Sommerskole"
@@ -296,8 +298,9 @@ export default function UiSandboxPage() {
           Split
         </h2>
 
-        {/* image right (default) */}
+        {/* image right (default), with kicker */}
         <Split
+          kicker="Anlegg"
           title="Frembanen — vår hjemmebane siden 1931"
           description="Et fullverdig anlegg med kunstgressbane, bandyis og gode fasiliteter for alle våre aktiviteter gjennom hele året."
           image={{ src: '/images/_DSC6121.jpg', alt: 'Frembanen' }}
@@ -311,6 +314,13 @@ export default function UiSandboxPage() {
           image={{ src: '/images/_DSC6121.jpg', alt: 'Frem 31 aktiviteter' }}
           cta={{ label: 'Meld deg inn', href: '/innmelding' }}
           imageSide="left"
+        />
+
+        {/* no cta */}
+        <Split
+          title="Et fellesskap for hele nabolaget"
+          description="Frivillige trenere, foreldre og spillere holder klubben i gang gjennom hele året."
+          image={{ src: '/images/_DSC6121.jpg', alt: 'Frem 31 aktiviteter' }}
         />
       </section>
       {/* ─── RichText + Image ─── */}
@@ -329,6 +339,13 @@ export default function UiSandboxPage() {
           RichText + Image
         </h2>
         <RichText content={sampleRichText} />
+        <Section maxWidth="content">
+          <Image
+            src="/images/_DSC6121.jpg"
+            alt="Frembanen"
+            caption="Frembanen — vår hjemmebane siden 1921"
+          />
+        </Section>
       </section>
       {/* ─── PricingTiers ─── */}
       <section style={{ borderTop: '1px solid #e8e8e8' }}>
@@ -368,53 +385,80 @@ export default function UiSandboxPage() {
   );
 }
 
-const sampleRichText: RichTextNode[] = [
-  { type: 'heading', level: 2, text: 'Om Frem-31' },
-  {
-    type: 'paragraph',
-    children: [
-      { text: 'Frem-31 er en idrettsklubb på nedre Stabekk med lange tradisjoner innen ' },
-      { text: 'fotball og bandy', marks: ['strong'] },
-      { text: '. Vi tilbyr aktiviteter for alle aldre og nivåer.' },
-    ],
-  },
-  { type: 'heading', level: 3, text: 'Våre aktiviteter' },
-  {
-    type: 'list',
-    style: 'bullet',
-    items: [
-      'Fotball — sommer og høst for barn, ungdom og voksne',
-      'Bandy — vinteraktivitet på Frembanen',
-      'Lego League — robotprogrammering for barn og unge',
-      'Sommerskole — aktiviteter i skoleferien',
-    ],
-  },
-  {
-    type: 'image',
-    src: '/images/_DSC6121.jpg',
-    alt: 'Frembanen',
-    caption: 'Frembanen — vår hjemmebane siden 1921',
-  },
-  {
-    type: 'paragraph',
-    children: [
+// Portable Text as the Studio's textBlock produces it. `span` is [text, marks].
+type Span = string | [string, string[]];
+
+function ptBlock(
+  key: string,
+  style: string,
+  spans: Span[],
+  extra: Partial<PortableTextBlock> = {}
+): PortableTextBlock {
+  return {
+    _type: 'block',
+    _key: key,
+    style,
+    markDefs: [],
+    children: spans.map((span, i) => {
+      const [text, marks] = typeof span === 'string' ? [span, []] : span;
+      return { _type: 'span', _key: `${key}-${i}`, text, marks };
+    }),
+    ...extra,
+  };
+}
+
+function ptList(key: string, listItem: 'bullet' | 'number', items: string[]) {
+  return items.map((item, i) => ptBlock(`${key}-${i}`, 'normal', [item], { listItem, level: 1 }));
+}
+
+const sampleRichText: PortableTextBlock[] = [
+  ptBlock('h1', 'title', ['Om Frem-31']),
+  ptBlock('p1', 'normal', [
+    'Frem-31 er en idrettsklubb på nedre Stabekk med lange tradisjoner innen ',
+    ['fotball og bandy', ['strong']],
+    '. Vi tilbyr aktiviteter for alle aldre og nivåer.',
+  ]),
+  ptBlock('h2', 'subtitle', ['Våre aktiviteter']),
+  ...ptList('ul', 'bullet', [
+    'Fotball — sommer og høst for barn, ungdom og voksne',
+    'Bandy — vinteraktivitet på Frembanen',
+    'Lego League — robotprogrammering for barn og unge',
+    'Sommerskole — aktiviteter i skoleferien',
+  ]),
+  ptBlock('p2', 'normal', [
+    'Anlegget holder høy standard med kunstgressbane og bandyis gjennom hele vinteren. ',
+    ['Les mer om fasiliteter og åpningstider på siden for banen.', ['em']],
+  ]),
+  ...ptList('ol', 'number', [
+    'Meld deg inn via innmeldingsskjema',
+    'Velg ønsket aktivitet og aldersgruppe',
+    'Betal treningsavgift',
+    'Møt opp på første trening',
+  ]),
+  ptBlock('p3', 'normal', [
+    'Dekorasjoner: ',
+    ['fet', ['strong']],
+    ', ',
+    ['kursiv', ['em']],
+    ', ',
+    ['gjennomstreket', ['strike-through']],
+    ', m',
+    ['2', ['sup']],
+    ' og H',
+    ['2', ['sub']],
+    'O.',
+  ]),
+  ptBlock('p4', 'normal', ['Les mer om ', ['Norges Bandyforbund', ['nbf']], '.'], {
+    markDefs: [
       {
-        text: 'Anlegget holder høy standard med kunstgressbane og bandyis gjennom hele vinteren. ',
+        _type: 'link',
+        _key: 'nbf',
+        type: 'external',
+        href: 'https://www.bandy.no',
+        openInNewTab: true,
       },
-      { text: 'Les mer om fasiliteter og åpningstider på siden for banen.', marks: ['em'] },
     ],
-  },
-  {
-    type: 'list',
-    style: 'number',
-    items: [
-      'Meld deg inn via innmeldingsskjema',
-      'Velg ønsket aktivitet og aldersgruppe',
-      'Betal treningsavgift',
-      'Møt opp på første trening',
-    ],
-  },
-  { type: 'link', href: '/frembanen', text: 'Les mer om Frembanen →' },
+  }),
 ];
 
 const membershipTiers = [

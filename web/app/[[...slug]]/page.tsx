@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { ContentBlocks } from '@/components/content/content-blocks';
 import { PageHeader } from '@/components/headers';
 import {
   PAGE_BY_PATH_QUERY,
@@ -70,5 +71,10 @@ export default async function SanityPage({ params }: Props) {
     notFound();
   }
 
-  return <PageHeader title={page.title ?? ''} description={page.description ?? undefined} />;
+  return (
+    <>
+      <PageHeader title={page.title ?? ''} description={page.description ?? undefined} />
+      <ContentBlocks blocks={page.content ?? []} />
+    </>
+  );
 }
