@@ -14,6 +14,19 @@ for (const name of requiredEnv) {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    // Sanity images: crop, hotspot and target size are in the query string
+    // (built by urlFor), so `search` is left open. The path is pinned to this
+    // project's dataset.
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+        port: '',
+        pathname: `/images/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/${process.env.NEXT_PUBLIC_SANITY_DATASET}/**`,
+      },
+    ],
+  },
   async redirects() {
     // Only redirect when feature flag is disabled
     if (process.env.NEXT_PUBLIC_ENABLE_HOME_PAGE !== 'true') {
