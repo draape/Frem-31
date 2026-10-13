@@ -46,7 +46,8 @@ function TextBlockView({ block }: { block: TextBlock }) {
 }
 
 function ImageSectionView({ block }: { block: ImageSectionBlock }) {
-  const image = sanityImage(block.image);
+  // Same 16/9 box `Image` uses without dimensions, cropped around the hotspot.
+  const image = sanityImage(block.image, { aspectRatio: 16 / 9 });
   if (!image) {
     return null;
   }
