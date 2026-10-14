@@ -53,6 +53,24 @@ export const PAGE_BY_PATH_QUERY = defineQuery(
   }`
 );
 
+// The site settings singleton (fixed id). Header items and footer links to an
+// unpublished page dereference to null and are dropped by the mapper.
+export const SITE_SETTINGS_QUERY = defineQuery(
+  `*[_id == "siteSettings"][0]{
+    "header": header[]{ _key, label, "href": reference->path.fullPath },
+    "footerColumns": footer.columns[]{
+      _key,
+      title,
+      links[]{
+        _key, type, label, href, email, openInNewTab,
+        "internalPath": internal->path.fullPath,
+        "internalTitle": internal->title
+      }
+    },
+    "facebook": socialLinks.facebook
+  }`
+);
+
 export type SanityImage = {
   crop?: { top: number; bottom: number; left: number; right: number } | null;
   hotspot?: { x: number; y: number; width: number; height: number } | null;
@@ -72,6 +90,8 @@ export type SanityLink = {
   openInNewTab?: boolean | null;
   // Resolved from `internal`; null when the target page is unpublished.
   internalPath?: string | null;
+  // The target page's title, where the query asks for it (label fallback).
+  internalTitle?: string | null;
 };
 
 export type CardItem = {
@@ -131,4 +151,16 @@ export type PageByPathResult = {
   seoTitle: string | null;
   seoDescription: string | null;
   content: ContentBlock[] | null;
+} | null;
+
+export type SiteSettingsResult = {
+  header: { _key: string; label: string | null; href: string | null }[] | null;
+  footerColumns:
+    | {
+        _key: string;
+        title: string | null;
+        links: (SanityLink & { _key: string })[] | null;
+      }[]
+    | null;
+  facebook: string | null;
 } | null;

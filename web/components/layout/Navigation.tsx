@@ -5,24 +5,27 @@ import { usePathname } from 'next/navigation';
 import NextLink from 'next/link';
 import Image from 'next/image';
 import { sva, cva, cx } from '@/styled-system/css';
-import { navigationConfig } from '@/lib/constants/navigation';
+import type { NavigationItem } from '@/lib/types';
 
-export function Navigation() {
+type NavigationProps = {
+  items: NavigationItem[];
+};
+
+export function Navigation({ items }: NavigationProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const s = navStyles();
 
-  const isActive = (href: string) =>
-    !href.startsWith('http') && (pathname === href || pathname.startsWith(href + '/'));
+  const isActive = (href: string) => isCurrentPath(pathname, href);
 
   const close = () => setIsOpen(false);
 
   return (
     <>
       <nav className={s.desktopMenu}>
-        {navigationConfig.header.map((item) => (
+        {items.map((item) => (
           <NextLink
-            key={item.href}
+            key={`${item.href}-${item.label}`}
             href={item.href}
             target={item.external ? '_blank' : undefined}
             rel={item.external ? 'noopener noreferrer' : undefined}
@@ -58,9 +61,9 @@ export function Navigation() {
             </button>
           </div>
           <nav className={s.overlayMenu}>
-            {navigationConfig.header.map((item) => (
+            {items.map((item) => (
               <NextLink
-                key={item.href}
+                key={`${item.href}-${item.label}`}
                 href={item.href}
                 target={item.external ? '_blank' : undefined}
                 rel={item.external ? 'noopener noreferrer' : undefined}
@@ -75,6 +78,24 @@ export function Navigation() {
       )}
     </>
   );
+}
+
+// Whether `href` is the current page. Only an exact match counts: a parent
+// page's item isn't highlighted on its children. The pathname can arrive
+// percent-encoded (æ/ø/å), while Sanity's `fullPath` is stored decoded.
+function isCurrentPath(pathname: string, href: string): boolean {
+  if (href.startsWith('http')) {
+    return false;
+  }
+  return safeDecode(pathname) === safeDecode(href);
+}
+
+function safeDecode(path: string): string {
+  try {
+    return decodeURI(path);
+  } catch {
+    return path;
+  }
 }
 
 const menuItem = cva({
