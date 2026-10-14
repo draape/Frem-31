@@ -1,12 +1,21 @@
 import type { Metadata } from 'next';
 import { css } from '@/styled-system/css';
+import { SITE_SEO_QUERY, type SiteSeoResult, sanityFetch } from '@/lib/sanity';
+import { siteSettingsFallback } from '@/lib/seo';
 import { inter, fraunces } from './fonts';
 import './globals.css';
 
-export const metadata: Metadata = {
-  title: 'Sportsklubb Frem-31',
-  description: 'Sportsklubb i Stabekk med fotballbane og treningsaktiviteter.',
-};
+// Defaults for every route. Sanity pages set their own title, description,
+// canonical and social tags; 404s and the hand-written routes inherit these.
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await sanityFetch<SiteSeoResult>({ query: SITE_SEO_QUERY });
+
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
+    title: site?.title || siteSettingsFallback.title,
+    description: site?.description || siteSettingsFallback.description,
+  };
+}
 
 const bodyStyles = css({
   display: 'flex',
