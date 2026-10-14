@@ -37,23 +37,4 @@ export const frembanenContent: FrembanenContent = {
     outro:
       'Vennligst ta med deg søppel av banen og kast det i søppeldunkene ved inngangene og ved klubbhuset.',
   },
-  pitchMap: {
-    title: 'Banekart',
-    zones: [
-      { id: '5er-A', label: '5er – A', type: '5er' },
-      { id: '5er-B', label: '5er – B', type: '5er' },
-      { id: '5er-C', label: '5er – C', type: '5er' },
-      { id: '5er-D', label: '5er – D', type: '5er' },
-      { id: '7er-A', label: '7er – A', type: '7er' },
-      { id: '7er-B', label: '7er – B', type: '7er' },
-    ],
-    parentZones: [
-      { id: 'parent-5er-A', label: 'Foreldresone 5er – A', type: 'parent-zone' },
-      { id: 'parent-5er-B', label: 'Foreldresone 5er – B', type: 'parent-zone' },
-      { id: 'parent-5er-C', label: 'Foreldresone 5er – C', type: 'parent-zone' },
-      { id: 'parent-5er-D', label: 'Foreldresone 5er – D', type: 'parent-zone' },
-      { id: 'parent-7er-A', label: 'Foreldresone 7er – A', type: 'parent-zone' },
-      { id: 'parent-7er-B', label: 'Foreldresone 7er – B', type: 'parent-zone' },
-    ],
-  },
 };
