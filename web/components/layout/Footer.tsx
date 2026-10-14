@@ -153,7 +153,8 @@ const styles = sva({
     },
     divider: {
       border: 'none',
-      borderTop: '1px solid',
+      borderTopWidth: '1px',
+      borderTopStyle: 'solid',
       borderColor: 'blue.600',
       my: '8',
     },
