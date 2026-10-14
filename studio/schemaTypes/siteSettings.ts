@@ -39,6 +39,21 @@ export const siteSettings = defineType({
       ],
     }),
     defineField({
+      name: 'socialLinks',
+      title: 'Social links',
+      type: 'object',
+      group: 'navigation',
+      fields: [
+        defineField({
+          name: 'facebook',
+          title: 'Facebook',
+          type: 'url',
+          description: 'Shown as an icon in the footer when set.',
+          validation: (rule) => rule.uri({scheme: ['http', 'https']}),
+        }),
+      ],
+    }),
+    defineField({
       name: 'seo',
       title: 'Default SEO',
       type: 'seoDefaults',

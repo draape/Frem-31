@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import { css } from '@/styled-system/css';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
 import { SITE_SEO_QUERY, type SiteSeoResult, sanityFetch } from '@/lib/sanity';
 import { siteSettingsFallback } from '@/lib/seo';
 import { inter, fraunces } from './fonts';
@@ -25,10 +23,8 @@ const bodyStyles = css({
   minHeight: '100vh',
 });
 
-const mainStyles = css({
-  flex: 1,
-});
-
+// The only root layout. Header, main and footer come from the route group
+// layouts: `(legacy)` for the hand-written routes, `(site)` for Sanity pages.
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -36,11 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="no" className={`${inter.variable} ${fraunces.variable}`}>
-      <body className={bodyStyles}>
-        <Header />
-        <main className={mainStyles}>{children}</main>
-        <Footer />
-      </body>
+      <body className={bodyStyles}>{children}</body>
     </html>
   );
 }

@@ -2,6 +2,8 @@ import { defineConfig } from '@pandacss/dev';
 
 export default defineConfig({
   preflight: true,
+  // Panda 2 adds no presets implicitly; v1 added both when `presets` was unset.
+  presets: ['@pandacss/preset-base', '@pandacss/preset-panda'],
   include: ['./components/**/*.{ts,tsx}', './app/**/*.{ts,tsx}'],
   exclude: [],
   theme: {

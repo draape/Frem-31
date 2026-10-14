@@ -1,9 +1,14 @@
 import Image from 'next/image';
 import NextLink from 'next/link';
 import { sva } from '@/styled-system/css';
+import type { NavigationItem } from '@/lib/types';
 import { Navigation } from './Navigation';
 
-export function Header() {
+type HeaderProps = {
+  items: NavigationItem[];
+};
+
+export function Header({ items }: HeaderProps) {
   const s = styles();
   return (
     <header className={s.root}>
@@ -13,7 +18,7 @@ export function Header() {
           Frem<span className={s.logoAccent}>-31</span>
         </span>
       </NextLink>
-      <Navigation />
+      <Navigation items={items} />
     </header>
   );
 }

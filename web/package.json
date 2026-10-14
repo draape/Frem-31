@@ -21,7 +21,9 @@
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
-    "@pandacss/dev": "^0.52.0",
+    "@pandacss/dev": "2.2.0",
+    "@pandacss/preset-base": "2.2.0",
+    "@pandacss/preset-panda": "2.2.0",
     "@playwright/test": "^1.50.0",
     "@types/node": "^22.10.5",
     "@types/react": "^19.3.0",

@@ -1,4 +1,7 @@
-import type { NavigationConfig } from '@/lib/types';
+// Hardcoded navigation for the hand-written routes in `app/(legacy)/`, imported
+// only by that layout. Sanity pages get theirs from `siteSettings`. Goes away
+// with #7, when these routes move to Sanity.
+import type { NavigationConfig, SocialLinks } from '@/lib/types';
 
 export const navigationConfig: NavigationConfig = {
   header: [
@@ -38,6 +41,6 @@ export const navigationConfig: NavigationConfig = {
   ],
 };
 
-export const socialLinks = {
+export const socialLinks: SocialLinks = {
   facebook: 'https://www.facebook.com/groups/293108129128966',
 };

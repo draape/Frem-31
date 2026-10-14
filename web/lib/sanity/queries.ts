@@ -52,8 +52,32 @@ export const PAGE_BY_PATH_QUERY = defineQuery(
           "description": coalesce(description, reference->description),
           "href": reference->path.fullPath
         }
+      },
+      _type == "callToAction" => {
+        title,
+        description,
+        variant,
+        cta{ ..., "internalPath": internal->path.fullPath }
       }
     }
+  }`
+);
+
+// The site settings singleton (fixed id). Header items and footer links to an
+// unpublished page dereference to null and are dropped by the mapper.
+export const SITE_SETTINGS_QUERY = defineQuery(
+  `*[_id == "siteSettings"][0]{
+    "header": header[]{ _key, label, "href": reference->path.fullPath },
+    "footerColumns": footer.columns[]{
+      _key,
+      title,
+      links[]{
+        _key, type, label, href, email, openInNewTab,
+        "internalPath": internal->path.fullPath,
+        "internalTitle": internal->title
+      }
+    },
+    "facebook": socialLinks.facebook
   }`
 );
 
@@ -76,6 +100,8 @@ export type SanityLink = {
   openInNewTab?: boolean | null;
   // Resolved from `internal`; null when the target page is unpublished.
   internalPath?: string | null;
+  // The target page's title, where the query asks for it (label fallback).
+  internalTitle?: string | null;
 };
 
 export type CardItem = {
@@ -116,6 +142,15 @@ export type CardSectionBlock = {
   cards: CardItem[] | null;
 };
 
+export type CallToActionBlock = {
+  _type: 'callToAction';
+  _key: string;
+  title: string | null;
+  description: string | null;
+  variant: 'blue' | 'yellow' | 'white' | null;
+  cta: SanityLink | null;
+};
+
 // A block type the web doesn't know yet (added in the Studio first).
 export type UnknownBlock = {
   _type: string;
@@ -127,6 +162,7 @@ export type ContentBlock =
   | ImageSectionBlock
   | SplitBlock
   | CardSectionBlock
+  | CallToActionBlock
   | UnknownBlock;
 
 export type PageByPathResult = {
@@ -160,3 +196,15 @@ export type PageSeo = SeoFields & {
 };
 
 export type SiteSeoResult = SeoFields | null;
+
+export type SiteSettingsResult = {
+  header: { _key: string; label: string | null; href: string | null }[] | null;
+  footerColumns:
+    | {
+        _key: string;
+        title: string | null;
+        links: (SanityLink & { _key: string })[] | null;
+      }[]
+    | null;
+  facebook: string | null;
+} | null;
