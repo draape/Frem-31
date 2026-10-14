@@ -80,6 +80,7 @@ export const page = defineType({
         {type: 'imageSection'},
         {type: 'split'},
         {type: 'cardSection'},
+        {type: 'feeTable'},
         {type: 'callToAction'},
         {type: 'pricingTiers'},
       ],
