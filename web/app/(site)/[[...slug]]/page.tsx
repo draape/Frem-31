@@ -5,15 +5,18 @@ import { Hero, PageHeader } from '@/components/headers';
 import {
   PAGE_BY_PATH_QUERY,
   PAGE_PATHS_QUERY,
+  SITE_SEO_QUERY,
   type PageByPathResult,
   type PagePathsResult,
   type SanityLink,
+  type SiteSeoResult,
   fullPathToSlug,
   isShadowedPath,
   resolveLink,
   sanityFetch,
   slugToFullPath,
 } from '@/lib/sanity';
+import { SEO_IMAGE_HEIGHT, SEO_IMAGE_WIDTH, resolveSeo } from '@/lib/seo';
 
 // ISR: rendered pages are regenerated at most every 60 seconds, the same
 // window as the sanityFetch default. The client reads through Sanity's API
@@ -44,29 +47,47 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const fullPath = slugToFullPath(slug);
-  const page = await fetchPage(fullPath);
+  const [page, site] = await Promise.all([
+    fetchPage(fullPath),
+    sanityFetch<SiteSeoResult>({ query: SITE_SEO_QUERY }),
+  ]);
 
   if (!page) {
     return {};
   }
 
-  const metadata: Metadata = {};
   // A hero page's heading reads "title accent", so the browser title does too
   // unless an SEO title overrides it.
   const accent = page.headerType === 'hero' ? page.hero?.titleAccent : null;
   const pageTitle = accent && page.title ? `${page.title} ${accent}` : page.title;
-  const title = page.seoTitle ?? pageTitle;
-  const description = page.seoDescription ?? page.description;
+  const { title, description, imageUrl } = resolveSeo({ ...page, title: pageTitle }, site);
+  // Relative paths resolve against the layout's metadataBase.
+  const url = page.seo?.canonical || fullPath;
+  const images = imageUrl
+    ? [{ url: imageUrl, width: SEO_IMAGE_WIDTH, height: SEO_IMAGE_HEIGHT }]
+    : undefined;
 
-  // The front page keeps the layout's "Sportsklubb Frem-31" title.
-  if (title && fullPath !== '/') {
-    metadata.title = `${title} - Sportsklubb Frem-31`;
-  }
-  if (description) {
-    metadata.description = description;
-  }
-
-  return metadata;
+  // Keys without a value are left out, so Next emits no empty tags and the
+  // layout's title and description still apply.
+  return {
+    ...(title && { title }),
+    ...(description && { description }),
+    alternates: { canonical: url },
+    ...(page.seo?.noIndex && { robots: { index: false } }),
+    openGraph: {
+      type: 'website',
+      url,
+      ...(title && { title }),
+      ...(description && { description }),
+      ...(images && { images }),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      ...(title && { title }),
+      ...(description && { description }),
+      ...(imageUrl && { images: [imageUrl] }),
+    },
+  };
 }
 
 // A hero button needs a label and a resolvable destination (e.g. not an
