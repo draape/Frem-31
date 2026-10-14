@@ -49,6 +49,12 @@ export const PAGE_BY_PATH_QUERY = defineQuery(
           "href": reference->path.fullPath
         }
       },
+      _type == "callToAction" => {
+        title,
+        description,
+        variant,
+        cta{ ..., "internalPath": internal->path.fullPath }
+      },
       _type == "pricingTiers" => {
         tiers[]{
           _key,
@@ -143,6 +149,15 @@ export type CardSectionBlock = {
   cards: CardItem[] | null;
 };
 
+export type CallToActionBlock = {
+  _type: 'callToAction';
+  _key: string;
+  title: string | null;
+  description: string | null;
+  variant: 'blue' | 'yellow' | 'white' | null;
+  cta: SanityLink | null;
+};
+
 export type PricingTierItem = {
   _key: string;
   name: string | null;
@@ -170,6 +185,7 @@ export type ContentBlock =
   | ImageSectionBlock
   | SplitBlock
   | CardSectionBlock
+  | CallToActionBlock
   | PricingTiersBlock
   | UnknownBlock;
 

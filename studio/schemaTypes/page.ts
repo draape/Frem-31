@@ -56,6 +56,7 @@ export const page = defineType({
         {type: 'imageSection'},
         {type: 'split'},
         {type: 'cardSection'},
+        {type: 'callToAction'},
         {type: 'pricingTiers'},
       ],
       options: {
