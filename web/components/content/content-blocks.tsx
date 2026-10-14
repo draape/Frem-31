@@ -5,11 +5,13 @@ import { CardList } from '@/components/content/card-list';
 import { Image } from '@/components/content/image';
 import { RichText } from '@/components/content/rich-text';
 import { Split } from '@/components/content/split';
+import { FeeTable, type FeeGroup } from '@/components/pricing/fee-table';
 import {
   resolveLink,
   sanityImage,
   type CardSectionBlock,
   type ContentBlock,
+  type FeeTableBlock,
   type ImageSectionBlock,
   type SplitBlock,
   type TextBlock,
@@ -36,6 +38,8 @@ function renderBlock(block: ContentBlock) {
       return <SplitView key={block._key} block={block as SplitBlock} />;
     case 'cardSection':
       return <CardSectionView key={block._key} block={block as CardSectionBlock} />;
+    case 'feeTable':
+      return <FeeTableView key={block._key} block={block as FeeTableBlock} />;
     default:
       return <DevPlaceholder key={block._key} label={`Unknown block: ${block._type}`} />;
   }
@@ -112,6 +116,24 @@ function CardSectionView({ block }: { block: CardSectionBlock }) {
       ))}
     </CardList>
   );
+}
+
+function FeeTableView({ block }: { block: FeeTableBlock }) {
+  // Studio validation isn't enforced on every write; skip rows and groups
+  // missing a required field, and the whole table if nothing is left.
+  const groups: FeeGroup[] = (block.groups ?? []).flatMap((group) => {
+    const rows = (group.rows ?? []).flatMap((row) =>
+      row.label && row.price
+        ? [{ key: row._key, label: row.label, price: row.price, note: row.note ?? undefined }]
+        : []
+    );
+    return group.title && rows.length > 0 ? [{ key: group._key, title: group.title, rows }] : [];
+  });
+  if (groups.length === 0) {
+    return null;
+  }
+
+  return <FeeTable groups={groups} />;
 }
 
 // Visible in development so a missing mapping is noticed; nothing in production.

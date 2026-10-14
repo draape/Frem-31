@@ -1,13 +1,17 @@
 import { css } from '@/styled-system/css';
 import { Section } from '@/components/section';
 
-type FeeRow = {
+// `key` is the Sanity `_key` where there is one; titles and labels aren't
+// guaranteed unique in editor content.
+export type FeeRow = {
+  key?: string;
   label: string;
   price: string;
   note?: string;
 };
 
-type FeeGroup = {
+export type FeeGroup = {
+  key?: string;
   title: string;
   rows: FeeRow[];
 };
@@ -27,14 +31,14 @@ export function FeeTable({ groups }: FeeTableProps) {
           </tr>
         </thead>
         {groups.map((group) => (
-          <tbody key={group.title}>
+          <tbody key={group.key ?? group.title}>
             <tr>
               <td colSpan={2} className={groupHeading}>
                 {group.title}
               </td>
             </tr>
             {group.rows.map((row, i) => (
-              <tr key={row.label} className={i % 2 === 0 ? rowEven : rowOdd}>
+              <tr key={row.key ?? row.label}className={i % 2 === 0 ? rowEven : rowOdd}>
                 <td className={cell}>
                   {row.label}
                   {row.note && <span className={note}>{row.note}</span>}

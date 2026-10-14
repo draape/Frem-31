@@ -48,6 +48,9 @@ export const PAGE_BY_PATH_QUERY = defineQuery(
           "description": coalesce(description, reference->description),
           "href": reference->path.fullPath
         }
+      },
+      _type == "feeTable" => {
+        groups[]{ _key, title, rows[]{ _key, label, price, note } }
       }
     }
   }`
@@ -132,6 +135,25 @@ export type CardSectionBlock = {
   cards: CardItem[] | null;
 };
 
+export type FeeTableRow = {
+  _key: string;
+  label: string | null;
+  price: string | null;
+  note: string | null;
+};
+
+export type FeeTableGroup = {
+  _key: string;
+  title: string | null;
+  rows: FeeTableRow[] | null;
+};
+
+export type FeeTableBlock = {
+  _type: 'feeTable';
+  _key: string;
+  groups: FeeTableGroup[] | null;
+};
+
 // A block type the web doesn't know yet (added in the Studio first).
 export type UnknownBlock = {
   _type: string;
@@ -143,6 +165,7 @@ export type ContentBlock =
   | ImageSectionBlock
   | SplitBlock
   | CardSectionBlock
+  | FeeTableBlock
   | UnknownBlock;
 
 export type PageByPathResult = {
