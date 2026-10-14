@@ -3,12 +3,12 @@ import { sva, css } from '@/styled-system/css';
 import { Section } from '@/components/section';
 import { Button } from '@/components/ui';
 
-type Tier = {
+export type Tier = {
   name: string;
   price: string;
   description?: string;
   features?: string[];
-  cta?: { label: string; href: string };
+  cta?: { label: string; href: string; external?: boolean };
   highlighted?: boolean;
 };
 
@@ -64,6 +64,7 @@ function TierCard({ tier }: { tier: Tier }) {
           <Button
             variant={tier.highlighted ? 'primary' : 'secondary'}
             href={tier.cta.href}
+            external={tier.cta.external}
           >
             {tier.cta.label}
           </Button>
