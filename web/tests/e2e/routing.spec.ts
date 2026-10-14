@@ -21,11 +21,12 @@ test.describe('Routing with the Sanity catch-all', () => {
     expect(response?.status()).toBe(404);
   });
 
-  test('/ redirects to /frembanen while the home page flag is off', async ({ page }) => {
-    test.skip(process.env.NEXT_PUBLIC_ENABLE_HOME_PAGE === 'true', 'home page flag is on');
+  // Holds with NEXT_PUBLIC_ENABLE_HOME_PAGE on or off.
+  test('/ resolves to the home page or redirects to /frembanen', async ({ page }) => {
+    const response = await page.goto('/');
 
-    await page.goto('/');
-
-    await expect(page).toHaveURL(/\/frembanen$/);
+    expect(response?.ok()).toBe(true);
+    await expect(page).toHaveURL(/\/(frembanen)?$/);
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   });
 });

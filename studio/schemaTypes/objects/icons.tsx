@@ -68,6 +68,20 @@ export function CardSectionIcon() {
   )
 }
 
+/** Fee table — a framed table with a header line, rows and a right-hand price column. */
+export function FeeTableIcon() {
+  return (
+    <Svg name="fee-table">
+      <rect x="3.5" y="5" width="18" height="15" rx="2" />
+      <line x1="3.5" y1="9.5" x2="21.5" y2="9.5" />
+      <line x1="3.5" y1="14.5" x2="21.5" y2="14.5" />
+      <line x1="15.5" y1="5" x2="15.5" y2="20" />
+      <line x1="6" y1="12" x2="12" y2="12" />
+      <line x1="6" y1="17" x2="11" y2="17" />
+    </Svg>
+  )
+}
+
 /** Call to action — a framed banner with two text lines and a small button. */
 export function CallToActionIcon() {
   return (

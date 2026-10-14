@@ -1,4 +1,5 @@
 import {defineType, defineField} from 'sanity'
+import {HeaderPicker} from './objects/headerPicker'
 
 /**
  * The `page` document type.
@@ -25,6 +26,29 @@ export const page = defineType({
     {name: 'seo', title: 'SEO'},
   ],
   fields: [
+    defineField({
+      name: 'headerType',
+      title: 'Header',
+      type: 'string',
+      group: 'content',
+      // Pages created before this field have no value; the web treats that as
+      // "standard".
+      options: {
+        list: [
+          {title: 'Standard', value: 'standard'},
+          {title: 'Hero', value: 'hero'},
+        ],
+      },
+      initialValue: 'standard',
+      components: {input: HeaderPicker},
+    }),
+    defineField({
+      name: 'hero',
+      title: 'Hero',
+      type: 'hero',
+      group: 'content',
+      hidden: ({document}) => document?.headerType !== 'hero',
+    }),
     defineField({
       name: 'title',
       title: 'Title',
@@ -56,6 +80,7 @@ export const page = defineType({
         {type: 'imageSection'},
         {type: 'split'},
         {type: 'cardSection'},
+        {type: 'feeTable'},
         {type: 'callToAction'},
         {type: 'pricingTiers'},
       ],

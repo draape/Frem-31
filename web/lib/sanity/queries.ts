@@ -26,6 +26,15 @@ export const PAGE_BY_PATH_QUERY = defineQuery(
     description,
     image{ ${SEO_IMAGE} },
     seo{ title, description, image{ ${SEO_IMAGE} }, canonical, noIndex },
+    "headerType": coalesce(headerType, "standard"),
+    headerType == "hero" => {
+      hero{
+        badge,
+        titleAccent,
+        primaryButton{ ..., "internalPath": internal->path.fullPath },
+        secondaryButton{ ..., "internalPath": internal->path.fullPath }
+      }
+    },
     content[]{
       _type,
       _key,
@@ -52,6 +61,9 @@ export const PAGE_BY_PATH_QUERY = defineQuery(
           "description": coalesce(description, reference->description),
           "href": reference->path.fullPath
         }
+      },
+      _type == "feeTable" => {
+        groups[]{ _key, title, rows[]{ _key, label, price, note } }
       },
       _type == "callToAction" => {
         title,
@@ -153,6 +165,25 @@ export type CardSectionBlock = {
   cards: CardItem[] | null;
 };
 
+export type FeeTableRow = {
+  _key: string;
+  label: string | null;
+  price: string | null;
+  note: string | null;
+};
+
+export type FeeTableGroup = {
+  _key: string;
+  title: string | null;
+  rows: FeeTableRow[] | null;
+};
+
+export type FeeTableBlock = {
+  _type: 'feeTable';
+  _key: string;
+  groups: FeeTableGroup[] | null;
+};
+
 export type CallToActionBlock = {
   _type: 'callToAction';
   _key: string;
@@ -189,15 +220,27 @@ export type ContentBlock =
   | ImageSectionBlock
   | SplitBlock
   | CardSectionBlock
+  | FeeTableBlock
   | CallToActionBlock
   | PricingTiersBlock
   | UnknownBlock;
+
+export type HeroHeader = {
+  badge: string | null;
+  titleAccent: string | null;
+  primaryButton: SanityLink | null;
+  secondaryButton: SanityLink | null;
+};
 
 export type PageByPathResult = {
   title: string | null;
   description: string | null;
   image: SeoImage | null;
   seo: PageSeo | null;
+  // Pages saved before the field existed come back as "standard".
+  headerType: 'standard' | 'hero';
+  // Only queried for hero pages.
+  hero?: HeroHeader | null;
   content: ContentBlock[] | null;
 } | null;
 

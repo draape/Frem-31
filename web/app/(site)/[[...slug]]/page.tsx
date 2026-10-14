@@ -1,16 +1,18 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ContentBlocks } from '@/components/content/content-blocks';
-import { PageHeader } from '@/components/headers';
+import { Hero, PageHeader } from '@/components/headers';
 import {
   PAGE_BY_PATH_QUERY,
   PAGE_PATHS_QUERY,
   SITE_SEO_QUERY,
   type PageByPathResult,
   type PagePathsResult,
+  type SanityLink,
   type SiteSeoResult,
   fullPathToSlug,
   isShadowedPath,
+  resolveLink,
   sanityFetch,
   slugToFullPath,
 } from '@/lib/sanity';
@@ -54,7 +56,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {};
   }
 
-  const { title, description, imageUrl } = resolveSeo(page, site);
+  // A hero page's heading reads "title accent", so the browser title does too
+  // unless an SEO title overrides it.
+  const accent = page.headerType === 'hero' ? page.hero?.titleAccent : null;
+  const pageTitle = accent && page.title ? `${page.title} ${accent}` : page.title;
+  const { title, description, imageUrl } = resolveSeo({ ...page, title: pageTitle }, site);
   // Relative paths resolve against the layout's metadataBase.
   const url = page.seo?.canonical || fullPath;
   const images = imageUrl
@@ -84,6 +90,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+// A hero button needs a label and a resolvable destination (e.g. not an
+// unpublished page), or it is left out.
+function heroButton(link: SanityLink | null | undefined) {
+  const resolved = link?.label ? resolveLink(link) : null;
+  return resolved && link?.label
+    ? { label: link.label, href: resolved.href, external: resolved.newTab }
+    : undefined;
+}
+
 export default async function SanityPage({ params }: Props) {
   const { slug } = await params;
   const page = await fetchPage(slugToFullPath(slug));
@@ -94,7 +109,18 @@ export default async function SanityPage({ params }: Props) {
 
   return (
     <>
-      <PageHeader title={page.title ?? ''} description={page.description ?? undefined} />
+      {page.headerType === 'hero' ? (
+        <Hero
+          badge={page.hero?.badge ?? undefined}
+          title={page.title ?? ''}
+          titleAccent={page.hero?.titleAccent ?? undefined}
+          description={page.description ?? undefined}
+          primaryButton={heroButton(page.hero?.primaryButton)}
+          secondaryButton={heroButton(page.hero?.secondaryButton)}
+        />
+      ) : (
+        <PageHeader title={page.title ?? ''} description={page.description ?? undefined} />
+      )}
       <ContentBlocks blocks={page.content ?? []} />
     </>
   );
