@@ -48,6 +48,12 @@ export const PAGE_BY_PATH_QUERY = defineQuery(
           "description": coalesce(description, reference->description),
           "href": reference->path.fullPath
         }
+      },
+      _type == "callToAction" => {
+        title,
+        description,
+        variant,
+        cta{ ..., "internalPath": internal->path.fullPath }
       }
     }
   }`
@@ -132,6 +138,15 @@ export type CardSectionBlock = {
   cards: CardItem[] | null;
 };
 
+export type CallToActionBlock = {
+  _type: 'callToAction';
+  _key: string;
+  title: string | null;
+  description: string | null;
+  variant: 'blue' | 'yellow' | 'white' | null;
+  cta: SanityLink | null;
+};
+
 // A block type the web doesn't know yet (added in the Studio first).
 export type UnknownBlock = {
   _type: string;
@@ -143,6 +158,7 @@ export type ContentBlock =
   | ImageSectionBlock
   | SplitBlock
   | CardSectionBlock
+  | CallToActionBlock
   | UnknownBlock;
 
 export type PageByPathResult = {
