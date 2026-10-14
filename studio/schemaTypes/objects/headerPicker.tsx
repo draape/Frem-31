@@ -84,7 +84,8 @@ export function HeaderPicker({value, onChange, schemaType, readOnly}: StringInpu
     <Grid columns={options.length} gap={3}>
       {options.map((option) => {
         if (!option.value) return null
-        const selected = value === option.value
+        // Pages saved before the picker have no value; the site renders them as Standard.
+        const selected = (value ?? 'standard') === option.value
         const Preview = skeletons[option.value]
         return (
           <Card
