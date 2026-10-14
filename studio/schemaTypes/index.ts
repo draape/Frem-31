@@ -7,6 +7,7 @@ import {split} from './objects/split'
 import {card} from './objects/card'
 import {cardSection} from './objects/cardSection'
 import {feeTable} from './objects/feeTable'
+import {callToAction} from './objects/callToAction'
 import {navItem} from './objects/navItem'
 import {footerColumn} from './objects/footerColumn'
 import {seo, seoDefaults} from './objects/seo'
@@ -21,6 +22,7 @@ export const schemaTypes = [
   card,
   cardSection,
   feeTable,
+  callToAction,
   navItem,
   footerColumn,
   seo,

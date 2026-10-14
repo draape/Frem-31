@@ -82,6 +82,18 @@ export function FeeTableIcon() {
   )
 }
 
+/** Call to action — a framed banner with two text lines and a small button. */
+export function CallToActionIcon() {
+  return (
+    <Svg name="call-to-action">
+      <rect x="3.5" y="5" width="18" height="15" rx="2" />
+      <line x1="6.5" y1="9" x2="16.5" y2="9" />
+      <line x1="6.5" y1="12" x2="13.5" y2="12" />
+      <rect x="6.5" y="14.5" width="6" height="2.5" rx="1" />
+    </Svg>
+  )
+}
+
 /** Single card — a framed image over a couple of title lines. */
 export function CardIcon() {
   return (

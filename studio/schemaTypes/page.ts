@@ -57,6 +57,7 @@ export const page = defineType({
         {type: 'split'},
         {type: 'cardSection'},
         {type: 'feeTable'},
+        {type: 'callToAction'},
       ],
       options: {
         insertMenu: {

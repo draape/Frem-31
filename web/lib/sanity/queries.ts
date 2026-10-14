@@ -51,6 +51,12 @@ export const PAGE_BY_PATH_QUERY = defineQuery(
       },
       _type == "feeTable" => {
         groups[]{ _key, title, rows[]{ _key, label, price, note } }
+      },
+      _type == "callToAction" => {
+        title,
+        description,
+        variant,
+        cta{ ..., "internalPath": internal->path.fullPath }
       }
     }
   }`
@@ -154,6 +160,15 @@ export type FeeTableBlock = {
   groups: FeeTableGroup[] | null;
 };
 
+export type CallToActionBlock = {
+  _type: 'callToAction';
+  _key: string;
+  title: string | null;
+  description: string | null;
+  variant: 'blue' | 'yellow' | 'white' | null;
+  cta: SanityLink | null;
+};
+
 // A block type the web doesn't know yet (added in the Studio first).
 export type UnknownBlock = {
   _type: string;
@@ -166,6 +181,7 @@ export type ContentBlock =
   | SplitBlock
   | CardSectionBlock
   | FeeTableBlock
+  | CallToActionBlock
   | UnknownBlock;
 
 export type PageByPathResult = {
