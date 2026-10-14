@@ -1,10 +1,5 @@
 import { Metadata } from 'next';
-import {
-  BodyTextSection,
-  AddressParkingSection,
-  RulesSection,
-  // PitchMap,
-} from '@/components/frembanen';
+import { BodyTextSection, AddressParkingSection, RulesSection } from '@/components/frembanen';
 import { PageHeader } from '@/components/headers';
 
 export const metadata: Metadata = {
@@ -22,7 +17,6 @@ export default function FrembanenPage() {
       <BodyTextSection />
       <AddressParkingSection />
       <RulesSection />
-      {/* <PitchMap /> */}
     </>
   );
 }

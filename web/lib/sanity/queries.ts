@@ -20,6 +20,15 @@ export const PAGE_BY_PATH_QUERY = defineQuery(
   `*[_type == "page" && path.fullPath == $fullPath][0]{
     title,
     description,
+    "headerType": coalesce(headerType, "standard"),
+    headerType == "hero" => {
+      hero{
+        badge,
+        titleAccent,
+        primaryButton{ ..., "internalPath": internal->path.fullPath },
+        secondaryButton{ ..., "internalPath": internal->path.fullPath }
+      }
+    },
     "seoTitle": seo.title,
     "seoDescription": seo.description,
     content[]{
@@ -48,8 +57,46 @@ export const PAGE_BY_PATH_QUERY = defineQuery(
           "description": coalesce(description, reference->description),
           "href": reference->path.fullPath
         }
+      },
+      _type == "feeTable" => {
+        groups[]{ _key, title, rows[]{ _key, label, price, note } }
+      },
+      _type == "callToAction" => {
+        title,
+        description,
+        variant,
+        cta{ ..., "internalPath": internal->path.fullPath }
+      },
+      _type == "pricingTiers" => {
+        tiers[]{
+          _key,
+          name,
+          price,
+          description,
+          features,
+          highlighted,
+          cta{ ..., "internalPath": internal->path.fullPath }
+        }
       }
     }
+  }`
+);
+
+// The site settings singleton (fixed id). Header items and footer links to an
+// unpublished page dereference to null and are dropped by the mapper.
+export const SITE_SETTINGS_QUERY = defineQuery(
+  `*[_id == "siteSettings"][0]{
+    "header": header[]{ _key, label, "href": reference->path.fullPath },
+    "footerColumns": footer.columns[]{
+      _key,
+      title,
+      links[]{
+        _key, type, label, href, email, openInNewTab,
+        "internalPath": internal->path.fullPath,
+        "internalTitle": internal->title
+      }
+    },
+    "facebook": socialLinks.facebook
   }`
 );
 
@@ -72,6 +119,8 @@ export type SanityLink = {
   openInNewTab?: boolean | null;
   // Resolved from `internal`; null when the target page is unpublished.
   internalPath?: string | null;
+  // The target page's title, where the query asks for it (label fallback).
+  internalTitle?: string | null;
 };
 
 export type CardItem = {
@@ -112,6 +161,50 @@ export type CardSectionBlock = {
   cards: CardItem[] | null;
 };
 
+export type FeeTableRow = {
+  _key: string;
+  label: string | null;
+  price: string | null;
+  note: string | null;
+};
+
+export type FeeTableGroup = {
+  _key: string;
+  title: string | null;
+  rows: FeeTableRow[] | null;
+};
+
+export type FeeTableBlock = {
+  _type: 'feeTable';
+  _key: string;
+  groups: FeeTableGroup[] | null;
+};
+
+export type CallToActionBlock = {
+  _type: 'callToAction';
+  _key: string;
+  title: string | null;
+  description: string | null;
+  variant: 'blue' | 'yellow' | 'white' | null;
+  cta: SanityLink | null;
+};
+
+export type PricingTierItem = {
+  _key: string;
+  name: string | null;
+  price: string | null;
+  description: string | null;
+  features: string[] | null;
+  highlighted: boolean | null;
+  cta: SanityLink | null;
+};
+
+export type PricingTiersBlock = {
+  _type: 'pricingTiers';
+  _key: string;
+  tiers: PricingTierItem[] | null;
+};
+
 // A block type the web doesn't know yet (added in the Studio first).
 export type UnknownBlock = {
   _type: string;
@@ -123,12 +216,38 @@ export type ContentBlock =
   | ImageSectionBlock
   | SplitBlock
   | CardSectionBlock
+  | FeeTableBlock
+  | CallToActionBlock
+  | PricingTiersBlock
   | UnknownBlock;
+
+export type HeroHeader = {
+  badge: string | null;
+  titleAccent: string | null;
+  primaryButton: SanityLink | null;
+  secondaryButton: SanityLink | null;
+};
 
 export type PageByPathResult = {
   title: string | null;
   description: string | null;
+  // Pages saved before the field existed come back as "standard".
+  headerType: 'standard' | 'hero';
+  // Only queried for hero pages.
+  hero?: HeroHeader | null;
   seoTitle: string | null;
   seoDescription: string | null;
   content: ContentBlock[] | null;
+} | null;
+
+export type SiteSettingsResult = {
+  header: { _key: string; label: string | null; href: string | null }[] | null;
+  footerColumns:
+    | {
+        _key: string;
+        title: string | null;
+        links: (SanityLink & { _key: string })[] | null;
+      }[]
+    | null;
+  facebook: string | null;
 } | null;

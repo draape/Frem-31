@@ -1,16 +1,23 @@
 import { css } from '@/styled-system/css';
 import { Section } from '@/components/section';
+import { CallToAction } from '@/components/content/call-to-action';
 import { Card } from '@/components/content/card';
 import { CardList } from '@/components/content/card-list';
 import { Image } from '@/components/content/image';
 import { RichText } from '@/components/content/rich-text';
 import { Split } from '@/components/content/split';
+import { FeeTable, type FeeGroup } from '@/components/pricing/fee-table';
+import { PricingTiers, type Tier } from '@/components/pricing/pricing-tiers';
 import {
   resolveLink,
   sanityImage,
+  type CallToActionBlock,
   type CardSectionBlock,
   type ContentBlock,
+  type FeeTableBlock,
   type ImageSectionBlock,
+  type PricingTierItem,
+  type PricingTiersBlock,
   type SplitBlock,
   type TextBlock,
 } from '@/lib/sanity';
@@ -36,6 +43,12 @@ function renderBlock(block: ContentBlock) {
       return <SplitView key={block._key} block={block as SplitBlock} />;
     case 'cardSection':
       return <CardSectionView key={block._key} block={block as CardSectionBlock} />;
+    case 'feeTable':
+      return <FeeTableView key={block._key} block={block as FeeTableBlock} />;
+    case 'callToAction':
+      return <CallToActionView key={block._key} block={block as CallToActionBlock} />;
+    case 'pricingTiers':
+      return <PricingTiersView key={block._key} block={block as PricingTiersBlock} />;
     default:
       return <DevPlaceholder key={block._key} label={`Unknown block: ${block._type}`} />;
   }
@@ -112,6 +125,70 @@ function CardSectionView({ block }: { block: CardSectionBlock }) {
       ))}
     </CardList>
   );
+}
+
+function FeeTableView({ block }: { block: FeeTableBlock }) {
+  // Studio validation isn't enforced on every write; skip rows and groups
+  // missing a required field, and the whole table if nothing is left.
+  const groups: FeeGroup[] = (block.groups ?? []).flatMap((group) => {
+    const rows = (group.rows ?? []).flatMap((row) =>
+      row.label && row.price
+        ? [{ key: row._key, label: row.label, price: row.price, note: row.note ?? undefined }]
+        : []
+    );
+    return group.title && rows.length > 0 ? [{ key: group._key, title: group.title, rows }] : [];
+  });
+  if (groups.length === 0) {
+    return null;
+  }
+
+  return <FeeTable groups={groups} />;
+}
+
+function CallToActionView({ block }: { block: CallToActionBlock }) {
+  // The button is the point of the block: without a resolvable destination
+  // (e.g. an unpublished page) or a label, leave the whole block out.
+  const link = resolveLink(block.cta);
+  if (!block.title || !link || !block.cta?.label) {
+    return null;
+  }
+
+  return (
+    <CallToAction
+      title={block.title}
+      description={block.description ?? undefined}
+      cta={{ label: block.cta.label, href: link.href, external: link.newTab }}
+      variant={block.variant ?? 'blue'}
+    />
+  );
+}
+
+function PricingTiersView({ block }: { block: PricingTiersBlock }) {
+  // A tier needs a name and a price to be shown; an empty block renders nothing.
+  const tiers = (block.tiers ?? []).filter((tier) => tier.name && tier.price).map(toTier);
+  if (tiers.length === 0) {
+    return null;
+  }
+
+  return <PricingTiers tiers={tiers} />;
+}
+
+function toTier(tier: PricingTierItem): Tier {
+  // An internal link to an unpublished page resolves to null: no button.
+  const link = tier.cta?.label ? resolveLink(tier.cta) : null;
+  const cta =
+    link && tier.cta?.label
+      ? { label: tier.cta.label, href: link.href, external: link.newTab }
+      : undefined;
+
+  return {
+    name: tier.name ?? '',
+    price: tier.price ?? '',
+    description: tier.description ?? undefined,
+    features: tier.features?.length ? tier.features : undefined,
+    cta,
+    highlighted: tier.highlighted ?? undefined,
+  };
 }
 
 // Visible in development so a missing mapping is noticed; nothing in production.

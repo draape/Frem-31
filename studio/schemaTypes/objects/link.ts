@@ -3,6 +3,12 @@ import {linkableTypes} from './linkableTypes'
 
 type LinkParent = {type?: string}
 
+export type LinkValue = {label?: string; internal?: unknown; href?: string; email?: string}
+
+// `link` has initial values, so a CTA object can exist without the editor
+// having chosen a destination. Only a destination makes it a real CTA.
+export const hasDestination = (link: LinkValue) => Boolean(link.internal || link.href || link.email)
+
 /**
  * The common link definition. Use this everywhere a link is needed — as a CTA
  * field on a component, or as a rich-text annotation. Supports:

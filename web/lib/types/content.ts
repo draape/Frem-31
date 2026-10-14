@@ -25,21 +25,6 @@ export interface AddressInfo {
   };
 }
 
-export interface PitchZone {
-  /** Zone identifier (e.g., "5er-A", "7er-B") */
-  id: string;
-  /** Display label */
-  label: string;
-  /** Zone type */
-  type: '5er' | '7er' | 'parent-zone';
-}
-
-export interface PitchMapConfig {
-  title: string;
-  zones: PitchZone[];
-  parentZones: PitchZone[];
-}
-
 export interface ParkingInfo {
   title: string;
   intro: string;
@@ -65,7 +50,6 @@ export interface FrembanenContent {
   address: AddressInfo;
   parking: ParkingInfo;
   rules: RulesInfo;
-  pitchMap: PitchMapConfig;
 }
 
 export interface CalendarConfig {

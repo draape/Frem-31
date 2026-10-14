@@ -68,6 +68,46 @@ export function CardSectionIcon() {
   )
 }
 
+/** Fee table — a framed table with a header line, rows and a right-hand price column. */
+export function FeeTableIcon() {
+  return (
+    <Svg name="fee-table">
+      <rect x="3.5" y="5" width="18" height="15" rx="2" />
+      <line x1="3.5" y1="9.5" x2="21.5" y2="9.5" />
+      <line x1="3.5" y1="14.5" x2="21.5" y2="14.5" />
+      <line x1="15.5" y1="5" x2="15.5" y2="20" />
+      <line x1="6" y1="12" x2="12" y2="12" />
+      <line x1="6" y1="17" x2="11" y2="17" />
+    </Svg>
+  )
+}
+
+/** Call to action — a framed banner with two text lines and a small button. */
+export function CallToActionIcon() {
+  return (
+    <Svg name="call-to-action">
+      <rect x="3.5" y="5" width="18" height="15" rx="2" />
+      <line x1="6.5" y1="9" x2="16.5" y2="9" />
+      <line x1="6.5" y1="12" x2="13.5" y2="12" />
+      <rect x="6.5" y="14.5" width="6" height="2.5" rx="1" />
+    </Svg>
+  )
+}
+
+/** Pricing tiers — three columns, the highlighted middle one taller, each with a price line. */
+export function PricingTiersIcon() {
+  return (
+    <Svg name="pricing-tiers">
+      <rect x="3.5" y="8" width="5.5" height="11" rx="1" />
+      <rect x="9.75" y="5" width="5.5" height="14" rx="1" />
+      <rect x="16" y="8" width="5.5" height="11" rx="1" />
+      <line x1="5" y1="11" x2="7.5" y2="11" />
+      <line x1="11.25" y1="8" x2="13.75" y2="8" />
+      <line x1="17.5" y1="11" x2="20" y2="11" />
+    </Svg>
+  )
+}
+
 /** Single card — a framed image over a couple of title lines. */
 export function CardIcon() {
   return (
