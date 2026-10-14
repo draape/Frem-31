@@ -38,7 +38,7 @@ export function FeeTable({ groups }: FeeTableProps) {
               </td>
             </tr>
             {group.rows.map((row, i) => (
-              <tr key={row.key ?? row.label}className={i % 2 === 0 ? rowEven : rowOdd}>
+              <tr key={row.key ?? row.label} className={i % 2 === 0 ? rowEven : rowOdd}>
                 <td className={cell}>
                   {row.label}
                   {row.note && <span className={note}>{row.note}</span>}
