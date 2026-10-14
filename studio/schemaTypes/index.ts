@@ -8,6 +8,7 @@ import {card} from './objects/card'
 import {cardSection} from './objects/cardSection'
 import {feeTable} from './objects/feeTable'
 import {callToAction} from './objects/callToAction'
+import {pricingTiers} from './objects/pricingTiers'
 import {navItem} from './objects/navItem'
 import {footerColumn} from './objects/footerColumn'
 import {seo, seoDefaults} from './objects/seo'
@@ -23,6 +24,7 @@ export const schemaTypes = [
   cardSection,
   feeTable,
   callToAction,
+  pricingTiers,
   navItem,
   footerColumn,
   seo,

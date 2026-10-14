@@ -58,6 +58,7 @@ export const page = defineType({
         {type: 'cardSection'},
         {type: 'feeTable'},
         {type: 'callToAction'},
+        {type: 'pricingTiers'},
       ],
       options: {
         insertMenu: {

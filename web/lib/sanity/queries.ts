@@ -57,6 +57,17 @@ export const PAGE_BY_PATH_QUERY = defineQuery(
         description,
         variant,
         cta{ ..., "internalPath": internal->path.fullPath }
+      },
+      _type == "pricingTiers" => {
+        tiers[]{
+          _key,
+          name,
+          price,
+          description,
+          features,
+          highlighted,
+          cta{ ..., "internalPath": internal->path.fullPath }
+        }
       }
     }
   }`
@@ -169,6 +180,22 @@ export type CallToActionBlock = {
   cta: SanityLink | null;
 };
 
+export type PricingTierItem = {
+  _key: string;
+  name: string | null;
+  price: string | null;
+  description: string | null;
+  features: string[] | null;
+  highlighted: boolean | null;
+  cta: SanityLink | null;
+};
+
+export type PricingTiersBlock = {
+  _type: 'pricingTiers';
+  _key: string;
+  tiers: PricingTierItem[] | null;
+};
+
 // A block type the web doesn't know yet (added in the Studio first).
 export type UnknownBlock = {
   _type: string;
@@ -182,6 +209,7 @@ export type ContentBlock =
   | CardSectionBlock
   | FeeTableBlock
   | CallToActionBlock
+  | PricingTiersBlock
   | UnknownBlock;
 
 export type PageByPathResult = {
