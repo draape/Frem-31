@@ -1,11 +1,6 @@
 import {defineType, defineField} from 'sanity'
 import {CallToActionIcon} from './icons'
-
-type LinkValue = {label?: string; internal?: unknown; href?: string; email?: string}
-
-// `link` has initial values, so a CTA object can exist without the editor
-// having chosen a destination. Only a destination makes it a real CTA.
-const hasDestination = (link: LinkValue) => Boolean(link.internal || link.href || link.email)
+import {hasDestination, type LinkValue} from './link'
 
 const variants = [
   {title: 'Blue', value: 'blue'},
