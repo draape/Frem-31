@@ -1,5 +1,6 @@
 import { css } from '@/styled-system/css';
 import { Section } from '@/components/section';
+import { CallToAction } from '@/components/content/call-to-action';
 import { Card } from '@/components/content/card';
 import { CardList } from '@/components/content/card-list';
 import { Image } from '@/components/content/image';
@@ -8,6 +9,7 @@ import { Split } from '@/components/content/split';
 import {
   resolveLink,
   sanityImage,
+  type CallToActionBlock,
   type CardSectionBlock,
   type ContentBlock,
   type ImageSectionBlock,
@@ -36,6 +38,8 @@ function renderBlock(block: ContentBlock) {
       return <SplitView key={block._key} block={block as SplitBlock} />;
     case 'cardSection':
       return <CardSectionView key={block._key} block={block as CardSectionBlock} />;
+    case 'callToAction':
+      return <CallToActionView key={block._key} block={block as CallToActionBlock} />;
     default:
       return <DevPlaceholder key={block._key} label={`Unknown block: ${block._type}`} />;
   }
@@ -111,6 +115,24 @@ function CardSectionView({ block }: { block: CardSectionBlock }) {
         />
       ))}
     </CardList>
+  );
+}
+
+function CallToActionView({ block }: { block: CallToActionBlock }) {
+  // The button is the point of the block: without a resolvable destination
+  // (e.g. an unpublished page) or a label, leave the whole block out.
+  const link = resolveLink(block.cta);
+  if (!block.title || !link || !block.cta?.label) {
+    return null;
+  }
+
+  return (
+    <CallToAction
+      title={block.title}
+      description={block.description ?? undefined}
+      cta={{ label: block.cta.label, href: link.href, external: link.newTab }}
+      variant={block.variant ?? 'blue'}
+    />
   );
 }
 
