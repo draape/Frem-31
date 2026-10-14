@@ -6,7 +6,7 @@ type HeroProps = {
   badge?: string;
   title: string;
   titleAccent?: string;
-  description: string;
+  description?: string;
   primaryButton?: {
     label: string;
     href: string;
@@ -15,6 +15,7 @@ type HeroProps = {
   secondaryButton?: {
     label: string;
     href: string;
+    external?: boolean;
   };
 };
 
@@ -40,7 +41,7 @@ export function Hero({
             {titleAccent && <span className={s.titleAccent}> {titleAccent}</span>}
           </h1>
 
-          <p className={s.description}>{description}</p>
+          {description && <p className={s.description}>{description}</p>}
 
           {(primaryButton || secondaryButton) && (
             <div className={s.buttonGroup}>
@@ -54,7 +55,11 @@ export function Hero({
                 </Button>
               )}
               {secondaryButton && (
-                <Button variant="outlined" href={secondaryButton.href}>
+                <Button
+                  variant="outlined"
+                  href={secondaryButton.href}
+                  external={secondaryButton.external}
+                >
                   {secondaryButton.label}
                 </Button>
               )}

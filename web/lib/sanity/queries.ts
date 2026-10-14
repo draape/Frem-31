@@ -20,6 +20,15 @@ export const PAGE_BY_PATH_QUERY = defineQuery(
   `*[_type == "page" && path.fullPath == $fullPath][0]{
     title,
     description,
+    "headerType": coalesce(headerType, "standard"),
+    headerType == "hero" => {
+      hero{
+        badge,
+        titleAccent,
+        primaryButton{ ..., "internalPath": internal->path.fullPath },
+        secondaryButton{ ..., "internalPath": internal->path.fullPath }
+      }
+    },
     "seoTitle": seo.title,
     "seoDescription": seo.description,
     content[]{
@@ -161,9 +170,20 @@ export type ContentBlock =
   | CallToActionBlock
   | UnknownBlock;
 
+export type HeroHeader = {
+  badge: string | null;
+  titleAccent: string | null;
+  primaryButton: SanityLink | null;
+  secondaryButton: SanityLink | null;
+};
+
 export type PageByPathResult = {
   title: string | null;
   description: string | null;
+  // Pages saved before the field existed come back as "standard".
+  headerType: 'standard' | 'hero';
+  // Only queried for hero pages.
+  hero?: HeroHeader | null;
   seoTitle: string | null;
   seoDescription: string | null;
   content: ContentBlock[] | null;
