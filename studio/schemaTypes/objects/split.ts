@@ -1,12 +1,7 @@
 import {defineType, defineField} from 'sanity'
 import {SplitIcon} from './icons'
 import {imageAltFields} from './imageAlt'
-
-type LinkValue = {label?: string; internal?: unknown; href?: string; email?: string}
-
-// `link` has initial values, so a CTA object can exist without the editor
-// having chosen a destination. Only a destination makes it a real CTA.
-const hasDestination = (link: LinkValue) => Boolean(link.internal || link.href || link.email)
+import {hasDestination, type LinkValue} from './link'
 
 export const split = defineType({
   name: 'split',

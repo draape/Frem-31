@@ -7,6 +7,7 @@ import {split} from './objects/split'
 import {card} from './objects/card'
 import {cardSection} from './objects/cardSection'
 import {callToAction} from './objects/callToAction'
+import {pricingTiers} from './objects/pricingTiers'
 import {hero} from './objects/hero'
 import {navItem} from './objects/navItem'
 import {footerColumn} from './objects/footerColumn'
@@ -22,6 +23,7 @@ export const schemaTypes = [
   card,
   cardSection,
   callToAction,
+  pricingTiers,
   hero,
   navItem,
   footerColumn,

@@ -81,6 +81,7 @@ export const page = defineType({
         {type: 'split'},
         {type: 'cardSection'},
         {type: 'callToAction'},
+        {type: 'pricingTiers'},
       ],
       options: {
         insertMenu: {
