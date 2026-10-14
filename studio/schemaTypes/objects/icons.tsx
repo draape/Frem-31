@@ -80,6 +80,20 @@ export function CallToActionIcon() {
   )
 }
 
+/** Pricing tiers — three columns, the highlighted middle one taller, each with a price line. */
+export function PricingTiersIcon() {
+  return (
+    <Svg name="pricing-tiers">
+      <rect x="3.5" y="8" width="5.5" height="11" rx="1" />
+      <rect x="9.75" y="5" width="5.5" height="14" rx="1" />
+      <rect x="16" y="8" width="5.5" height="11" rx="1" />
+      <line x1="5" y1="11" x2="7.5" y2="11" />
+      <line x1="11.25" y1="8" x2="13.75" y2="8" />
+      <line x1="17.5" y1="11" x2="20" y2="11" />
+    </Svg>
+  )
+}
+
 /** Single card — a framed image over a couple of title lines. */
 export function CardIcon() {
   return (

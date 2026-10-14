@@ -3,12 +3,12 @@ import { sva, css } from '@/styled-system/css';
 import { Section } from '@/components/section';
 import { Button } from '@/components/ui';
 
-type Tier = {
+export type Tier = {
   name: string;
   price: string;
   description?: string;
   features?: string[];
-  cta?: { label: string; href: string };
+  cta?: { label: string; href: string; external?: boolean };
   highlighted?: boolean;
 };
 
@@ -20,8 +20,9 @@ export function PricingTiers({ tiers }: PricingTiersProps) {
   return (
     <Section maxWidth="layout" padding="lg">
       <div className={grid}>
-        {tiers.map((tier) => (
-          <TierCard key={tier.name} tier={tier} />
+        {/* Index keys: editors can enter duplicate names, and the list never reorders client-side. */}
+        {tiers.map((tier, index) => (
+          <TierCard key={index} tier={tier} />
         ))}
       </div>
     </Section>
@@ -48,8 +49,8 @@ function TierCard({ tier }: { tier: Tier }) {
 
       {tier.features && tier.features.length > 0 && (
         <ul className={s.features}>
-          {tier.features.map((feature) => (
-            <li key={feature} className={s.featureItem}>
+          {tier.features.map((feature, index) => (
+            <li key={index} className={s.featureItem}>
               <span className={s.checkIcon}>
                 <Check size={14} weight="bold" />
               </span>
@@ -64,6 +65,7 @@ function TierCard({ tier }: { tier: Tier }) {
           <Button
             variant={tier.highlighted ? 'primary' : 'secondary'}
             href={tier.cta.href}
+            external={tier.cta.external}
           >
             {tier.cta.label}
           </Button>
