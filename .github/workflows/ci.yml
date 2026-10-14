@@ -11,7 +11,9 @@ permissions:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  # Only cancel superseded PR runs. Every push run on main must finish, since
+  # paths-filter diffs each push against the previous one.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # Public values, same as web/.env.example. No token: CI only reads published content.
 env:
