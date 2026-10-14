@@ -1,12 +1,10 @@
-import {defineType, defineField} from 'sanity'
+import {defineType, defineField, type ValidationContext} from 'sanity'
+import {hasDestination, type LinkValue} from './link'
 
-type LinkValue = {label?: string; internal?: unknown; href?: string; email?: string}
-
-// `link` has initial values, so a button object can exist without the editor
-// having chosen a destination. Only a destination makes it a real button.
-const hasDestination = (link: LinkValue) => Boolean(link.internal || link.href || link.email)
-
-const buttonLabelRule = (value: unknown) => {
+// Sanity validates hidden fields too, so skip the rule unless the hero is in
+// use; otherwise a stale button would block publishing a Standard page.
+const buttonLabelRule = (value: unknown, context: ValidationContext) => {
+  if (context.document?.headerType !== 'hero') return true
   const link = value as LinkValue | undefined
   return link && hasDestination(link) && !link.label ? 'Add a button label' : true
 }
