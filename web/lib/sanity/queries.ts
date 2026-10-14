@@ -175,7 +175,7 @@ export type PageByPathResult = {
 
 // The site-wide SEO defaults. Null until a siteSettings document exists.
 export const SITE_SEO_QUERY = defineQuery(
-  `*[_type == "siteSettings"][0].seo{ title, description, image{ ${SEO_IMAGE} } }`
+  `*[_id == "siteSettings"][0].seo{ title, description, image{ ${SEO_IMAGE} } }`
 );
 
 export type SeoImage = {
