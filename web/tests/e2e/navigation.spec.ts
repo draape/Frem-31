@@ -1,9 +1,18 @@
 import { test, expect } from '@playwright/test';
 
-// These run on /frembanen, not /: it always uses the hardcoded legacy
-// navigation, while / depends on NEXT_PUBLIC_ENABLE_HOME_PAGE and, when the
-// flag is on, on siteSettings in the Sanity dataset.
+// Navigation comes from siteSettings in the Sanity dataset, as set by
+// studio/scripts/migrateLegacyPages.ts. These run on /frembanen, not /, which
+// depends on NEXT_PUBLIC_ENABLE_HOME_PAGE.
 test.describe('Navigation', () => {
+  test('should show exactly Frembanen and Banekalender in the header', async ({ page }) => {
+    await page.goto('/frembanen');
+
+    // The desktop menu, the header's first nav. The logo link is outside it,
+    // and the legacy "Treningstilbud" button is gone.
+    const menuLinks = page.locator('header nav').first().locator('a');
+    await expect(menuLinks).toHaveText(['Frembanen', 'Banekalender']);
+  });
+
   test('should display header with logo and navigation links', async ({ page }) => {
     await page.goto('/frembanen');
 

@@ -14,6 +14,8 @@ import {getCliClient} from 'sanity/cli'
  *   FRONT_PAGE_TITLE='Forsiden' FRONT_PAGE_SLUG=forsiden \
  *     pnpm exec sanity exec scripts/createFrontPage.ts --with-user-token
  *
+ * `sanity exec` has no dataset flag; DATASET=production targets another one.
+ *
  * Safe to re-run: it bails out if a root page already exists, and creates the
  * document with `createIfNotExists` on a fixed id.
  */
@@ -24,7 +26,10 @@ const title = process.env.FRONT_PAGE_TITLE || 'Front page'
 const slug = process.env.FRONT_PAGE_SLUG || 'home'
 
 async function main() {
-  const client = getCliClient()
+  const cliClient = getCliClient()
+  const client = process.env.DATASET
+    ? cliClient.withConfig({dataset: process.env.DATASET})
+    : cliClient
   const {projectId, dataset} = client.config()
 
   // Any page without a parent is a root. There should only ever be one, so an

@@ -1,18 +1,28 @@
 import { test, expect } from '@playwright/test';
 
-// The [[...slug]] catch-all must not shadow the hand-written routes.
+// /frembanen and /banekalender are Sanity pages served by the [[...slug]]
+// catch-all; /ui is the one hand-written route it must not shadow.
 test.describe('Routing with the Sanity catch-all', () => {
-  test('/frembanen renders the hand-written page', async ({ page }) => {
+  test('/frembanen renders from Sanity', async ({ page }) => {
     await page.goto('/frembanen');
 
     await expect(page.getByRole('heading', { level: 1, name: 'Frembanen' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'banekalenderen' })).toBeVisible();
   });
 
-  test('/banekalender renders the hand-written calendar', async ({ page }) => {
+  test('/banekalender renders from Sanity with the calendar', async ({ page }) => {
     await page.goto('/banekalender');
 
     await expect(page.getByRole('heading', { level: 1, name: /Banekalender/i })).toBeVisible();
+    await expect(page.locator('iframe[title="Banekalender - Frembanen"]')).toBeVisible({
+      timeout: 10000,
+    });
+  });
+
+  test('/ui renders the hand-written component sandbox', async ({ page }) => {
+    await page.goto('/ui');
+
+    await expect(page.getByRole('heading', { name: /Component sandbox/ })).toBeVisible();
   });
 
   test('an unknown path returns 404', async ({ page }) => {

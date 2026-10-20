@@ -7,6 +7,7 @@ import { CardList } from '@/components/content/card-list';
 import { Split } from '@/components/content/split';
 import { RichText } from '@/components/content/rich-text';
 import { Image } from '@/components/content/image';
+import { MapEmbed } from '@/components/content/map-embed';
 import { Section } from '@/components/section';
 import type { PortableTextBlock } from 'next-sanity';
 import { PricingTiers } from '@/components/pricing/pricing-tiers';
@@ -344,6 +345,28 @@ export default function UiSandboxPage() {
             src="/images/_DSC6121.jpg"
             alt="Frembanen"
             caption="Frembanen — vår hjemmebane siden 1921"
+          />
+        </Section>
+      </section>
+      {/* ─── MapEmbed ─── */}
+      <section style={{ borderTop: '1px solid #e8e8e8' }}>
+        <h2
+          style={{
+            fontFamily: 'sans-serif',
+            fontSize: '12px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+            color: '#ABABAB',
+            padding: '24px 24px 0',
+          }}
+        >
+          MapEmbed
+        </h2>
+        <Section maxWidth="content">
+          <MapEmbed
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2000.2982680992989!2d10.615837599999999!3d59.91059709999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46416ce8a4b2c0c3%3A0x2b3c482baaaeb9cf!2sFrembanen%20kunstgress!5e0!3m2!1sen!2sno!4v1773009324276!5m2!1sen!2sno"
+            title="Kart over Frembanen"
           />
         </Section>
       </section>

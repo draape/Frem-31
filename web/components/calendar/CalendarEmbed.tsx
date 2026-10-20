@@ -2,7 +2,11 @@
 
 import { useState } from 'react';
 import { css } from '@/styled-system/css';
-import { calendarConfig } from '@/lib/constants/calendar';
+
+// Fixed on purpose: the Studio's EasyPlay calendar block has no settings.
+const EMBED_URL = 'https://www.easyplay.no/clubs/frem31?stadium=Frembanen_kunstgress';
+const FALLBACK_MESSAGE = 'Kalenderen er midlertidig utilgjengelig. Besøk easyplay.no direkte.';
+const FALLBACK_URL = 'https://www.easyplay.no/clubs/frem31';
 
 const containerStyles = css({
   width: '100%',
@@ -80,9 +84,9 @@ export function CalendarEmbed() {
   if (hasError) {
     return (
       <div className={fallbackStyles}>
-        <p className={fallbackTextStyles}>{calendarConfig.fallbackMessage}</p>
+        <p className={fallbackTextStyles}>{FALLBACK_MESSAGE}</p>
         <a
-          href={calendarConfig.fallbackUrl}
+          href={FALLBACK_URL}
           target="_blank"
           rel="noopener noreferrer"
           className={fallbackLinkStyles}
@@ -101,7 +105,7 @@ export function CalendarEmbed() {
         </div>
       )}
       <iframe
-        src={calendarConfig.embedUrl}
+        src={EMBED_URL}
         className={iframeStyles}
         onLoad={handleLoad}
         onError={handleError}

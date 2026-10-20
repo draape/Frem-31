@@ -57,17 +57,16 @@ pnpm lint
 
 ```
 app/                    # Next.js App Router pages
-  [[...slug]]/page.tsx # Pages from Sanity, including the front page
-  frembanen/page.tsx   # Frembanen page (hand-written)
-  banekalender/page.tsx # Calendar page
+  (site)/[[...slug]]/page.tsx # Pages from Sanity, including the front page
+  (site)/ui/page.tsx   # Component sandbox (hand-written)
   layout.tsx           # Root layout
 components/
-  frembanen/           # Frembanen page sections
-  calendar/            # Calendar components
+  content/             # Page content blocks (text, image, map, split, …)
+  calendar/            # The EasyPlay calendar embed
   layout/              # Header, Footer, Navigation
   ui/                  # Reusable UI components
 lib/
-  constants/           # Static content and config
+  sanity/              # Client, queries, path and link helpers
   types/               # TypeScript type definitions
 public/images/         # Static assets
 tests/e2e/             # Playwright tests
@@ -75,11 +74,11 @@ tests/e2e/             # Playwright tests
 
 ## Pages from Sanity
 
-`app/[[...slug]]/page.tsx` renders every published `page` document at its `path.fullPath`: `/` is the front page, `/parent/child` a nested page. Unknown paths return 404. Pages without a `fullPath` are not reachable. For now a page renders only its title and description in a `PageHeader`.
+`app/(site)/[[...slug]]/page.tsx` renders every published `page` document at its `path.fullPath`: `/` is the front page, `/parent/child` a nested page. Unknown paths return 404. Pages without a `fullPath` are not reachable. A page renders its header and then its content blocks in Studio order. `/frembanen` and `/banekalender` are ordinary Sanity pages (created by `studio/scripts/migrateLegacyPages.ts`); navigation comes from the `siteSettings` document.
 
 - **Revalidation:** time-based ISR with a 60 s window (`revalidate = 60`). Reads go through Sanity's API CDN, which can add a few seconds, so published changes appear within about a minute. Pages published after a deploy render on their first request without a rebuild. Drafts never show; the client uses the `published` perspective.
 - **Build:** `pnpm build` queries Sanity for all page paths (`generateStaticParams`), so it needs the `NEXT_PUBLIC_SANITY_*` variables and network access.
-- **Shadowed paths:** `/frembanen`, `/banekalender` and `/ui` belong to hand-written routes, which take priority over the catch-all at exactly those paths. A Sanity page with one of these `fullPath`s never renders and is left out of the build (`SHADOWED_PATHS` in `lib/sanity/paths.ts`). Pages below them, such as `/frembanen/child`, render as usual.
+- **Shadowed paths:** `/ui` belongs to a hand-written route, which takes priority over the catch-all at exactly that path. A Sanity page with that `fullPath` never renders and is left out of the build (`SHADOWED_PATHS` in `lib/sanity/paths.ts`). Pages below it, such as `/ui/child`, render as usual.
 - **`/`:** unless `NEXT_PUBLIC_ENABLE_HOME_PAGE=true`, `next.config.mjs` still redirects `/` to `/frembanen`.
 
 ## Design Tokens

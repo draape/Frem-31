@@ -1,9 +1,8 @@
 // Paths owned by hand-written routes in app/. A static route wins over the
 // [[...slug]] catch-all only at its exact path, so a Sanity page at one of
 // these never renders and generateStaticParams skips it. Pages below them
-// (e.g. /frembanen/child) are not shadowed and render as usual. Entries go
-// away as #7 migrates the routes to Sanity.
-export const SHADOWED_PATHS = ['/frembanen', '/banekalender', '/ui'];
+// (e.g. /ui/child) are not shadowed and render as usual.
+export const SHADOWED_PATHS = ['/ui'];
 
 function decodeSegment(segment: string): string {
   try {

@@ -45,6 +45,7 @@ export const PAGE_BY_PATH_QUERY = defineQuery(
         }
       },
       _type == "imageSection" => { caption, image{ ${IMAGE} } },
+      _type == "mapEmbed" => { url, title },
       _type == "split" => {
         kicker,
         title,
@@ -147,6 +148,19 @@ export type ImageSectionBlock = {
   image: SanityImage | null;
 };
 
+export type MapEmbedBlock = {
+  _type: 'mapEmbed';
+  _key: string;
+  url: string | null;
+  title: string | null;
+};
+
+// No fields: the calendar's URL and fallback live in `CalendarEmbed`.
+export type EasyplayCalendarBlock = {
+  _type: 'easyplayCalendar';
+  _key: string;
+};
+
 export type SplitBlock = {
   _type: 'split';
   _key: string;
@@ -218,6 +232,8 @@ export type UnknownBlock = {
 export type ContentBlock =
   | TextBlock
   | ImageSectionBlock
+  | MapEmbedBlock
+  | EasyplayCalendarBlock
   | SplitBlock
   | CardSectionBlock
   | FeeTableBlock
