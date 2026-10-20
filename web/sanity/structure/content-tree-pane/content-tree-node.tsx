@@ -335,6 +335,8 @@ export function ContentTreeExpander({
 
 function Thumbnail({imageUrl}: {imageUrl?: string}) {
   if (imageUrl) {
+    // A Studio thumbnail already sized by Sanity's image CDN; next/image adds nothing here.
+    // eslint-disable-next-line @next/next/no-img-element
     return <img className="content-tree__thumbnail" src={imageUrl} alt="" />
   }
 

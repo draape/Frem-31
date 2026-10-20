@@ -158,6 +158,9 @@ export function useContentTree(type: string) {
   )
 
   useEffect(() => {
+    // Fetch-on-mount from an external store: the spinner flips on before the
+    // request goes out, which is the intended render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchDocuments()
   }, [fetchDocuments])
 

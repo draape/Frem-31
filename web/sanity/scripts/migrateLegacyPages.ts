@@ -6,14 +6,15 @@ import {getCliClient} from 'sanity/cli'
  * the hand-written routes showed. The text is copied from the constants the
  * web used before the migration (#7).
  *
- * Needs a front page (run `pnpm seed:front-page` first). Run with the CLI,
- * which supplies project/dataset from sanity.cli.ts:
+ * Needs a front page (run `pnpm seed:front-page` first). Run from web/ with
+ * the CLI, which supplies project/dataset from sanity.cli.ts (the
+ * NEXT_PUBLIC_SANITY_* env vars):
  *
- *   pnpm exec sanity exec scripts/migrateLegacyPages.ts --with-user-token
+ *   pnpm migrate:legacy-pages
  *
  * `sanity exec` has no dataset flag; target another dataset with an env var:
  *
- *   DATASET=production pnpm exec sanity exec scripts/migrateLegacyPages.ts --with-user-token
+ *   DATASET=production pnpm migrate:legacy-pages
  *
  * Re-running is safe for the pages: they are created with `createIfNotExists`
  * on fixed ids and never overwritten. The site-settings header, footer and

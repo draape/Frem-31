@@ -309,6 +309,8 @@ function DragPreview({node}: {node: TreeNode}) {
     >
       <Flex gap={2} align="center" style={{minWidth: 0}}>
         {node.imageUrl ? (
+          // A Studio thumbnail already sized by Sanity's image CDN; next/image adds nothing here.
+          // eslint-disable-next-line @next/next/no-img-element
           <img className="content-tree__thumbnail" src={node.imageUrl} alt="" />
         ) : (
           <div

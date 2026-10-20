@@ -5,14 +5,14 @@ import {getCliClient} from 'sanity/cli'
  * no `path.parent`). Everything else hangs off it, and the content tree pane
  * pins it at the top, so a dataset needs one before it is useful.
  *
- * Run with the CLI, which supplies project/dataset from sanity.cli.ts:
+ * Run from web/ with the CLI, which supplies project/dataset from sanity.cli.ts
+ * (the NEXT_PUBLIC_SANITY_* env vars):
  *
- *   pnpm exec sanity exec scripts/createFrontPage.ts --with-user-token
+ *   pnpm seed:front-page
  *
  * Override the defaults with env vars:
  *
- *   FRONT_PAGE_TITLE='Forsiden' FRONT_PAGE_SLUG=forsiden \
- *     pnpm exec sanity exec scripts/createFrontPage.ts --with-user-token
+ *   FRONT_PAGE_TITLE='Forsiden' FRONT_PAGE_SLUG=forsiden pnpm seed:front-page
  *
  * `sanity exec` has no dataset flag; DATASET=production targets another one.
  *

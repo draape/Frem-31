@@ -1,16 +1,23 @@
+'use client'
+
+/**
+ * The Sanity Studio, mounted at /studio by app/studio/[[...tool]]/page.tsx.
+ * Project and dataset come from the same env vars the site reads.
+ */
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
-import {schemaTypes} from './schemaTypes'
-import {structure, singletonTypes} from './structure'
-import {templates} from './schemaTypes/templates'
+import {schemaTypes} from './sanity/schemaTypes'
+import {structure, singletonTypes} from './sanity/structure'
+import {templates} from './sanity/schemaTypes/templates'
 
 export default defineConfig({
   name: 'default',
   title: 'frem-31',
+  basePath: '/studio',
 
-  projectId: 'auquaqxb',
-  dataset: 'test',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
 
   plugins: [structureTool({structure}), visionTool()],
 
