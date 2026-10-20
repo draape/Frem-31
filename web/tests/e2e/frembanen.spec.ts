@@ -18,6 +18,7 @@ test.describe('Frembanen Page', () => {
     // Body text with link to calendar (use specific text)
     const calendarLink = page.getByRole('link', { name: 'banekalenderen' });
     await expect(calendarLink).toBeVisible();
+    await expect(calendarLink).toHaveAttribute('href', '/banekalender');
   });
 
   test('should display address section with Google Maps', async ({ page }) => {
@@ -51,7 +52,7 @@ test.describe('Frembanen Page', () => {
     await expect(rulesHeading).toBeVisible();
 
     // At least one rule is visible
-    const prohibitedItem = page.getByText('Hunder – av hygieniske grunner');
+    const prohibitedItem = page.getByText('hunder – av hygieniske grunner');
     await expect(prohibitedItem).toBeVisible();
   });
 
