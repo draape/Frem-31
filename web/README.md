@@ -59,7 +59,8 @@ pnpm lint
 app/                    # Next.js App Router pages
   (site)/[[...slug]]/page.tsx # Pages from Sanity, including the front page
   (site)/ui/page.tsx   # Component sandbox (hand-written)
-  layout.tsx           # Root layout
+  layout.tsx           # Root layout: header and footer from siteSettings
+  not-found.tsx        # 404 for notFound() and unmatched URLs
 components/
   content/             # Page content blocks (text, image, map, split, …)
   calendar/            # The EasyPlay calendar embed
