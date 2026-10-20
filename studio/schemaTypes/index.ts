@@ -3,6 +3,8 @@ import {siteSettings} from './siteSettings'
 import {link} from './objects/link'
 import {textBlock} from './objects/textBlock'
 import {imageSection} from './objects/imageSection'
+import {mapEmbed} from './objects/mapEmbed'
+import {easyplayCalendar} from './objects/easyplayCalendar'
 import {split} from './objects/split'
 import {card} from './objects/card'
 import {cardSection} from './objects/cardSection'
@@ -20,6 +22,8 @@ export const schemaTypes = [
   link,
   textBlock,
   imageSection,
+  mapEmbed,
+  easyplayCalendar,
   split,
   card,
   cardSection,

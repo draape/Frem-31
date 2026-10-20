@@ -42,6 +42,35 @@ export function ImageSectionIcon() {
   )
 }
 
+/** Map embed — a framed area with a location pin. */
+export function MapEmbedIcon() {
+  return (
+    <Svg name="map-embed">
+      <rect x="4" y="4" width="17" height="12" rx="2" />
+      <path d="M12.5 13.5s-3-2.6-3-4.8a3 3 0 0 1 6 0c0 2.2-3 4.8-3 4.8z" />
+      <circle cx="12.5" cy="8.7" r="0.9" />
+      <line x1="6" y1="19.5" x2="16" y2="19.5" />
+    </Svg>
+  )
+}
+
+/** EasyPlay calendar — a calendar page with a ring binding and a grid of days. */
+export function EasyplayCalendarIcon() {
+  return (
+    <Svg name="easyplay-calendar">
+      <rect x="4" y="6" width="17" height="14" rx="2" />
+      <line x1="4" y1="10" x2="21" y2="10" />
+      <line x1="8.5" y1="4" x2="8.5" y2="7.5" />
+      <line x1="16.5" y1="4" x2="16.5" y2="7.5" />
+      <line x1="7.5" y1="13.5" x2="9" y2="13.5" />
+      <line x1="11.75" y1="13.5" x2="13.25" y2="13.5" />
+      <line x1="16" y1="13.5" x2="17.5" y2="13.5" />
+      <line x1="7.5" y1="16.5" x2="9" y2="16.5" />
+      <line x1="11.75" y1="16.5" x2="13.25" y2="16.5" />
+    </Svg>
+  )
+}
+
 /** 50/50 split — a framed area divided in two: image on one side, text on the other. */
 export function SplitIcon() {
   return (

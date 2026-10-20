@@ -78,11 +78,13 @@ export const page = defineType({
       of: [
         {type: 'textBlock'},
         {type: 'imageSection'},
+        {type: 'mapEmbed'},
         {type: 'split'},
         {type: 'cardSection'},
         {type: 'feeTable'},
         {type: 'callToAction'},
         {type: 'pricingTiers'},
+        {type: 'easyplayCalendar'},
       ],
       options: {
         insertMenu: {
