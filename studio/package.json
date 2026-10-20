@@ -10,6 +10,7 @@
     "deploy-graphql": "sanity graphql deploy",
     "dev": "sanity dev",
     "seed:front-page": "sanity exec scripts/createFrontPage.ts --with-user-token",
+    "migrate:legacy-pages": "sanity exec scripts/migrateLegacyPages.ts --with-user-token",
     "start": "sanity start"
   },
   "keywords": [
