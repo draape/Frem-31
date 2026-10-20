@@ -1,9 +1,11 @@
 import { css } from '@/styled-system/css';
 import { Section } from '@/components/section';
+import { CalendarEmbed } from '@/components/calendar';
 import { CallToAction } from '@/components/content/call-to-action';
 import { Card } from '@/components/content/card';
 import { CardList } from '@/components/content/card-list';
 import { Image } from '@/components/content/image';
+import { MapEmbed } from '@/components/content/map-embed';
 import { RichText } from '@/components/content/rich-text';
 import { Split } from '@/components/content/split';
 import { FeeTable, type FeeGroup } from '@/components/pricing/fee-table';
@@ -16,6 +18,7 @@ import {
   type ContentBlock,
   type FeeTableBlock,
   type ImageSectionBlock,
+  type MapEmbedBlock,
   type PricingTierItem,
   type PricingTiersBlock,
   type SplitBlock,
@@ -39,6 +42,10 @@ function renderBlock(block: ContentBlock) {
       return <TextBlockView key={block._key} block={block as TextBlock} />;
     case 'imageSection':
       return <ImageSectionView key={block._key} block={block as ImageSectionBlock} />;
+    case 'mapEmbed':
+      return <MapEmbedView key={block._key} block={block as MapEmbedBlock} />;
+    case 'easyplayCalendar':
+      return <EasyplayCalendarView key={block._key} />;
     case 'split':
       return <SplitView key={block._key} block={block as SplitBlock} />;
     case 'cardSection':
@@ -74,6 +81,32 @@ function ImageSectionView({ block }: { block: ImageSectionBlock }) {
         height={image.height}
         caption={block.caption ?? undefined}
       />
+    </Section>
+  );
+}
+
+// The Studio only accepts Google Maps embed URLs, but validation isn't
+// enforced on every write; anything else would end up in an iframe.
+const MAP_EMBED_PREFIX = 'https://www.google.com/maps/embed';
+
+function MapEmbedView({ block }: { block: MapEmbedBlock }) {
+  if (!block.url?.startsWith(MAP_EMBED_PREFIX) || !block.title) {
+    return null;
+  }
+
+  return (
+    <Section maxWidth="content" padding="sm">
+      <MapEmbed src={block.url} title={block.title} />
+    </Section>
+  );
+}
+
+// The block has no settings; the calendar is fixed in `CalendarEmbed`. No
+// vertical padding, like the hand-written page it replaces.
+function EasyplayCalendarView() {
+  return (
+    <Section maxWidth="layout" padding="none">
+      <CalendarEmbed />
     </Section>
   );
 }
