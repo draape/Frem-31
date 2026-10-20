@@ -14,8 +14,8 @@ Website for Sportsklubb Frem-31 featuring Frembanen pitch information and calend
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm 8+
+- Node.js 22+ (see .nvmrc; CI uses 24)
+- pnpm 10+
 
 ### Installation
 

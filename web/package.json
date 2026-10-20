@@ -2,6 +2,9 @@
   "name": "frem-31-web",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "panda codegen && next dev",
     "build": "panda codegen && next build",
