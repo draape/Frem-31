@@ -10,7 +10,7 @@ type SiteShellProps = {
   children: React.ReactNode;
 };
 
-// Header, main and footer around a page, used by the `(site)` layout.
+// Header, main and footer around a page, used by the root layout.
 export function SiteShell({ headerItems, footerGroups, facebookUrl, children }: SiteShellProps) {
   return (
     <>
