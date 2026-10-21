@@ -1,6 +1,6 @@
-import {Box, Card, Flex, TextInput, Text, Spinner, useToast} from '@sanity/ui'
-import {SearchIcon} from '@sanity/icons/Search'
-import {DocumentIcon} from '@sanity/icons/Document'
+import { Box, Card, Flex, TextInput, Text, Spinner, useToast } from '@sanity/ui';
+import { SearchIcon } from '@sanity/icons/Search';
+import { DocumentIcon } from '@sanity/icons/Document';
 import {
   DndContext,
   DragOverlay,
@@ -10,162 +10,162 @@ import {
   type DragEndEvent,
   type DragOverEvent,
   type DragStartEvent,
-} from '@dnd-kit/core'
-import {useRouter} from 'sanity/router'
-import {TreeNode, useContentTree} from './use-content-tree'
-import {useCallback, useMemo, useState} from 'react'
-import {AncestorThread, ContentTreeExpander, ContentTreeNode} from './content-tree-node'
-import {canDrop, executeMove, indexTree} from './tree-move'
-import {useSanityClient} from '../../utils/useSanityClient'
-import {ContentTreePaneOptions} from '.'
-import './content-tree-pane.css'
+} from '@dnd-kit/core';
+import { useRouter } from 'sanity/router';
+import { TreeNode, useContentTree } from './use-content-tree';
+import { useCallback, useMemo, useState } from 'react';
+import { AncestorThread, ContentTreeExpander, ContentTreeNode } from './content-tree-node';
+import { canDrop, executeMove, indexTree } from './tree-move';
+import { useSanityClient } from '../../utils/useSanityClient';
+import { ContentTreePaneOptions } from '.';
+import './content-tree-pane.css';
 
 // Drag-and-drop state shared with renderNode so each row knows whether it is the
 // active source / a valid drop target. `rootIds` marks the parent-less nodes
 // (front page) so they render as non-draggable.
 type DndState = {
-  enabled: boolean
-  activeId: string | null
-  overId: string | null
-  dropValid: boolean
-  rootIds: Set<string>
-}
+  enabled: boolean;
+  activeId: string | null;
+  overId: string | null;
+  dropValid: boolean;
+  rootIds: Set<string>;
+};
 
 type ContentTreePaneProps = {
-  options?: Record<string, unknown>
-  childItemId?: string
-}
+  options?: Record<string, unknown>;
+  childItemId?: string;
+};
 
-export function ContentTreePane({options, childItemId}: ContentTreePaneProps) {
-  const {type, addChildTemplate, draggable} = options as ContentTreePaneOptions
-  const {documents, loading, error, refetch} = useContentTree(type)
-  const {navigateIntent} = useRouter()
-  const client = useSanityClient('published')
-  const toast = useToast()
-  const [collapsedIds, setCollapsedIds] = useState<Set<string>>(new Set())
-  const [searchQuery, setSearchQuery] = useState('')
-  const [activeId, setActiveId] = useState<string | null>(null)
-  const [overId, setOverId] = useState<string | null>(null)
+export function ContentTreePane({ options, childItemId }: ContentTreePaneProps) {
+  const { type, addChildTemplate, draggable } = options as ContentTreePaneOptions;
+  const { documents, loading, error, refetch } = useContentTree(type);
+  const { navigateIntent } = useRouter();
+  const client = useSanityClient('published');
+  const toast = useToast();
+  const [collapsedIds, setCollapsedIds] = useState<Set<string>>(new Set());
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
 
   // A small drag (< 8px) is treated as a click so the row's ChildLink still
   // navigates; only a real drag starts a move. This is what lets the whole row
   // be the drag affordance without a dedicated handle.
-  const sensors = useSensors(useSensor(PointerSensor, {activationConstraint: {distance: 8}}))
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
 
   // id -> node lookup used by the drop checks; rebuilt only when the tree changes.
-  const nodeIndex = useMemo(() => indexTree(documents), [documents])
+  const nodeIndex = useMemo(() => indexTree(documents), [documents]);
 
   // The parent-less nodes. In the standard single-site model this is just the
   // front page; it is a drop target but never a drag source.
-  const rootIds = useMemo(() => new Set(documents.map((d) => d._id)), [documents])
+  const rootIds = useMemo(() => new Set(documents.map((d) => d._id)), [documents]);
 
   const dropValid =
-    activeId !== null && overId !== null ? canDrop(activeId, overId, nodeIndex, rootIds).ok : false
+    activeId !== null && overId !== null ? canDrop(activeId, overId, nodeIndex, rootIds).ok : false;
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
-    setActiveId(String(event.active.id))
-  }, [])
+    setActiveId(String(event.active.id));
+  }, []);
 
   const handleDragOver = useCallback((event: DragOverEvent) => {
-    setOverId(event.over ? String(event.over.id) : null)
-  }, [])
+    setOverId(event.over ? String(event.over.id) : null);
+  }, []);
 
   // Escape (or any cancelled drag) fires onDragCancel, not onDragEnd — reset the
   // drag state here too, otherwise the source stays dimmed and the last hovered
   // row keeps its drop-target highlight.
   const handleDragCancel = useCallback(() => {
-    setActiveId(null)
-    setOverId(null)
+    setActiveId(null);
+    setOverId(null);
     // The pointer-down focused the row's link; pressing Escape flips the browser
     // into keyboard focus-visible mode, so that link now paints a focus ring
     // that lingers after the cancel. Drop the focus to clear it.
-    const active = document.activeElement
+    const active = document.activeElement;
     if (active instanceof HTMLElement && active.closest('.content-tree-pane')) {
-      active.blur()
+      active.blur();
     }
-  }, [])
+  }, []);
 
   const handleDragEnd = useCallback(
     async (event: DragEndEvent) => {
-      const draggedId = String(event.active.id)
-      const targetId = event.over ? String(event.over.id) : null
-      setActiveId(null)
-      setOverId(null)
-      if (!targetId) return
+      const draggedId = String(event.active.id);
+      const targetId = event.over ? String(event.over.id) : null;
+      setActiveId(null);
+      setOverId(null);
+      if (!targetId) return;
 
       // Re-run the same check that gated the highlight, now as a hard guard.
-      const check = canDrop(draggedId, targetId, nodeIndex, rootIds)
+      const check = canDrop(draggedId, targetId, nodeIndex, rootIds);
       if (!check.ok) {
         toast.push({
           status: 'warning',
           title: 'Move not allowed',
           description: check.reason,
-        })
-        return
+        });
+        return;
       }
 
-      const dragged = nodeIndex.get(draggedId)
-      if (!dragged) return
+      const dragged = nodeIndex.get(draggedId);
+      if (!dragged) return;
 
       try {
-        await executeMove(dragged, targetId, client, type)
-        toast.push({status: 'success', title: 'Moved'})
+        await executeMove(dragged, targetId, client, type);
+        toast.push({ status: 'success', title: 'Moved' });
         // Silent refetch: update the tree in place. A non-silent refetch would
         // flip `loading` on and swap the whole tree for the spinner, unmounting
         // the scroll container and making the view jump. The realtime listener
         // would also catch this; this just makes it immediate.
-        refetch(true)
+        refetch(true);
       } catch (err) {
-        console.error('Failed to move:', err)
+        console.error('Failed to move:', err);
         toast.push({
           status: 'error',
           title: 'Move failed',
           description: err instanceof Error ? err.message : 'Unknown error',
-        })
+        });
       }
     },
-    [nodeIndex, rootIds, client, toast, refetch, type],
-  )
+    [nodeIndex, rootIds, client, toast, refetch, type]
+  );
 
   const toggleCollapse = useCallback((id: string) => {
     setCollapsedIds((prev) => {
-      const next = new Set(prev)
+      const next = new Set(prev);
       if (next.has(id)) {
-        next.delete(id)
+        next.delete(id);
       } else {
-        next.add(id)
+        next.add(id);
       }
-      return next
-    })
-  }, [])
+      return next;
+    });
+  }, []);
 
   // Create a child via the initial-value template and open it in the editor
   // pane. The pane's `canHandleIntent` routes the create intent through its
   // `.child()` resolver, so the new draft opens just like a clicked row.
   const handleAddChild = useCallback(
     (parentBaseId: string) => {
-      if (!addChildTemplate) return
-      navigateIntent('create', [{type, template: addChildTemplate}, {parent: parentBaseId}])
+      if (!addChildTemplate) return;
+      navigateIntent('create', [{ type, template: addChildTemplate }, { parent: parentBaseId }]);
     },
-    [navigateIntent, type, addChildTemplate],
-  )
+    [navigateIntent, type, addChildTemplate]
+  );
 
-  const onAddChild = addChildTemplate ? handleAddChild : undefined
+  const onAddChild = addChildTemplate ? handleAddChild : undefined;
 
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value)
-  }, [])
+    setSearchQuery(e.target.value);
+  }, []);
 
-  const {filtered: filteredDocuments, matchingIds} = useMemo(
+  const { filtered: filteredDocuments, matchingIds } = useMemo(
     () => filterTree(documents, searchQuery),
-    [documents, searchQuery],
-  )
+    [documents, searchQuery]
+  );
 
   // A single root is the front page: pin it on top, separated by a divider,
   // and promote its children to the top level so everything else is one step
   // shallower.
-  const frontPage = documents.length === 1 ? (filteredDocuments[0] ?? null) : null
-  const topLevelNodes = frontPage ? frontPage.children : filteredDocuments
+  const frontPage = documents.length === 1 ? (filteredDocuments[0] ?? null) : null;
+  const topLevelNodes = frontPage ? frontPage.children : filteredDocuments;
 
   const dnd: DndState = {
     enabled: !!draggable,
@@ -173,17 +173,17 @@ export function ContentTreePane({options, childItemId}: ContentTreePaneProps) {
     overId,
     dropValid,
     rootIds,
-  }
+  };
 
   // The node currently being dragged, rendered in the cursor-following overlay.
-  const activeNode = activeId ? (nodeIndex.get(activeId) ?? null) : null
+  const activeNode = activeId ? (nodeIndex.get(activeId) ?? null) : null;
 
   if (error) {
     return (
       <Card padding={4} tone="critical">
         <Text>Error loading: {error.message}</Text>
       </Card>
-    )
+    );
   }
 
   return (
@@ -249,14 +249,14 @@ export function ContentTreePane({options, childItemId}: ContentTreePaneProps) {
                 childItemId,
                 matchingIds,
                 onAddChild,
-                dnd,
-              ),
+                dnd
+              )
             )}
           </Box>
         </DndOrFragment>
       )}
     </Flex>
-  )
+  );
 }
 
 // Wraps the tree in a DndContext only when drag-and-drop is enabled for this
@@ -272,16 +272,16 @@ function DndOrFragment({
   overlay,
   children,
 }: {
-  enabled: boolean
-  sensors: ReturnType<typeof useSensors>
-  onDragStart: (event: DragStartEvent) => void
-  onDragOver: (event: DragOverEvent) => void
-  onDragEnd: (event: DragEndEvent) => void
-  onDragCancel: () => void
-  overlay: React.ReactNode
-  children: React.ReactNode
+  enabled: boolean;
+  sensors: ReturnType<typeof useSensors>;
+  onDragStart: (event: DragStartEvent) => void;
+  onDragOver: (event: DragOverEvent) => void;
+  onDragEnd: (event: DragEndEvent) => void;
+  onDragCancel: () => void;
+  overlay: React.ReactNode;
+  children: React.ReactNode;
 }) {
-  if (!enabled) return <>{children}</>
+  if (!enabled) return <>{children}</>;
   return (
     <DndContext
       sensors={sensors}
@@ -293,21 +293,21 @@ function DndOrFragment({
       {children}
       <DragOverlay dropAnimation={null}>{overlay}</DragOverlay>
     </DndContext>
-  )
+  );
 }
 
 // A compact, cursor-following preview of the dragged node so it is obvious what
 // is being moved. Reuses the row's thumbnail styling for visual consistency.
-function DragPreview({node}: {node: TreeNode}) {
+function DragPreview({ node }: { node: TreeNode }) {
   return (
     <Card
       className="content-tree__drag-preview"
       padding={2}
       radius={2}
       shadow={3}
-      style={{display: 'inline-flex', cursor: 'grabbing', maxWidth: 280}}
+      style={{ display: 'inline-flex', cursor: 'grabbing', maxWidth: 280 }}
     >
-      <Flex gap={2} align="center" style={{minWidth: 0}}>
+      <Flex gap={2} align="center" style={{ minWidth: 0 }}>
         {node.imageUrl ? (
           // A Studio thumbnail already sized by Sanity's image CDN; next/image adds nothing here.
           // eslint-disable-next-line @next/next/no-img-element
@@ -325,7 +325,7 @@ function DragPreview({node}: {node: TreeNode}) {
         </Text>
       </Flex>
     </Card>
-  )
+  );
 }
 
 function renderNode(
@@ -337,15 +337,15 @@ function renderNode(
   selectedId?: string,
   matchingIds?: Set<string>,
   onAddChild?: (parentBaseId: string) => void,
-  dnd?: DndState,
+  dnd?: DndState
 ): React.ReactNode {
-  const isCollapsed = collapsedIds.has(node._id)
-  const hasChildren = node.children.length > 0
-  const isSearchMatch = matchingIds?.size ? matchingIds.has(node._id) : undefined
+  const isCollapsed = collapsedIds.has(node._id);
+  const hasChildren = node.children.length > 0;
+  const isSearchMatch = matchingIds?.size ? matchingIds.has(node._id) : undefined;
 
   // A root node (the front page) is never a drag source, even if it ever appears
   // here as a non-pinned (orphan) node.
-  const nodeDraggable = !!dnd?.enabled && !dnd.rootIds.has(node._id)
+  const nodeDraggable = !!dnd?.enabled && !dnd.rootIds.has(node._id);
 
   return (
     <div key={node._id}>
@@ -378,65 +378,65 @@ function renderNode(
           renderNode(
             child,
             level + 1,
-            [...ancestors, {id: node._id, continues: i < node.children.length - 1}],
+            [...ancestors, { id: node._id, continues: i < node.children.length - 1 }],
             collapsedIds,
             toggleCollapse,
             selectedId,
             matchingIds,
             onAddChild,
-            dnd,
-          ),
+            dnd
+          )
         )}
       {hasChildren && isCollapsed && (
         <ContentTreeExpander
           ownerId={node._id}
           count={node.children.length}
           level={level + 1}
-          ancestors={[...ancestors, {id: node._id, continues: false}]}
+          ancestors={[...ancestors, { id: node._id, continues: false }]}
           onToggle={toggleCollapse}
         />
       )}
     </div>
-  )
+  );
 }
 
 function filterTree(
   nodes: TreeNode[],
-  query: string,
-): {filtered: TreeNode[]; matchingIds: Set<string>} {
+  query: string
+): { filtered: TreeNode[]; matchingIds: Set<string> } {
   if (!query.trim()) {
-    return {filtered: nodes, matchingIds: new Set()}
+    return { filtered: nodes, matchingIds: new Set() };
   }
 
-  const lowerQuery = query.toLowerCase()
-  const matchingIds = new Set<string>()
+  const lowerQuery = query.toLowerCase();
+  const matchingIds = new Set<string>();
 
   function collectMatches(node: TreeNode): boolean {
-    const titleMatches = node.title?.toLowerCase().includes(lowerQuery) ?? false
+    const titleMatches = node.title?.toLowerCase().includes(lowerQuery) ?? false;
 
-    const childMatchResults = node.children.map((child) => collectMatches(child))
-    const childMatches = childMatchResults.some(Boolean)
+    const childMatchResults = node.children.map((child) => collectMatches(child));
+    const childMatches = childMatchResults.some(Boolean);
 
     if (titleMatches) {
-      matchingIds.add(node._id)
+      matchingIds.add(node._id);
     }
 
-    return titleMatches || childMatches
+    return titleMatches || childMatches;
   }
 
   function filterNode(node: TreeNode): TreeNode | null {
-    const titleMatches = node.title?.toLowerCase().includes(lowerQuery)
-    const filteredChildren = node.children.map(filterNode).filter((n): n is TreeNode => n !== null)
+    const titleMatches = node.title?.toLowerCase().includes(lowerQuery);
+    const filteredChildren = node.children.map(filterNode).filter((n): n is TreeNode => n !== null);
 
     if (titleMatches || filteredChildren.length > 0) {
-      return {...node, children: filteredChildren}
+      return { ...node, children: filteredChildren };
     }
-    return null
+    return null;
   }
 
-  nodes.forEach(collectMatches)
+  nodes.forEach(collectMatches);
 
-  const filtered = nodes.map(filterNode).filter((n): n is TreeNode => n !== null)
+  const filtered = nodes.map(filterNode).filter((n): n is TreeNode => n !== null);
 
-  return {filtered, matchingIds}
+  return { filtered, matchingIds };
 }

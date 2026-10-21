@@ -6,4 +6,4 @@
  * When a new renderable document type is added (e.g. `article`, `product`),
  * add it here once and every link/reference picks it up.
  */
-export const linkableTypes: {type: string}[] = [{type: 'page'}]
+export const linkableTypes: { type: string }[] = [{ type: 'page' }];

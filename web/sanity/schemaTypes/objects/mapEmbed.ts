@@ -1,10 +1,10 @@
-import {defineType, defineField} from 'sanity'
-import {MapEmbedIcon} from './icons'
+import { defineType, defineField } from 'sanity';
+import { MapEmbedIcon } from './icons';
 
 // Only Google Maps embed URLs (Share → Embed a map → the iframe's `src`). The
 // web renders the URL in an iframe, so anything else is refused here and
 // skipped there.
-const MAP_EMBED_PREFIX = 'https://www.google.com/maps/embed'
+const MAP_EMBED_PREFIX = 'https://www.google.com/maps/embed';
 
 export const mapEmbed = defineType({
   name: 'mapEmbed',
@@ -20,10 +20,10 @@ export const mapEmbed = defineType({
         'In Google Maps: Share → Embed a map → copy the address inside src="…" (it starts with https://www.google.com/maps/embed).',
       validation: (rule) =>
         rule.required().custom((value) => {
-          if (!value) return true
+          if (!value) return true;
           return (value as string).startsWith(MAP_EMBED_PREFIX)
             ? true
-            : `Use a Google Maps embed URL (starts with ${MAP_EMBED_PREFIX})`
+            : `Use a Google Maps embed URL (starts with ${MAP_EMBED_PREFIX})`;
         }),
     }),
     defineField({
@@ -36,9 +36,9 @@ export const mapEmbed = defineType({
     }),
   ],
   preview: {
-    select: {title: 'title'},
-    prepare({title}) {
-      return {title: title || 'Map', subtitle: 'Map'}
+    select: { title: 'title' },
+    prepare({ title }) {
+      return { title: title || 'Map', subtitle: 'Map' };
     },
   },
-})
+});

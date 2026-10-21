@@ -1,6 +1,6 @@
-import type {ReactNode} from 'react'
+import type { ReactNode } from 'react';
 
-function Svg({children, name}: {children: ReactNode; name: string}) {
+function Svg({ children, name }: { children: ReactNode; name: string }) {
   return (
     <svg
       width="1em"
@@ -15,7 +15,7 @@ function Svg({children, name}: {children: ReactNode; name: string}) {
     >
       {children}
     </svg>
-  )
+  );
 }
 
 /** Rich text — a few paragraph lines of varying length. */
@@ -27,7 +27,7 @@ export function TextBlockIcon() {
       <line x1="5" y1="15" x2="20" y2="15" />
       <line x1="5" y1="19" x2="12" y2="19" />
     </Svg>
-  )
+  );
 }
 
 /** Standalone image with a caption — framed picture (sun + mountain) over a line. */
@@ -39,7 +39,7 @@ export function ImageSectionIcon() {
       <polyline points="5,15.5 9,11 12,14 15,10 20,15.5" />
       <line x1="6" y1="19.5" x2="16" y2="19.5" />
     </Svg>
-  )
+  );
 }
 
 /** Map embed — a framed area with a location pin. */
@@ -51,7 +51,7 @@ export function MapEmbedIcon() {
       <circle cx="12.5" cy="8.7" r="0.9" />
       <line x1="6" y1="19.5" x2="16" y2="19.5" />
     </Svg>
-  )
+  );
 }
 
 /** EasyPlay calendar — a calendar page with a ring binding and a grid of days. */
@@ -68,7 +68,7 @@ export function EasyplayCalendarIcon() {
       <line x1="7.5" y1="16.5" x2="9" y2="16.5" />
       <line x1="11.75" y1="16.5" x2="13.25" y2="16.5" />
     </Svg>
-  )
+  );
 }
 
 /** 50/50 split — a framed area divided in two: image on one side, text on the other. */
@@ -83,7 +83,7 @@ export function SplitIcon() {
       <line x1="14.8" y1="12" x2="19.8" y2="12" />
       <line x1="14.8" y1="15" x2="18.3" y2="15" />
     </Svg>
-  )
+  );
 }
 
 /** Card grid — a row of equal cards. */
@@ -94,7 +94,7 @@ export function CardSectionIcon() {
       <rect x="10.1" y="7" width="4.8" height="11" rx="1" />
       <rect x="16.2" y="7" width="4.8" height="11" rx="1" />
     </Svg>
-  )
+  );
 }
 
 /** Fee table — a framed table with a header line, rows and a right-hand price column. */
@@ -108,7 +108,7 @@ export function FeeTableIcon() {
       <line x1="6" y1="12" x2="12" y2="12" />
       <line x1="6" y1="17" x2="11" y2="17" />
     </Svg>
-  )
+  );
 }
 
 /** Call to action — a framed banner with two text lines and a small button. */
@@ -120,7 +120,7 @@ export function CallToActionIcon() {
       <line x1="6.5" y1="12" x2="13.5" y2="12" />
       <rect x="6.5" y="14.5" width="6" height="2.5" rx="1" />
     </Svg>
-  )
+  );
 }
 
 /** Pricing tiers — three columns, the highlighted middle one taller, each with a price line. */
@@ -134,7 +134,7 @@ export function PricingTiersIcon() {
       <line x1="11.25" y1="8" x2="13.75" y2="8" />
       <line x1="17.5" y1="11" x2="20" y2="11" />
     </Svg>
-  )
+  );
 }
 
 /** Single card — a framed image over a couple of title lines. */
@@ -148,5 +148,5 @@ export function CardIcon() {
       <line x1="9" y1="15.5" x2="16" y2="15.5" />
       <line x1="9" y1="17.8" x2="13" y2="17.8" />
     </Svg>
-  )
+  );
 }

@@ -1,7 +1,7 @@
-import {defineType, defineField, defineArrayMember} from 'sanity'
-import {CardSectionIcon} from './icons'
+import { defineType, defineField, defineArrayMember } from 'sanity';
+import { CardSectionIcon } from './icons';
 
-type Cards = unknown[]
+type Cards = unknown[];
 
 export const cardSection = defineType({
   name: 'cardSection',
@@ -19,15 +19,15 @@ export const cardSection = defineType({
       name: 'cards',
       title: 'Cards',
       type: 'array',
-      of: [defineArrayMember({type: 'card'})],
+      of: [defineArrayMember({ type: 'card' })],
       validation: (rule) => rule.min(2).error('Add at least two cards'),
     }),
   ],
   preview: {
-    select: {title: 'title', cards: 'cards'},
-    prepare({title, cards}) {
-      const count = ((cards as Cards) || []).length
-      return {title: title || 'Cards', subtitle: `${count} card${count === 1 ? '' : 's'}`}
+    select: { title: 'title', cards: 'cards' },
+    prepare({ title, cards }) {
+      const count = ((cards as Cards) || []).length;
+      return { title: title || 'Cards', subtitle: `${count} card${count === 1 ? '' : 's'}` };
     },
   },
-})
+});

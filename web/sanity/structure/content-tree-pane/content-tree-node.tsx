@@ -1,51 +1,51 @@
-import {Card, Flex, Text} from '@sanity/ui'
-import {AddIcon} from '@sanity/icons/Add'
-import {ChevronDownIcon} from '@sanity/icons/ChevronDown'
-import {DocumentIcon} from '@sanity/icons/Document'
-import {useDraggable, useDroppable} from '@dnd-kit/core'
-import {useCallback} from 'react'
-import {DocumentStateIndicator} from './document-state-indicator'
-import {usePaneRouter} from 'sanity/structure'
+import { Card, Flex, Text } from '@sanity/ui';
+import { AddIcon } from '@sanity/icons/Add';
+import { ChevronDownIcon } from '@sanity/icons/ChevronDown';
+import { DocumentIcon } from '@sanity/icons/Document';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
+import { useCallback } from 'react';
+import { DocumentStateIndicator } from './document-state-indicator';
+import { usePaneRouter } from 'sanity/structure';
 
-const STATUS_WIDTH = 28
-const THUMB_SIZE = 32
+const STATUS_WIDTH = 28;
+const THUMB_SIZE = 32;
 // One level of indent equals one thumbnail width.
-const INDENT_PER_LEVEL = 32
-const CONTENT_INSET = 8
+const INDENT_PER_LEVEL = 32;
+const CONTENT_INSET = 8;
 // A node's vertical spine runs through the centre of its thumbnail (YouTube
 // reply-thread style): centre = thumbnail left edge + half a thumbnail.
-const SPINE_OFFSET = CONTENT_INSET + THUMB_SIZE / 2
+const SPINE_OFFSET = CONTENT_INSET + THUMB_SIZE / 2;
 // The elbow sweeps from the parent's spine to the child thumbnail's left edge.
-const HOOK_WIDTH = INDENT_PER_LEVEL - THUMB_SIZE / 2
-const CURVE_RADIUS = 14
+const HOOK_WIDTH = INDENT_PER_LEVEL - THUMB_SIZE / 2;
+const CURVE_RADIUS = 14;
 // Transparent width that widens each 1px line's hit area; the visible stroke
 // stays on the line's left edge.
-const LINE_HIT_WIDTH = 14
+const LINE_HIT_WIDTH = 14;
 
 export type AncestorThread = {
   // The ancestor whose children-thread runs through this column.
-  id: string
+  id: string;
   // True while that ancestor still has a later sibling — draw a full-height
   // line through this row rather than ending at the elbow.
-  continues: boolean
-}
+  continues: boolean;
+};
 
 // Hovering any segment of a thread highlights the whole thread. The segments
 // live in different rows, so we toggle a class on every element tagged with the
 // same owner id rather than relying on CSS :hover cascading.
 function threadElements(target: Element): NodeListOf<Element> | [] {
-  const thread = (target as HTMLElement).dataset.thread
-  const root = target.closest('.content-tree-pane')
-  if (!thread || !root) return []
-  return root.querySelectorAll(`[data-thread="${CSS.escape(thread)}"]`)
+  const thread = (target as HTMLElement).dataset.thread;
+  const root = target.closest('.content-tree-pane');
+  if (!thread || !root) return [];
+  return root.querySelectorAll(`[data-thread="${CSS.escape(thread)}"]`);
 }
 
 function handleLineEnter(e: React.MouseEvent<HTMLElement>) {
-  threadElements(e.currentTarget).forEach((el) => el.classList.add('is-thread-hover'))
+  threadElements(e.currentTarget).forEach((el) => el.classList.add('is-thread-hover'));
 }
 
 function handleLineLeave(e: React.MouseEvent<HTMLElement>) {
-  threadElements(e.currentTarget).forEach((el) => el.classList.remove('is-thread-hover'))
+  threadElements(e.currentTarget).forEach((el) => el.classList.remove('is-thread-hover'));
 }
 
 // Toggling re-renders the tree, which can unmount the very element being
@@ -55,7 +55,7 @@ function clearHighlights(target: Element) {
   target
     .closest('.content-tree-pane')
     ?.querySelectorAll('.is-thread-hover')
-    .forEach((el) => el.classList.remove('is-thread-hover'))
+    .forEach((el) => el.classList.remove('is-thread-hover'));
 }
 
 // Shared mouse interactions for any element that belongs to a thread: hover
@@ -67,12 +67,12 @@ function threadProps(owner: string, onToggle?: (id: string) => void) {
     onMouseEnter: handleLineEnter,
     onMouseLeave: handleLineLeave,
     onClick: (e: React.MouseEvent) => {
-      e.stopPropagation()
-      e.preventDefault()
-      clearHighlights(e.currentTarget)
-      onToggle?.(owner)
+      e.stopPropagation();
+      e.preventDefault();
+      clearHighlights(e.currentTarget);
+      onToggle?.(owner);
     },
-  }
+  };
 }
 
 // The connectors that join a row to its ancestors: straight lines for every
@@ -83,11 +83,11 @@ function TreeLines({
   level,
   onToggle,
 }: {
-  ancestors: AncestorThread[]
-  level: number
-  onToggle?: (id: string) => void
+  ancestors: AncestorThread[];
+  level: number;
+  onToggle?: (id: string) => void;
 }) {
-  const parent = ancestors[level - 1]
+  const parent = ancestors[level - 1];
 
   return (
     <>
@@ -105,7 +105,7 @@ function TreeLines({
               bottom: 0,
             }}
           />
-        ) : null,
+        ) : null
       )}
       {parent && (
         <span
@@ -133,32 +133,32 @@ function TreeLines({
         />
       )}
     </>
-  )
+  );
 }
 
 type ContentTreeNodeProps = {
-  baseId: string
-  title: string
-  subtitle?: string
-  imageUrl?: string
-  hasPublished: boolean
-  hasDraft: boolean
-  level?: number
-  ancestors?: AncestorThread[]
-  isCollapsed?: boolean
-  isSelected: boolean
-  hasChildren: boolean
-  isSearchMatch?: boolean
-  onToggle?: (id: string) => void
-  onAddChild?: (parentBaseId: string) => void
+  baseId: string;
+  title: string;
+  subtitle?: string;
+  imageUrl?: string;
+  hasPublished: boolean;
+  hasDraft: boolean;
+  level?: number;
+  ancestors?: AncestorThread[];
+  isCollapsed?: boolean;
+  isSelected: boolean;
+  hasChildren: boolean;
+  isSearchMatch?: boolean;
+  onToggle?: (id: string) => void;
+  onAddChild?: (parentBaseId: string) => void;
   // Drag-and-drop state, threaded from the pane. `dndEnabled` turns the feature
   // on for this tree; `draggable` is false for the front page (a drop target
   // but not a source).
-  dndEnabled?: boolean
-  draggable?: boolean
-  isDragging?: boolean
-  showDropIndicator?: boolean
-}
+  dndEnabled?: boolean;
+  draggable?: boolean;
+  isDragging?: boolean;
+  showDropIndicator?: boolean;
+};
 
 export function ContentTreeNode({
   baseId,
@@ -180,28 +180,28 @@ export function ContentTreeNode({
   isDragging = false,
   showDropIndicator = false,
 }: ContentTreeNodeProps) {
-  const {ChildLink} = usePaneRouter()
+  const { ChildLink } = usePaneRouter();
 
   // The whole row is the drag affordance (no separate handle). The hooks are
   // always called to respect the rules of hooks; `disabled` neutralizes them for
   // trees without drag-and-drop (e.g. categories) and for the non-draggable
   // front page row, which still acts as a drop target. The PointerSensor's
   // distance constraint (in the pane) lets a plain click still navigate.
-  const draggableState = useDraggable({id: baseId, disabled: !dndEnabled || !draggable})
-  const droppableState = useDroppable({id: baseId, disabled: !dndEnabled})
+  const draggableState = useDraggable({ id: baseId, disabled: !dndEnabled || !draggable });
+  const droppableState = useDroppable({ id: baseId, disabled: !dndEnabled });
 
   const setRowRef = useCallback(
     (el: HTMLElement | null) => {
-      draggableState.setNodeRef(el)
-      droppableState.setNodeRef(el)
+      draggableState.setNodeRef(el);
+      droppableState.setNodeRef(el);
     },
     // dnd-kit's setNodeRef callbacks are stable; depending on the whole state
     // objects would re-create this ref every render and churn the node ref.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [draggableState.setNodeRef, droppableState.setNodeRef],
-  )
+    [draggableState.setNodeRef, droppableState.setNodeRef]
+  );
 
-  const cardTone = showDropIndicator ? 'positive' : isSelected ? 'primary' : 'default'
+  const cardTone = showDropIndicator ? 'positive' : isSelected ? 'primary' : 'default';
 
   return (
     <ChildLink childId={baseId}>
@@ -236,10 +236,10 @@ export function ContentTreeNode({
             aria-expanded={!isCollapsed}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
-                e.stopPropagation()
-                e.preventDefault()
-                clearHighlights(e.currentTarget)
-                onToggle?.(baseId)
+                e.stopPropagation();
+                e.preventDefault();
+                clearHighlights(e.currentTarget);
+                onToggle?.(baseId);
               }
             }}
             className="content-tree__line content-tree__line--toggle"
@@ -256,7 +256,7 @@ export function ContentTreeNode({
             direction="column"
             flex={1}
             gap={2}
-            style={{minWidth: 0, opacity: isSearchMatch === false ? 0.5 : 1}}
+            style={{ minWidth: 0, opacity: isSearchMatch === false ? 0.5 : 1 }}
           >
             <Text size={1} weight="medium" textOverflow="ellipsis">
               {title || '(Untitled)'}
@@ -267,7 +267,7 @@ export function ContentTreeNode({
               </Text>
             )}
           </Flex>
-          <Flex align="center" gap={1} style={{flexShrink: 0}}>
+          <Flex align="center" gap={1} style={{ flexShrink: 0 }}>
             {onAddChild && (
               <button
                 type="button"
@@ -275,22 +275,22 @@ export function ContentTreeNode({
                 aria-label="Add child"
                 title="Add child"
                 onClick={(e) => {
-                  e.stopPropagation()
-                  e.preventDefault()
-                  onAddChild(baseId)
+                  e.stopPropagation();
+                  e.preventDefault();
+                  onAddChild(baseId);
                 }}
               >
                 <AddIcon />
               </button>
             )}
-            <Flex style={{width: STATUS_WIDTH}} justify="center" align="center">
+            <Flex style={{ width: STATUS_WIDTH }} justify="center" align="center">
               <DocumentStateIndicator hasPublished={hasPublished} hasDraft={hasDraft} />
             </Flex>
           </Flex>
         </Flex>
       </Card>
     </ChildLink>
-  )
+  );
 }
 
 // Shown in place of a collapsed node's children: a compact "N ⌄" pill sitting
@@ -303,11 +303,11 @@ export function ContentTreeExpander({
   ancestors,
   onToggle,
 }: {
-  ownerId: string
-  count: number
-  level: number
-  ancestors: AncestorThread[]
-  onToggle?: (id: string) => void
+  ownerId: string;
+  count: number;
+  level: number;
+  ancestors: AncestorThread[];
+  onToggle?: (id: string) => void;
 }) {
   return (
     <div
@@ -330,19 +330,19 @@ export function ContentTreeExpander({
         </button>
       </Flex>
     </div>
-  )
+  );
 }
 
-function Thumbnail({imageUrl}: {imageUrl?: string}) {
+function Thumbnail({ imageUrl }: { imageUrl?: string }) {
   if (imageUrl) {
     // A Studio thumbnail already sized by Sanity's image CDN; next/image adds nothing here.
     // eslint-disable-next-line @next/next/no-img-element
-    return <img className="content-tree__thumbnail" src={imageUrl} alt="" />
+    return <img className="content-tree__thumbnail" src={imageUrl} alt="" />;
   }
 
   return (
     <div className="content-tree__thumbnail content-tree__thumbnail--fallback" aria-hidden="true">
       <DocumentIcon />
     </div>
-  )
+  );
 }

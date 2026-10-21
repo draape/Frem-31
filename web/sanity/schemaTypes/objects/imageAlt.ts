@@ -1,6 +1,6 @@
-import {defineField} from 'sanity'
+import { defineField } from 'sanity';
 
-type ImageParent = {decorative?: boolean}
+type ImageParent = { decorative?: boolean };
 
 /**
  * Alt text sub-fields for content images. `alt` is required unless the editor
@@ -14,9 +14,9 @@ export const imageAltFields = [
     description: 'Describe the image for people who cannot see it.',
     validation: (rule) =>
       rule.custom((value, context) => {
-        const parent = context.parent as ImageParent | undefined
-        if (!value && !parent?.decorative) return 'Add alt text, or mark the image as decorative'
-        return true
+        const parent = context.parent as ImageParent | undefined;
+        if (!value && !parent?.decorative) return 'Add alt text, or mark the image as decorative';
+        return true;
       }),
   }),
   defineField({
@@ -26,4 +26,4 @@ export const imageAltFields = [
     description: 'The image adds nothing to the content, so screen readers skip it.',
     initialValue: false,
   }),
-]
+];

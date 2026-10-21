@@ -1,11 +1,11 @@
-import type {SanityClient} from 'sanity'
+import type { SanityClient } from 'sanity';
 
 export type ParentReference = {
-  _type: 'reference'
-  _ref: string
-  _weak?: true
-  _strengthenOnPublish?: {type: string}
-}
+  _type: 'reference';
+  _ref: string;
+  _weak?: true;
+  _strengthenOnPublish?: { type: string };
+};
 
 /**
  * Build the `path.parent` reference pointing at `parentId`.
@@ -36,15 +36,15 @@ export type ParentReference = {
 export async function parentReference(
   client: SanityClient,
   parentId: string,
-  type: string,
+  type: string
 ): Promise<ParentReference> {
   // Matching the base id explicitly keeps this correct under any perspective —
   // a draft is stored under `drafts.<id>` and can never match it.
-  const baseId = parentId.replace(/^drafts\./, '')
-  const publishedCount = await client.fetch<number>('count(*[_id == $baseId])', {baseId})
+  const baseId = parentId.replace(/^drafts\./, '');
+  const publishedCount = await client.fetch<number>('count(*[_id == $baseId])', { baseId });
 
   if (publishedCount > 0) {
-    return {_type: 'reference', _ref: baseId}
+    return { _type: 'reference', _ref: baseId };
   }
-  return {_type: 'reference', _ref: baseId, _weak: true, _strengthenOnPublish: {type}}
+  return { _type: 'reference', _ref: baseId, _weak: true, _strengthenOnPublish: { type } };
 }

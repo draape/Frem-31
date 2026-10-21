@@ -1,4 +1,4 @@
-import {defineType, defineField} from 'sanity'
+import { defineType, defineField } from 'sanity';
 
 /**
  * SEO / metadata. Two object types share the same base fields:
@@ -35,24 +35,24 @@ const baseSeoFields = () => [
     name: 'image',
     title: 'Social share image',
     type: 'image',
-    options: {hotspot: true},
+    options: { hotspot: true },
     description: 'Used for Open Graph / Twitter cards when shared. Recommended size 1200×630.',
   }),
-]
+];
 
 export const seoDefaults = defineType({
   name: 'seoDefaults',
   title: 'SEO',
   type: 'object',
-  options: {collapsible: true, collapsed: false},
+  options: { collapsible: true, collapsed: false },
   fields: baseSeoFields(),
-})
+});
 
 export const seo = defineType({
   name: 'seo',
   title: 'SEO',
   type: 'object',
-  options: {collapsible: true, collapsed: false},
+  options: { collapsible: true, collapsed: false },
   fields: [
     ...baseSeoFields(),
     defineField({
@@ -60,8 +60,8 @@ export const seo = defineType({
       title: 'Canonical URL',
       type: 'url',
       description:
-        'Optional. Point search engines at a different primary URL for this content (duplicate-content cases). Leave empty to use this page\'s own URL.',
-      validation: (rule) => rule.uri({scheme: ['http', 'https']}),
+        "Optional. Point search engines at a different primary URL for this content (duplicate-content cases). Leave empty to use this page's own URL.",
+      validation: (rule) => rule.uri({ scheme: ['http', 'https'] }),
     }),
     defineField({
       name: 'noIndex',
@@ -71,4 +71,4 @@ export const seo = defineType({
       description: 'Adds a noindex tag so this page is excluded from search results.',
     }),
   ],
-})
+});

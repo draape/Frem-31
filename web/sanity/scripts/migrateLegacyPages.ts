@@ -1,4 +1,4 @@
-import {getCliClient} from 'sanity/cli'
+import { getCliClient } from 'sanity/cli';
 
 /**
  * Moves the two hand-written pages, /frembanen and /banekalender, into the
@@ -21,15 +21,15 @@ import {getCliClient} from 'sanity/cli'
  * Facebook link are reset to the values below on every run.
  */
 
-const FRONT_PAGE_FIX = 'Run `pnpm seed:front-page` first.'
+const FRONT_PAGE_FIX = 'Run `pnpm seed:front-page` first.';
 
-const FREMBANEN_ID = 'page-frembanen'
-const BANEKALENDER_ID = 'page-banekalender'
-const SITE_SETTINGS_ID = 'siteSettings'
+const FREMBANEN_ID = 'page-frembanen';
+const BANEKALENDER_ID = 'page-banekalender';
+const SITE_SETTINGS_ID = 'siteSettings';
 
-const ref = (id: string) => ({_type: 'reference', _ref: id})
+const ref = (id: string) => ({ _type: 'reference', _ref: id });
 
-type Span = string | {text: string; link: string}
+type Span = string | { text: string; link: string };
 
 // A Portable Text block as the `textBlock` editor produces it. A span with a
 // `link` key gets the link annotation with that key.
@@ -38,25 +38,25 @@ function block(
   style: 'normal' | 'subtitle',
   spans: Span[],
   markDefs: Record<string, unknown>[] = [],
-  listItem?: 'bullet',
+  listItem?: 'bullet'
 ) {
   return {
     _type: 'block',
     _key: key,
     style,
     markDefs,
-    ...(listItem && {listItem, level: 1}),
+    ...(listItem && { listItem, level: 1 }),
     children: spans.map((span, i) => {
-      const [text, marks] = typeof span === 'string' ? [span, []] : [span.text, [span.link]]
-      return {_type: 'span', _key: `${key}-${i}`, text, marks}
+      const [text, marks] = typeof span === 'string' ? [span, []] : [span.text, [span.link]];
+      return { _type: 'span', _key: `${key}-${i}`, text, marks };
     }),
-  }
+  };
 }
 
 const bullets = (key: string, items: string[]) =>
-  items.map((item, i) => block(`${key}-${i}`, 'normal', [item], [], 'bullet'))
+  items.map((item, i) => block(`${key}-${i}`, 'normal', [item], [], 'bullet'));
 
-const textBlock = (key: string, content: unknown[]) => ({_type: 'textBlock', _key: key, content})
+const textBlock = (key: string, content: unknown[]) => ({ _type: 'textBlock', _key: key, content });
 
 const banekalender = (rootId: string) => ({
   _id: BANEKALENDER_ID,
@@ -70,14 +70,14 @@ const banekalender = (rootId: string) => ({
       'Se når Frembanen er ledig. Banekalender for trening og kamper på kunstgressbanen.',
   },
   path: {
-    slug: {_type: 'slug', current: 'banekalender'},
+    slug: { _type: 'slug', current: 'banekalender' },
     parent: ref(rootId),
     // Normally written by the compute-full-path Function; seeded so the page
     // is reachable at once (see createFrontPage.ts).
     fullPath: '/banekalender',
   },
-  content: [{_type: 'easyplayCalendar', _key: 'calendar'}],
-})
+  content: [{ _type: 'easyplayCalendar', _key: 'calendar' }],
+});
 
 const frembanen = (rootId: string) => ({
   _id: FREMBANEN_ID,
@@ -90,7 +90,7 @@ const frembanen = (rootId: string) => ({
     description: 'Informasjon om Frembanen, trenings- og kampanlegget til Frem-31.',
   },
   path: {
-    slug: {_type: 'slug', current: 'frembanen'},
+    slug: { _type: 'slug', current: 'frembanen' },
     parent: ref(rootId),
     fullPath: '/frembanen',
   },
@@ -101,10 +101,10 @@ const frembanen = (rootId: string) => ({
         'normal',
         [
           'Frembanen er åpen for alle og fungerer som en samlingsplass for nærmiljøet rundt Lysaker skole og Nedre Stabekk. Her møtes barn, unge og familier til aktivitet, lek og fotball – både organisert og uorganisert. Sjekk ',
-          {text: 'banekalenderen', link: 'calendar-link'},
+          { text: 'banekalenderen', link: 'calendar-link' },
           ' for å se når banen er ledig.',
         ],
-        [{_type: 'link', _key: 'calendar-link', type: 'internal', internal: ref(BANEKALENDER_ID)}],
+        [{ _type: 'link', _key: 'calendar-link', type: 'internal', internal: ref(BANEKALENDER_ID) }]
       ),
     ]),
     textBlock('address', [
@@ -147,7 +147,7 @@ const frembanen = (rootId: string) => ({
       ]),
     ]),
   ],
-})
+});
 
 const external = (key: string, label: string, href: string, openInNewTab = false) => ({
   _type: 'link',
@@ -156,13 +156,13 @@ const external = (key: string, label: string, href: string, openInNewTab = false
   label,
   href,
   openInNewTab,
-})
+});
 
 // What the hand-written routes showed, minus the header's external
 // "Treningstilbud" button, which the header no longer supports.
 const navigation = {
   header: [
-    {_type: 'navItem', _key: 'frembanen', label: 'Frembanen', reference: ref(FREMBANEN_ID)},
+    { _type: 'navItem', _key: 'frembanen', label: 'Frembanen', reference: ref(FREMBANEN_ID) },
     {
       _type: 'navItem',
       _key: 'banekalender',
@@ -202,65 +202,65 @@ const navigation = {
     },
   ],
   'socialLinks.facebook': 'https://www.facebook.com/groups/293108129128966',
-}
+};
 
 async function main() {
-  const cliClient = getCliClient()
+  const cliClient = getCliClient();
   const client = process.env.DATASET
-    ? cliClient.withConfig({dataset: process.env.DATASET})
-    : cliClient
-  const {projectId, dataset} = client.config()
-  const where = `${projectId}/${dataset}`
+    ? cliClient.withConfig({ dataset: process.env.DATASET })
+    : cliClient;
+  const { projectId, dataset } = client.config();
+  const where = `${projectId}/${dataset}`;
 
-  const roots = await client.fetch<{_id: string}[]>(
-    `*[_type == "page" && !defined(path.parent) && !(_id in path("drafts.**"))]{_id}`,
-  )
+  const roots = await client.fetch<{ _id: string }[]>(
+    `*[_type == "page" && !defined(path.parent) && !(_id in path("drafts.**"))]{_id}`
+  );
   if (roots.length === 0) {
-    throw new Error(`No front page in ${where}. ${FRONT_PAGE_FIX}`)
+    throw new Error(`No front page in ${where}. ${FRONT_PAGE_FIX}`);
   }
   if (roots.length > 1) {
-    const ids = roots.map((r) => r._id).join(', ')
-    throw new Error(`More than one root page in ${where} (${ids}). Keep one and re-run.`)
+    const ids = roots.map((r) => r._id).join(', ');
+    throw new Error(`More than one root page in ${where} (${ids}). Keep one and re-run.`);
   }
-  const rootId = roots[0]._id
+  const rootId = roots[0]._id;
 
   // A page someone already made at one of the paths would be shadowed by, or
   // collide with, ours. Leave both alone and let a human decide.
-  const conflicts = await client.fetch<{_id: string; fullPath: string}[]>(
+  const conflicts = await client.fetch<{ _id: string; fullPath: string }[]>(
     `*[_type == "page" && path.fullPath in $paths && !(_id in $ids)]{_id, "fullPath": path.fullPath}`,
     {
       paths: ['/frembanen', '/banekalender'],
       ids: [FREMBANEN_ID, BANEKALENDER_ID, `drafts.${FREMBANEN_ID}`, `drafts.${BANEKALENDER_ID}`],
-    },
-  )
+    }
+  );
   if (conflicts.length > 0) {
-    const listed = conflicts.map((c) => `${c.fullPath} (${c._id})`).join(', ')
-    throw new Error(`Pages already exist in ${where} at: ${listed}. Nothing was written.`)
+    const listed = conflicts.map((c) => `${c.fullPath} (${c._id})`).join(', ');
+    throw new Error(`Pages already exist in ${where} at: ${listed}. Nothing was written.`);
   }
 
   const existing = await client.fetch<string[]>(`*[_id in $ids]._id`, {
     ids: [BANEKALENDER_ID, FREMBANEN_ID, SITE_SETTINGS_ID],
-  })
+  });
 
   // Banekalender first: the Frembanen text links to it.
   await client
     .transaction()
     .createIfNotExists(banekalender(rootId))
     .createIfNotExists(frembanen(rootId))
-    .createIfNotExists({_id: SITE_SETTINGS_ID, _type: 'siteSettings'})
+    .createIfNotExists({ _id: SITE_SETTINGS_ID, _type: 'siteSettings' })
     .patch(SITE_SETTINGS_ID, (patch) => patch.set(navigation))
-    .commit()
+    .commit();
 
   for (const id of [BANEKALENDER_ID, FREMBANEN_ID]) {
-    console.log(`${existing.includes(id) ? 'Already present, left as is' : 'Created'}: ${id}`)
+    console.log(`${existing.includes(id) ? 'Already present, left as is' : 'Created'}: ${id}`);
   }
   console.log(
-    `${existing.includes(SITE_SETTINGS_ID) ? 'Updated' : 'Created'} ${SITE_SETTINGS_ID}: header, footer columns and Facebook link`,
-  )
-  console.log(`Done in ${where}.`)
+    `${existing.includes(SITE_SETTINGS_ID) ? 'Updated' : 'Created'} ${SITE_SETTINGS_ID}: header, footer columns and Facebook link`
+  );
+  console.log(`Done in ${where}.`);
 }
 
 main().catch((err) => {
-  console.error('Failed to migrate the legacy pages:', err instanceof Error ? err.message : err)
-  process.exit(1)
-})
+  console.error('Failed to migrate the legacy pages:', err instanceof Error ? err.message : err);
+  process.exit(1);
+});

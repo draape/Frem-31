@@ -1,13 +1,14 @@
-import {defineType, defineField} from 'sanity'
-import {linkableTypes} from './linkableTypes'
+import { defineType, defineField } from 'sanity';
+import { linkableTypes } from './linkableTypes';
 
-type LinkParent = {type?: string}
+type LinkParent = { type?: string };
 
-export type LinkValue = {label?: string; internal?: unknown; href?: string; email?: string}
+export type LinkValue = { label?: string; internal?: unknown; href?: string; email?: string };
 
 // `link` has initial values, so a CTA object can exist without the editor
 // having chosen a destination. Only a destination makes it a real CTA.
-export const hasDestination = (link: LinkValue) => Boolean(link.internal || link.href || link.email)
+export const hasDestination = (link: LinkValue) =>
+  Boolean(link.internal || link.href || link.email);
 
 /**
  * The common link definition. Use this everywhere a link is needed — as a CTA
@@ -30,9 +31,9 @@ export const link = defineType({
       type: 'string',
       options: {
         list: [
-          {title: 'Internal page', value: 'internal'},
-          {title: 'External URL', value: 'external'},
-          {title: 'Email', value: 'email'},
+          { title: 'Internal page', value: 'internal' },
+          { title: 'External URL', value: 'external' },
+          { title: 'Email', value: 'email' },
         ],
         layout: 'radio',
       },
@@ -51,38 +52,36 @@ export const link = defineType({
       title: 'Page',
       type: 'reference',
       to: linkableTypes,
-      hidden: ({parent}) => (parent as LinkParent)?.type !== 'internal',
+      hidden: ({ parent }) => (parent as LinkParent)?.type !== 'internal',
       validation: (rule) =>
         rule.custom((value, context) => {
-          const parent = context.parent as LinkParent | undefined
-          if (parent?.type === 'internal' && !value) return 'Select a page to link to'
-          return true
+          const parent = context.parent as LinkParent | undefined;
+          if (parent?.type === 'internal' && !value) return 'Select a page to link to';
+          return true;
         }),
     }),
     defineField({
       name: 'href',
       title: 'URL',
       type: 'url',
-      hidden: ({parent}) => (parent as LinkParent)?.type !== 'external',
+      hidden: ({ parent }) => (parent as LinkParent)?.type !== 'external',
       validation: (rule) =>
-        rule
-          .uri({scheme: ['http', 'https']})
-          .custom((value, context) => {
-            const parent = context.parent as LinkParent | undefined
-            if (parent?.type === 'external' && !value) return 'Enter a URL'
-            return true
-          }),
+        rule.uri({ scheme: ['http', 'https'] }).custom((value, context) => {
+          const parent = context.parent as LinkParent | undefined;
+          if (parent?.type === 'external' && !value) return 'Enter a URL';
+          return true;
+        }),
     }),
     defineField({
       name: 'email',
       title: 'Email address',
       type: 'string',
-      hidden: ({parent}) => (parent as LinkParent)?.type !== 'email',
+      hidden: ({ parent }) => (parent as LinkParent)?.type !== 'email',
       validation: (rule) =>
         rule.email().custom((value, context) => {
-          const parent = context.parent as LinkParent | undefined
-          if (parent?.type === 'email' && !value) return 'Enter an email address'
-          return true
+          const parent = context.parent as LinkParent | undefined;
+          if (parent?.type === 'email' && !value) return 'Enter an email address';
+          return true;
         }),
     }),
     defineField({
@@ -90,15 +89,21 @@ export const link = defineType({
       title: 'Open in new tab',
       type: 'boolean',
       initialValue: false,
-      hidden: ({parent}) => (parent as LinkParent)?.type === 'email',
+      hidden: ({ parent }) => (parent as LinkParent)?.type === 'email',
     }),
   ],
   preview: {
-    select: {label: 'label', type: 'type', internalTitle: 'internal.title', href: 'href', email: 'email'},
-    prepare({label, type, internalTitle, href, email}) {
+    select: {
+      label: 'label',
+      type: 'type',
+      internalTitle: 'internal.title',
+      href: 'href',
+      email: 'email',
+    },
+    prepare({ label, type, internalTitle, href, email }) {
       const destination =
-        type === 'internal' ? internalTitle || 'Page' : type === 'email' ? email : href
-      return {title: label || destination || 'Link', subtitle: destination}
+        type === 'internal' ? internalTitle || 'Page' : type === 'email' ? email : href;
+      return { title: label || destination || 'Link', subtitle: destination };
     },
   },
-})
+});

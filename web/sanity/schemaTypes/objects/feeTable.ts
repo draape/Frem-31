@@ -1,8 +1,8 @@
-import {defineType, defineField, defineArrayMember} from 'sanity'
-import {FeeTableIcon} from './icons'
+import { defineType, defineField, defineArrayMember } from 'sanity';
+import { FeeTableIcon } from './icons';
 
-type Groups = {title?: string}[]
-type Rows = unknown[]
+type Groups = { title?: string }[];
+type Rows = unknown[];
 
 export const feeTable = defineType({
   name: 'feeTable',
@@ -57,7 +57,7 @@ export const feeTable = defineType({
                     }),
                   ],
                   preview: {
-                    select: {title: 'label', subtitle: 'price'},
+                    select: { title: 'label', subtitle: 'price' },
                   },
                 }),
               ],
@@ -65,10 +65,10 @@ export const feeTable = defineType({
             }),
           ],
           preview: {
-            select: {title: 'title', rows: 'rows'},
-            prepare({title, rows}) {
-              const count = ((rows as Rows) || []).length
-              return {title: title || 'Group', subtitle: `${count} row${count === 1 ? '' : 's'}`}
+            select: { title: 'title', rows: 'rows' },
+            prepare({ title, rows }) {
+              const count = ((rows as Rows) || []).length;
+              return { title: title || 'Group', subtitle: `${count} row${count === 1 ? '' : 's'}` };
             },
           },
         }),
@@ -77,10 +77,10 @@ export const feeTable = defineType({
     }),
   ],
   preview: {
-    select: {groups: 'groups'},
-    prepare({groups}) {
-      const titles = ((groups as Groups) || []).map((group) => group.title).filter(Boolean)
-      return {title: 'Fee table', subtitle: titles.length > 0 ? titles.join(', ') : 'No groups'}
+    select: { groups: 'groups' },
+    prepare({ groups }) {
+      const titles = ((groups as Groups) || []).map((group) => group.title).filter(Boolean);
+      return { title: 'Fee table', subtitle: titles.length > 0 ? titles.join(', ') : 'No groups' };
     },
   },
-})
+});

@@ -1,6 +1,6 @@
-import {defineType, defineField, defineArrayMember} from 'sanity'
+import { defineType, defineField, defineArrayMember } from 'sanity';
 
-type Links = unknown[]
+type Links = unknown[];
 
 export const footerColumn = defineType({
   name: 'footerColumn',
@@ -17,14 +17,17 @@ export const footerColumn = defineType({
       name: 'links',
       title: 'Links',
       type: 'array',
-      of: [defineArrayMember({type: 'link'})],
+      of: [defineArrayMember({ type: 'link' })],
     }),
   ],
   preview: {
-    select: {title: 'title', links: 'links'},
-    prepare({title, links}) {
-      const count = ((links as Links) || []).length
-      return {title: title || 'Footer column', subtitle: `${count} link${count === 1 ? '' : 's'}`}
+    select: { title: 'title', links: 'links' },
+    prepare({ title, links }) {
+      const count = ((links as Links) || []).length;
+      return {
+        title: title || 'Footer column',
+        subtitle: `${count} link${count === 1 ? '' : 's'}`,
+      };
     },
   },
-})
+});

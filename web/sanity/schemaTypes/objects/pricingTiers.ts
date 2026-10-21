@@ -1,8 +1,8 @@
-import {defineType, defineField, defineArrayMember} from 'sanity'
-import {PricingTiersIcon} from './icons'
-import {hasDestination, type LinkValue} from './link'
+import { defineType, defineField, defineArrayMember } from 'sanity';
+import { PricingTiersIcon } from './icons';
+import { hasDestination, type LinkValue } from './link';
 
-type Tiers = unknown[]
+type Tiers = unknown[];
 
 export const pricingTiers = defineType({
   name: 'pricingTiers',
@@ -43,7 +43,7 @@ export const pricingTiers = defineType({
               name: 'features',
               title: 'Features',
               type: 'array',
-              of: [defineArrayMember({type: 'string'})],
+              of: [defineArrayMember({ type: 'string' })],
             }),
             defineField({
               name: 'cta',
@@ -51,8 +51,8 @@ export const pricingTiers = defineType({
               type: 'link',
               validation: (rule) =>
                 rule.custom((value) => {
-                  const link = value as LinkValue | undefined
-                  return link && hasDestination(link) && !link.label ? 'Add a button label' : true
+                  const link = value as LinkValue | undefined;
+                  return link && hasDestination(link) && !link.label ? 'Add a button label' : true;
                 }),
             }),
             defineField({
@@ -64,10 +64,12 @@ export const pricingTiers = defineType({
             }),
           ],
           preview: {
-            select: {title: 'name', price: 'price', highlighted: 'highlighted'},
-            prepare({title, price, highlighted}) {
-              const subtitle = [price, highlighted ? 'highlighted' : null].filter(Boolean).join(' · ')
-              return {title: title || 'Tier', subtitle}
+            select: { title: 'name', price: 'price', highlighted: 'highlighted' },
+            prepare({ title, price, highlighted }) {
+              const subtitle = [price, highlighted ? 'highlighted' : null]
+                .filter(Boolean)
+                .join(' · ');
+              return { title: title || 'Tier', subtitle };
             },
           },
         }),
@@ -75,10 +77,10 @@ export const pricingTiers = defineType({
     }),
   ],
   preview: {
-    select: {tiers: 'tiers'},
-    prepare({tiers}) {
-      const count = ((tiers as Tiers) || []).length
-      return {title: 'Pricing tiers', subtitle: `${count} tier${count === 1 ? '' : 's'}`}
+    select: { tiers: 'tiers' },
+    prepare({ tiers }) {
+      const count = ((tiers as Tiers) || []).length;
+      return { title: 'Pricing tiers', subtitle: `${count} tier${count === 1 ? '' : 's'}` };
     },
   },
-})
+});

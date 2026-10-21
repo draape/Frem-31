@@ -1,8 +1,8 @@
-import {defineType, defineField} from 'sanity'
-import {linkableTypes} from './linkableTypes'
-import {CardIcon} from './icons'
+import { defineType, defineField } from 'sanity';
+import { linkableTypes } from './linkableTypes';
+import { CardIcon } from './icons';
 
-type CardParent = {reference?: unknown}
+type CardParent = { reference?: unknown };
 
 /**
  * A card shows its own title and description, falling back to the referenced
@@ -21,9 +21,9 @@ export const card = defineType({
       description: 'Leave empty to use the title of the linked page.',
       validation: (rule) =>
         rule.custom((value, context) => {
-          const parent = context.parent as CardParent | undefined
-          if (!value && !parent?.reference) return 'Add a title or choose a page'
-          return true
+          const parent = context.parent as CardParent | undefined;
+          if (!value && !parent?.reference) return 'Add a title or choose a page';
+          return true;
         }),
     }),
     defineField({
@@ -41,13 +41,13 @@ export const card = defineType({
     }),
   ],
   preview: {
-    select: {title: 'title', pageTitle: 'reference.title', media: 'reference.image'},
-    prepare({title, pageTitle, media}) {
+    select: { title: 'title', pageTitle: 'reference.title', media: 'reference.image' },
+    prepare({ title, pageTitle, media }) {
       return {
         title: title || pageTitle || 'Untitled card',
         subtitle: pageTitle ? `Card → ${pageTitle}` : 'Card',
         media,
-      }
+      };
     },
   },
-})
+});

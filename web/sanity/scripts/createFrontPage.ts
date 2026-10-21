@@ -1,4 +1,4 @@
-import {getCliClient} from 'sanity/cli'
+import { getCliClient } from 'sanity/cli';
 
 /**
  * Seeds the front page — the single root of the page tree (the only `page` with
@@ -20,29 +20,29 @@ import {getCliClient} from 'sanity/cli'
  * document with `createIfNotExists` on a fixed id.
  */
 
-const FRONT_PAGE_ID = 'frontPage'
+const FRONT_PAGE_ID = 'frontPage';
 
-const title = process.env.FRONT_PAGE_TITLE || 'Front page'
-const slug = process.env.FRONT_PAGE_SLUG || 'home'
+const title = process.env.FRONT_PAGE_TITLE || 'Front page';
+const slug = process.env.FRONT_PAGE_SLUG || 'home';
 
 async function main() {
-  const cliClient = getCliClient()
+  const cliClient = getCliClient();
   const client = process.env.DATASET
-    ? cliClient.withConfig({dataset: process.env.DATASET})
-    : cliClient
-  const {projectId, dataset} = client.config()
+    ? cliClient.withConfig({ dataset: process.env.DATASET })
+    : cliClient;
+  const { projectId, dataset } = client.config();
 
   // Any page without a parent is a root. There should only ever be one, so an
   // existing one means this script has already run (or a root was made by hand).
-  const existingRoots = await client.fetch<{_id: string; title?: string}[]>(
-    `*[_type == "page" && !defined(path.parent)]{_id, title}`,
-  )
+  const existingRoots = await client.fetch<{ _id: string; title?: string }[]>(
+    `*[_type == "page" && !defined(path.parent)]{_id, title}`
+  );
 
   if (existingRoots.length > 0) {
-    const listed = existingRoots.map((p) => `${p.title ?? '(untitled)'} (${p._id})`).join(', ')
-    console.log(`Front page already exists in ${projectId}/${dataset}: ${listed}`)
-    console.log('Nothing to do. Delete it first if you want to re-seed.')
-    return
+    const listed = existingRoots.map((p) => `${p.title ?? '(untitled)'} (${p._id})`).join(', ');
+    console.log(`Front page already exists in ${projectId}/${dataset}: ${listed}`);
+    console.log('Nothing to do. Delete it first if you want to re-seed.');
+    return;
   }
 
   const created = await client.createIfNotExists({
@@ -50,7 +50,7 @@ async function main() {
     _type: 'page',
     title,
     path: {
-      slug: {_type: 'slug', current: slug},
+      slug: { _type: 'slug', current: slug },
       // No `parent` — that is what makes this the root of the tree.
       //
       // `fullPath` is normally written by the compute-full-path Function, but
@@ -59,12 +59,12 @@ async function main() {
       // the same value and skip the write.
       fullPath: '/',
     },
-  })
+  });
 
-  console.log(`Created front page "${title}" as ${created._id} in ${projectId}/${dataset}`)
+  console.log(`Created front page "${title}" as ${created._id} in ${projectId}/${dataset}`);
 }
 
 main().catch((err) => {
-  console.error('Failed to create the front page:', err instanceof Error ? err.message : err)
-  process.exit(1)
-})
+  console.error('Failed to create the front page:', err instanceof Error ? err.message : err);
+  process.exit(1);
+});

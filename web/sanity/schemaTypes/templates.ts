@@ -1,6 +1,6 @@
-import type {InitialValueResolverContext, Template} from 'sanity'
-import {parentReference} from '../utils/parentReference'
-import {API_VERSION} from '../utils/useSanityClient'
+import type { InitialValueResolverContext, Template } from 'sanity';
+import { parentReference } from '../utils/parentReference';
+import { API_VERSION } from '../utils/useSanityClient';
 
 /**
  * Initial-value templates.
@@ -13,18 +13,18 @@ import {API_VERSION} from '../utils/useSanityClient'
  * templates that take parameters from UIs which cannot supply them, so this one
  * stays out of the global "Create new" menu and only fires from the tree.
  */
-export const pageChildTemplate: Template<{parent: string}> = {
+export const pageChildTemplate: Template<{ parent: string }> = {
   id: 'page-child',
   title: 'Child page',
   schemaType: 'page',
-  parameters: [{name: 'parent', title: 'Parent page ID', type: 'string'}],
+  parameters: [{ name: 'parent', title: 'Parent page ID', type: 'string' }],
   // Async because the shape of the reference depends on whether the parent has
   // been published yet — see parentReference for why that matters.
-  value: async ({parent}: {parent: string}, context: InitialValueResolverContext) => ({
+  value: async ({ parent }: { parent: string }, context: InitialValueResolverContext) => ({
     path: {
-      parent: await parentReference(context.getClient({apiVersion: API_VERSION}), parent, 'page'),
+      parent: await parentReference(context.getClient({ apiVersion: API_VERSION }), parent, 'page'),
     },
   }),
-}
+};
 
-export const templates: Template[] = [pageChildTemplate]
+export const templates: Template[] = [pageChildTemplate];

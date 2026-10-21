@@ -1,6 +1,6 @@
-import {defineType, defineField} from 'sanity'
-import {ImageSectionIcon} from './icons'
-import {imageAltFields} from './imageAlt'
+import { defineType, defineField } from 'sanity';
+import { ImageSectionIcon } from './icons';
+import { imageAltFields } from './imageAlt';
 
 export const imageSection = defineType({
   name: 'imageSection',
@@ -12,7 +12,7 @@ export const imageSection = defineType({
       name: 'image',
       title: 'Image',
       type: 'image',
-      options: {hotspot: true},
+      options: { hotspot: true },
       fields: imageAltFields,
       validation: (rule) => rule.required(),
     }),
@@ -23,9 +23,9 @@ export const imageSection = defineType({
     }),
   ],
   preview: {
-    select: {title: 'caption', media: 'image'},
-    prepare({title, media}) {
-      return {title: title || 'Image', subtitle: 'Image', media}
+    select: { title: 'caption', media: 'image' },
+    prepare({ title, media }) {
+      return { title: title || 'Image', subtitle: 'Image', media };
     },
   },
-})
+});

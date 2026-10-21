@@ -1,5 +1,5 @@
-import {defineType, defineField} from 'sanity'
-import {EasyplayCalendarIcon} from './icons'
+import { defineType, defineField } from 'sanity';
+import { EasyplayCalendarIcon } from './icons';
 
 /**
  * The Frembanen booking calendar from EasyPlay. The block has nothing to edit:
@@ -25,7 +25,7 @@ export const easyplayCalendar = defineType({
       return {
         title: 'Banekalender (EasyPlay)',
         subtitle: 'Frembanen calendar. The URL is fixed in code.',
-      }
+      };
     },
   },
-})
+});

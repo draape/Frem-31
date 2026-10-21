@@ -1,5 +1,5 @@
-import {defineType, defineField} from 'sanity'
-import {linkableTypes} from './linkableTypes'
+import { defineType, defineField } from 'sanity';
+import { linkableTypes } from './linkableTypes';
 
 export const navItem = defineType({
   name: 'navItem',
@@ -21,9 +21,9 @@ export const navItem = defineType({
     }),
   ],
   preview: {
-    select: {title: 'label', subtitle: 'reference.title'},
-    prepare({title, subtitle}) {
-      return {title: title || '(no label)', subtitle: subtitle || 'Navigation item'}
+    select: { title: 'label', subtitle: 'reference.title' },
+    prepare({ title, subtitle }) {
+      return { title: title || '(no label)', subtitle: subtitle || 'Navigation item' };
     },
   },
-})
+});

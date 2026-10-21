@@ -1,7 +1,7 @@
-import {defineType, defineField} from 'sanity'
-import {SplitIcon} from './icons'
-import {imageAltFields} from './imageAlt'
-import {hasDestination, type LinkValue} from './link'
+import { defineType, defineField } from 'sanity';
+import { SplitIcon } from './icons';
+import { imageAltFields } from './imageAlt';
+import { hasDestination, type LinkValue } from './link';
 
 export const split = defineType({
   name: 'split',
@@ -31,7 +31,7 @@ export const split = defineType({
       name: 'image',
       title: 'Image',
       type: 'image',
-      options: {hotspot: true},
+      options: { hotspot: true },
       fields: imageAltFields,
       validation: (rule) => rule.required(),
     }),
@@ -41,8 +41,8 @@ export const split = defineType({
       type: 'string',
       options: {
         list: [
-          {title: 'Left', value: 'left'},
-          {title: 'Right', value: 'right'},
+          { title: 'Left', value: 'left' },
+          { title: 'Right', value: 'right' },
         ],
         layout: 'radio',
       },
@@ -55,15 +55,15 @@ export const split = defineType({
       type: 'link',
       validation: (rule) =>
         rule.custom((value) => {
-          const link = value as LinkValue | undefined
-          return link && hasDestination(link) && !link.label ? 'Add a button label' : true
+          const link = value as LinkValue | undefined;
+          return link && hasDestination(link) && !link.label ? 'Add a button label' : true;
         }),
     }),
   ],
   preview: {
-    select: {title: 'title', subtitle: 'kicker', media: 'image'},
-    prepare({title, subtitle, media}) {
-      return {title: title || 'Split', subtitle: subtitle || 'Split (50/50)', media}
+    select: { title: 'title', subtitle: 'kicker', media: 'image' },
+    prepare({ title, subtitle, media }) {
+      return { title: title || 'Split', subtitle: subtitle || 'Split (50/50)', media };
     },
   },
-})
+});

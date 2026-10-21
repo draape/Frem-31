@@ -1,4 +1,4 @@
-import {defineType, defineField, defineArrayMember} from 'sanity'
+import { defineType, defineField, defineArrayMember } from 'sanity';
 
 /**
  * Site-wide settings. This is a singleton — exactly one document of this type
@@ -10,8 +10,8 @@ export const siteSettings = defineType({
   title: 'Site settings',
   type: 'document',
   groups: [
-    {name: 'navigation', title: 'Navigation', default: true},
-    {name: 'seo', title: 'SEO'},
+    { name: 'navigation', title: 'Navigation', default: true },
+    { name: 'seo', title: 'SEO' },
   ],
   fields: [
     defineField({
@@ -20,21 +20,21 @@ export const siteSettings = defineType({
       type: 'array',
       group: 'navigation',
       description: 'The main menu links shown in the site header.',
-      of: [defineArrayMember({type: 'navItem'})],
+      of: [defineArrayMember({ type: 'navItem' })],
     }),
     defineField({
       name: 'footer',
       title: 'Footer',
       type: 'object',
       group: 'navigation',
-      options: {collapsible: true, collapsed: false},
+      options: { collapsible: true, collapsed: false },
       fields: [
         defineField({
           name: 'columns',
           title: 'Columns',
           type: 'array',
           description: 'Each column has a title and its own list of links.',
-          of: [defineArrayMember({type: 'footerColumn'})],
+          of: [defineArrayMember({ type: 'footerColumn' })],
         }),
       ],
     }),
@@ -49,7 +49,7 @@ export const siteSettings = defineType({
           title: 'Facebook',
           type: 'url',
           description: 'Shown as an icon in the footer when set.',
-          validation: (rule) => rule.uri({scheme: ['http', 'https']}),
+          validation: (rule) => rule.uri({ scheme: ['http', 'https'] }),
         }),
       ],
     }),
@@ -64,7 +64,7 @@ export const siteSettings = defineType({
   ],
   preview: {
     prepare() {
-      return {title: 'Site settings'}
+      return { title: 'Site settings' };
     },
   },
-})
+});
