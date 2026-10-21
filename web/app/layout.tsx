@@ -1,14 +1,6 @@
 import type { Metadata } from 'next';
 import { css } from '@/styled-system/css';
-import { SiteShell } from '@/components/layout/SiteShell';
-import {
-  SITE_SEO_QUERY,
-  type SiteSeoResult,
-  fetchSiteSettings,
-  sanityFetch,
-  toFooterGroups,
-  toHeaderItems,
-} from '@/lib/sanity';
+import { SITE_SEO_QUERY, type SiteSeoResult, sanityFetch } from '@/lib/sanity';
 import { siteSettingsFallback } from '@/lib/seo';
 import { inter, fraunces } from './fonts';
 import './globals.css';
@@ -31,27 +23,16 @@ const bodyStyles = css({
   minHeight: '100vh',
 });
 
-// The only layout. It wraps the Sanity pages, the /ui sandbox and the 404 in
-// the header, main and footer; navigation comes from the `siteSettings`
-// singleton, fetched once per render.
-export default async function RootLayout({
+// Document shell only. The site's header and footer live in (site)/layout.tsx,
+// so the Studio at /studio renders without them.
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const settings = await fetchSiteSettings();
-
   return (
     <html lang="no" className={`${inter.variable} ${fraunces.variable}`}>
-      <body className={bodyStyles}>
-        <SiteShell
-          headerItems={toHeaderItems(settings)}
-          footerGroups={toFooterGroups(settings)}
-          facebookUrl={settings?.facebook ?? undefined}
-        >
-          {children}
-        </SiteShell>
-      </body>
+      <body className={bodyStyles}>{children}</body>
     </html>
   );
 }

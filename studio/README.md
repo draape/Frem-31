@@ -1,24 +1,10 @@
-# Frem 31 Studio
+# Frem 31 Sanity Functions
 
-Sanity Studio for project `auquaqxb`.
+Sanity Functions and their blueprint for project `auquaqxb`.
 
-## Migrating the legacy pages
+The Studio itself lives in `web/`: it is served by the Next app at `/studio`, with its config in `web/sanity.config.ts` and the schema, structure and scripts in `web/sanity/`. See `web/README.md`.
 
-`/frembanen` and `/banekalender` used to be hand-written routes in the web. `scripts/migrateLegacyPages.ts` creates them as `page` documents (`page-frembanen`, `page-banekalender`) and sets the site-settings header, footer and Facebook link to what those routes showed.
-
-On a new dataset, run from `studio/`, in this order:
-
-1. `pnpm seed:front-page` (the pages hang off the front page; the script stops if there is none)
-2. `pnpm migrate:legacy-pages`
-
-Both use the dataset in `sanity.cli.ts` (`test`). `sanity exec` has no dataset flag, so both scripts read `DATASET` instead:
-
-```bash
-DATASET=production pnpm seed:front-page
-DATASET=production pnpm migrate:legacy-pages
-```
-
-Re-running never overwrites the two pages, but it does reset the header, footer columns and Facebook link in site settings. If another page already sits at `/frembanen` or `/banekalender`, the script reports it and writes nothing.
+Checks, run from `studio/`: `pnpm typecheck` and `pnpm test`.
 
 ## Functions
 

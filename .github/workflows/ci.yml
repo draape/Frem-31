@@ -63,6 +63,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec panda codegen
       - run: pnpm lint
+      - run: pnpm schema:validate
       - run: pnpm build
 
   e2e:
@@ -110,6 +111,5 @@ jobs:
           cache: pnpm
           cache-dependency-path: studio/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec tsc --noEmit
-      - run: pnpm exec sanity schema validate
-      - run: node --test functions/compute-full-path/fullPath.test.ts
+      - run: pnpm typecheck
+      - run: pnpm test
